@@ -6,23 +6,23 @@ namespace Entitas {
 
     /// Use pool.CreateEntity() to create a new entity and pool.DestroyEntity() to destroy it.
     /// You can add, replace and remove IComponent to an entity.
-    public partial class Entity {
+    public partial class Entity : IEntity {
 
-        /// Occurs when a component gets added. All event handlers will be removed when the entity gets destroyed by the pool.
+        /// Occurs when a component gets added.
+        /// All event handlers will be removed when the entity gets destroyed by the pool.
         public event EntityChanged OnComponentAdded;
 
-        /// Occurs when a component gets removed. All event handlers will be removed when the entity gets destroyed by the pool.
+        /// Occurs when a component gets removed.
+        /// All event handlers will be removed when the entity gets destroyed by the pool.
         public event EntityChanged OnComponentRemoved;
 
-        /// Occurs when a component gets replaced. All event handlers will be removed when the entity gets destroyed by the pool.
+        /// Occurs when a component gets replaced.
+        /// All event handlers will be removed when the entity gets destroyed by the pool.
         public event ComponentReplaced OnComponentReplaced;
 
-        /// Occurs when an entity gets released and is not retained anymore. All event handlers will be removed when the entity gets destroyed by the pool.
+        /// Occurs when an entity gets released and is not retained anymore.
+        /// All event handlers will be removed when the entity gets destroyed by the pool.
         public event EntityReleased OnEntityReleased;
-
-        public delegate void EntityChanged(Entity entity, int index, IComponent component);
-        public delegate void ComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent);
-        public delegate void EntityReleased(Entity entity);
 
         /// The total amount of components an entity can possibly have.
         public int totalComponents { get { return _totalComponents; } }
@@ -276,7 +276,7 @@ namespace Entitas {
         }
 
 #if ENTITAS_FAST_AND_UNSAFE
-        
+
         /// Returns the number of objects that retain this entity.
         public int retainCount { get { return _retainCount; } }
         int _retainCount;
@@ -287,7 +287,8 @@ namespace Entitas {
         public int retainCount { get { return owners.Count; } }
 
         /// Returns all the objects that retain this entity.
-        public readonly HashSet<object> owners = new HashSet<object>();
+        public HashSet<object> owners { get { return _owners; } }
+        readonly HashSet<object> _owners = new HashSet<object>();
 
 #endif
 
@@ -297,7 +298,7 @@ namespace Entitas {
         public Entity Retain(object owner) {
 
 #if ENTITAS_FAST_AND_UNSAFE
-            
+
             _retainCount += 1;
 
 #else
@@ -319,7 +320,7 @@ namespace Entitas {
         public void Release(object owner) {
 
 #if ENTITAS_FAST_AND_UNSAFE
-            
+
             _retainCount -= 1;
             if (_retainCount == 0) {
 
