@@ -7,7 +7,7 @@ namespace Entitas {
     /// Calling pool.GetGroup(matcher) with the same matcher will always return the same instance of the group.
     /// The created group is managed by the pool and will always be up to date.
     /// It will automatically add entities that match the matcher or remove entities as soon as they don't match the matcher anymore.
-    public class Group {
+    public class Group<TEntity> where TEntity : class, IEntity, new() {
 
         /// Occurs when an entity gets added.
         public event GroupChanged OnEntityAdded;
@@ -18,29 +18,29 @@ namespace Entitas {
         /// Occurs when a component of an entity in the group gets replaced.
         public event GroupUpdated OnEntityUpdated;
 
-        public delegate void GroupChanged(Group group, Entity entity, int index, IComponent component);
-        public delegate void GroupUpdated(Group group, Entity entity, int index, IComponent previousComponent, IComponent newComponent);
+        public delegate void GroupChanged(Group<TEntity> group, TEntity entity, int index, IComponent component);
+        public delegate void GroupUpdated(Group<TEntity> group, TEntity entity, int index, IComponent previousComponent, IComponent newComponent);
 
         /// Returns the number of entities in the group.
         public int count { get { return _entities.Count; } }
 
         /// Returns the matcher which was used to create this group.
-        public IMatcher matcher { get { return _matcher; } }
+        public IMatcher<TEntity> matcher { get { return _matcher; } }
 
-        readonly IMatcher _matcher;
+        readonly IMatcher<TEntity> _matcher;
 
-        readonly HashSet<Entity> _entities = new HashSet<Entity>(EntityEqualityComparer.comparer);
-        Entity[] _entitiesCache;
-        Entity _singleEntityCache;
+        readonly HashSet<TEntity> _entities = new HashSet<TEntity>(EntityEqualityComparer<TEntity>.comparer);
+        TEntity[] _entitiesCache;
+        TEntity _singleEntityCache;
         string _toStringCache;
 
         /// Use pool.GetGroup(matcher) to get a group of entities which match the specified matcher.
-        public Group(IMatcher matcher) {
+        public Group(IMatcher<TEntity> matcher) {
             _matcher = matcher;
         }
 
         /// This is used by the pool to manage the group.
-        public void HandleEntitySilently(Entity entity) {
+        public void HandleEntitySilently(TEntity entity) {
             if (_matcher.Matches(entity)) {
                 addEntitySilently(entity);
             } else {
@@ -49,7 +49,7 @@ namespace Entitas {
         }
 
         /// This is used by the pool to manage the group.
-        public void HandleEntity(Entity entity, int index, IComponent component) {
+        public void HandleEntity(TEntity entity, int index, IComponent component) {
             if (_matcher.Matches(entity)) {
                 addEntity(entity, index, component);
             } else {
@@ -58,7 +58,7 @@ namespace Entitas {
         }
 
         /// This is used by the pool to manage the group.
-        public void UpdateEntity(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
+        public void UpdateEntity(TEntity entity, int index, IComponent previousComponent, IComponent newComponent) {
             if (_entities.Contains(entity)) {
                 if (OnEntityRemoved != null) {
                     OnEntityRemoved(this, entity, index, previousComponent);
@@ -80,13 +80,13 @@ namespace Entitas {
             OnEntityUpdated = null;
         }
 
-        internal GroupChanged handleEntity(Entity entity) {
+        internal GroupChanged handleEntity(TEntity entity) {
             return _matcher.Matches(entity)
                        ? (addEntitySilently(entity) ? OnEntityAdded : null)
                        : (removeEntitySilently(entity) ? OnEntityRemoved : null);
         }
 
-        bool addEntitySilently(Entity entity) {
+        bool addEntitySilently(TEntity entity) {
             var added = _entities.Add(entity);
             if (added) {
                 _entitiesCache = null;
@@ -97,13 +97,13 @@ namespace Entitas {
             return added;
         }
 
-        void addEntity(Entity entity, int index, IComponent component) {
+        void addEntity(TEntity entity, int index, IComponent component) {
             if (addEntitySilently(entity) && OnEntityAdded != null) {
                 OnEntityAdded(this, entity, index, component);
             }
         }
 
-        bool removeEntitySilently(Entity entity) {
+        bool removeEntitySilently(TEntity entity) {
             var removed = _entities.Remove(entity);
             if (removed) {
                 _entitiesCache = null;
@@ -114,7 +114,7 @@ namespace Entitas {
             return removed;
         }
 
-        void removeEntity(Entity entity, int index, IComponent component) {
+        void removeEntity(TEntity entity, int index, IComponent component) {
             var removed = _entities.Remove(entity);
             if (removed) {
                 _entitiesCache = null;
@@ -127,14 +127,14 @@ namespace Entitas {
         }
 
         /// Determines whether this group has the specified entity.
-        public bool ContainsEntity(Entity entity) {
+        public bool ContainsEntity(TEntity entity) {
             return _entities.Contains(entity);
         }
 
         /// Returns all entities which are currently in this group.
-        public Entity[] GetEntities() {
+        public TEntity[] GetEntities() {
             if (_entitiesCache == null) {
-                _entitiesCache = new Entity[_entities.Count];
+                _entitiesCache = new TEntity[_entities.Count];
                 _entities.CopyTo(_entitiesCache);
             }
 
@@ -143,7 +143,7 @@ namespace Entitas {
 
         /// Returns the only entity in this group. It will return null if the group is empty.
         /// It will throw an exception if the group has more than one entity.
-        public Entity GetSingleEntity() {
+        public TEntity GetSingleEntity() {
             if (_singleEntityCache == null) {
                 var c = _entities.Count;
                 if (c == 1) {
@@ -154,7 +154,7 @@ namespace Entitas {
                 } else if (c == 0) {
                     return null;
                 } else {
-                    throw new GroupSingleEntityException(this);
+                    throw new GroupSingleEntityException<TEntity>(this);
                 }
             }
 
@@ -169,8 +169,8 @@ namespace Entitas {
         }
     }
 
-    public class GroupSingleEntityException : EntitasException {
-        public GroupSingleEntityException(Group group) :
+    public class GroupSingleEntityException<TEntity> : EntitasException where TEntity : class, IEntity, new() {
+        public GroupSingleEntityException(Group<TEntity> group) :
             base("Cannot get the single entity from " + group + "!\nGroup contains " + group.count + " entities:",
                 string.Join("\n", group.GetEntities().Select(e => e.ToString()).ToArray())) {
         }

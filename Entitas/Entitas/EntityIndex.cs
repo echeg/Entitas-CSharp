@@ -7,12 +7,12 @@ namespace Entitas {
         void Deactivate();
     }
 
-    public abstract class AbstractEntityIndex<T> : IEntityIndex {
+    public abstract class AbstractEntityIndex<TEntity, TKey> : IEntityIndex where TEntity : class, IEntity, new() {
 
-        protected readonly Group _group;
-        protected readonly Func<Entity, IComponent, T> _getKey;
+        protected readonly Group<TEntity> _group;
+        protected readonly Func<TEntity, IComponent, TKey> _getKey;
 
-        protected AbstractEntityIndex(Group group, Func<Entity, IComponent, T> getKey) {
+        protected AbstractEntityIndex(Group<TEntity> group, Func<TEntity, IComponent, TKey> getKey) {
             _group = group;
             _getKey = getKey;
 
@@ -26,24 +26,24 @@ namespace Entitas {
             clear();
         }
 
-        protected void indexEntities(Group group) {
+        protected void indexEntities(Group<TEntity> group) {
             var entities = group.GetEntities();
             for (int i = 0; i < entities.Length; i++) {
                 addEntity(entities[i], null);
             }
         }
 
-        protected void onEntityAdded(Group group, Entity entity, int index, IComponent component) {
+        protected void onEntityAdded(Group<TEntity> group, TEntity entity, int index, IComponent component) {
             addEntity(entity, component);
         }
 
-        protected void onEntityRemoved(Group group, Entity entity, int index, IComponent component) {
+        protected void onEntityRemoved(Group<TEntity> group, TEntity entity, int index, IComponent component) {
             removeEntity(entity, component);
         }
 
-        protected abstract void addEntity(Entity entity, IComponent component);
+        protected abstract void addEntity(TEntity entity, IComponent component);
 
-        protected abstract void removeEntity(Entity entity, IComponent component);
+        protected abstract void removeEntity(TEntity entity, IComponent component);
 
         protected abstract void clear();
 
@@ -52,20 +52,20 @@ namespace Entitas {
         }
     }
 
-    public class PrimaryEntityIndex<T> : AbstractEntityIndex<T> {
+    public class PrimaryEntityIndex<TEntity, TKey> : AbstractEntityIndex<TEntity, TKey> where TEntity : class, IEntity, new() {
 
-        readonly Dictionary<T, Entity> _index;
+        readonly Dictionary<TKey, TEntity> _index;
 
-        public PrimaryEntityIndex(Group group, Func<Entity, IComponent, T> getKey) : base(group, getKey) {
-            _index = new Dictionary<T, Entity>();
+        public PrimaryEntityIndex(Group<TEntity> group, Func<TEntity, IComponent, TKey> getKey) : base(group, getKey) {
+            _index = new Dictionary<TKey, TEntity>();
             indexEntities(group);
         }
 
-        public bool HasEntity(T key) {
+        public bool HasEntity(TKey key) {
             return _index.ContainsKey(key);
         }
 
-        public Entity GetEntity(T key) {
+        public TEntity GetEntity(TKey key) {
             var entity = TryGetEntity(key);
             if (entity == null) {
                 throw new EntityIndexException("Entity for key '" + key + "' doesn't exist!",
@@ -75,8 +75,8 @@ namespace Entitas {
             return entity;
         }
 
-        public Entity TryGetEntity(T key) {
-            Entity entity;
+        public TEntity TryGetEntity(TKey key) {
+            TEntity entity;
             _index.TryGetValue(key, out entity);
             return entity;
         }
@@ -89,7 +89,7 @@ namespace Entitas {
             _index.Clear();
         }
 
-        protected override void addEntity(Entity entity, IComponent component) {
+        protected override void addEntity(TEntity entity, IComponent component) {
             var key = _getKey(entity, component);
             if (_index.ContainsKey(key)) {
                 throw new EntityIndexException("Entity for key '" + key + "' already exists!",
@@ -100,25 +100,25 @@ namespace Entitas {
             entity.Retain(this);
         }
 
-        protected override void removeEntity(Entity entity, IComponent component) {
+        protected override void removeEntity(TEntity entity, IComponent component) {
             _index.Remove(_getKey(entity, component));
             entity.Release(this);
         }
     }
 
-    public class EntityIndex<T> : AbstractEntityIndex<T> {
+    public class EntityIndex<TEntity, TKey> : AbstractEntityIndex<TEntity, TKey> where TEntity : class, IEntity, new() {
 
-        readonly Dictionary<T, HashSet<Entity>> _index;
+        readonly Dictionary<TKey, HashSet<TEntity>> _index;
 
-        public EntityIndex(Group group, Func<Entity, IComponent, T> getKey) : base(group, getKey) {
-            _index = new Dictionary<T, HashSet<Entity>>();
+        public EntityIndex(Group<TEntity> group, Func<TEntity, IComponent, TKey> getKey) : base(group, getKey) {
+            _index = new Dictionary<TKey, HashSet<TEntity>>();
             indexEntities(group);
         }
 
-        public HashSet<Entity> GetEntities(T key) {
-            HashSet<Entity> entities;
+        public HashSet<TEntity> GetEntities(TKey key) {
+            HashSet<TEntity> entities;
             if (!_index.TryGetValue(key, out entities)) {
-                entities = new HashSet<Entity>(EntityEqualityComparer.comparer);
+                entities = new HashSet<TEntity>(EntityEqualityComparer<TEntity>.comparer);
                 _index.Add(key, entities);
             }
 
@@ -135,12 +135,12 @@ namespace Entitas {
             _index.Clear();
         }
 
-        protected override void addEntity(Entity entity, IComponent component) {
+        protected override void addEntity(TEntity entity, IComponent component) {
             GetEntities(_getKey(entity, component)).Add(entity);
             entity.Retain(this);
         }
 
-        protected override void removeEntity(Entity entity, IComponent component) {
+        protected override void removeEntity(TEntity entity, IComponent component) {
             GetEntities(_getKey(entity, component)).Remove(entity);
             entity.Release(this);
         }

@@ -20,8 +20,8 @@ namespace Entitas {
         }
 
         /// Adds the system instance to the systems list.
-        public virtual Systems Add(ISystem system) {
-            var reactiveSystem = system as ReactiveSystem;
+        public virtual Systems Add<TEntity>(ISystem system) where TEntity : class, IEntity, new() {
+            var reactiveSystem = system as ReactiveSystem<TEntity>;
 
             var initializeSystem = reactiveSystem != null
                 ? reactiveSystem.subsystem as IInitializeSystem
@@ -87,7 +87,7 @@ namespace Entitas {
         public virtual void ActivateReactiveSystems() {
             for (int i = 0; i < _executeSystems.Count; i++) {
                 var system = _executeSystems[i];
-                var reactiveSystem = system as ReactiveSystem;
+                var reactiveSystem = system as IReactiveSystemWrapper;
                 if (reactiveSystem != null) {
                     reactiveSystem.Activate();
                 }
@@ -104,7 +104,7 @@ namespace Entitas {
         public virtual void DeactivateReactiveSystems() {
             for (int i = 0; i < _executeSystems.Count; i++) {
                 var system = _executeSystems[i];
-                var reactiveSystem = system as ReactiveSystem;
+                var reactiveSystem = system as IReactiveSystemWrapper;
                 if (reactiveSystem != null) {
                     reactiveSystem.Deactivate();
                 }
@@ -120,7 +120,7 @@ namespace Entitas {
         public virtual void ClearReactiveSystems() {
             for (int i = 0; i < _executeSystems.Count; i++) {
                 var system = _executeSystems[i];
-                var reactiveSystem = system as ReactiveSystem;
+                var reactiveSystem = system as IReactiveSystemWrapper;
                 if (reactiveSystem != null) {
                     reactiveSystem.Clear();
                 }

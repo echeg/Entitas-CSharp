@@ -10,26 +10,26 @@ namespace Entitas {
     }
 
     /// A GroupObserver can observe one or more groups and collects changed entities based on the specified eventType.
-    public class GroupObserver {
+    public class GroupObserver<TEntity> where TEntity : class, IEntity, new() {
 
         /// Returns all collected entities. Call observer.ClearCollectedEntities() once you processed all entities.
-        public HashSet<Entity> collectedEntities { get { return _collectedEntities; } }
+        public HashSet<TEntity> collectedEntities { get { return _collectedEntities; } }
 
-        readonly HashSet<Entity> _collectedEntities;
-        readonly Group[] _groups;
+        readonly HashSet<TEntity> _collectedEntities;
+        readonly Group<TEntity>[] _groups;
         readonly GroupEventType[] _eventTypes;
-        Group.GroupChanged _addEntityCache;
+        Group<TEntity>.GroupChanged _addEntityCache;
         string _toStringCache;
 
         /// Creates a GroupObserver and will collect changed entities based on the specified eventType.
-        public GroupObserver(Group group, GroupEventType eventType)
+        public GroupObserver(Group<TEntity> group, GroupEventType eventType)
             : this(new [] { group }, new [] { eventType }) {
         }
 
         /// Creates a GroupObserver and will collect changed entities based on the specified eventTypes.
-        public GroupObserver(Group[] groups, GroupEventType[] eventTypes) {
+        public GroupObserver(Group<TEntity>[] groups, GroupEventType[] eventTypes) {
             _groups = groups;
-            _collectedEntities = new HashSet<Entity>(EntityEqualityComparer.comparer);
+            _collectedEntities = new HashSet<TEntity>(EntityEqualityComparer<TEntity>.comparer);
             _eventTypes = eventTypes;
 
             if (groups.Length != eventTypes.Length) {
@@ -81,7 +81,7 @@ namespace Entitas {
             _collectedEntities.Clear();
         }
 
-        void addEntity(Group group, Entity entity, int index, IComponent component) {
+        void addEntity(Group<TEntity> group, TEntity entity, int index, IComponent component) {
             var added = _collectedEntities.Add(entity);
             if (added) {
                 entity.Retain(this);

@@ -43,43 +43,51 @@ namespace Entitas {
         /// It's used to provide better error messages.
         public PoolMetaData poolMetaData { get { return _poolMetaData; } }
 
-        internal int _creationIndex;
-        internal bool _isEnabled = true;
+        int _creationIndex;
+        bool _isEnabled;
 
-        readonly int _totalComponents;
-        readonly IComponent[] _components;
-        readonly Stack<IComponent>[] _componentPools;
-        readonly PoolMetaData _poolMetaData;
+        int _totalComponents;
+        IComponent[] _components;
+        Stack<IComponent>[] _componentPools;
+        PoolMetaData _poolMetaData;
 
         IComponent[] _componentsCache;
         int[] _componentIndicesCache;
         string _toStringCache;
 
+        bool _isInitialized;
+
         /// Use pool.CreateEntity() to create a new entity and pool.DestroyEntity() to destroy it.
-        public Entity(int totalComponents, Stack<IComponent>[] componentPools, PoolMetaData poolMetaData = null) {
-            _totalComponents = totalComponents;
-            _components = new IComponent[totalComponents];
-            _componentPools = componentPools;
+        public void Setup(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, PoolMetaData poolMetaData = null) {
+            _creationIndex = creationIndex;
+            _isEnabled = true;
 
-            if(poolMetaData != null) {
-                _poolMetaData = poolMetaData;
-            } else {
+            if(!_isInitialized) {
+                _isInitialized = true;
+                _totalComponents = totalComponents;
+                _components = new IComponent[totalComponents];
+                _componentPools = componentPools;
 
-                // If pool.CreateEntity() was used to create the entity, we will never end up here.
-                // This is a fallback when entities are created manually.
+                if(poolMetaData != null) {
+                    _poolMetaData = poolMetaData;
+                } else {
 
-                var componentNames = new string[totalComponents];
-                for(int i = 0; i < componentNames.Length; i++) {
-                    componentNames[i] = i.ToString();
+                    // If pool.CreateEntity() was used to create the entity, we will never end up here.
+                    // This is a fallback when entities are created manually.
+
+                    var componentNames = new string[totalComponents];
+                    for(int i = 0; i < componentNames.Length; i++) {
+                        componentNames[i] = i.ToString();
+                    }
+                    _poolMetaData = new PoolMetaData("No Pool", componentNames, null);
                 }
-                _poolMetaData = new PoolMetaData("No Pool", componentNames, null);
             }
         }
 
         /// Adds a component at the specified index. You can only have one component at an index.
         /// Each component type must have its own constant index.
         /// The prefered way is to use the generated methods from the code generator.
-        public Entity AddComponent(int index, IComponent component) {
+        public IEntity AddComponent(int index, IComponent component) {
             if(!_isEnabled) {
                 throw new EntityIsNotEnabledException("Cannot add component '" + _poolMetaData.componentNames[index] + "' to " + this + "!");
             }
@@ -105,7 +113,7 @@ namespace Entitas {
 
         /// Removes a component at the specified index. You can only remove a component at an index if it exists.
         /// The prefered way is to use the generated methods from the code generator.
-        public Entity RemoveComponent(int index) {
+        public IEntity RemoveComponent(int index) {
             if(!_isEnabled) {
                 throw new EntityIsNotEnabledException("Cannot remove component '" + _poolMetaData.componentNames[index] + "' from " + this + "!");
             }
@@ -125,7 +133,7 @@ namespace Entitas {
 
         /// Replaces an existing component at the specified index or adds it if it doesn't exist yet.
         /// The prefered way is to use the generated methods from the code generator.
-        public Entity ReplaceComponent(int index, IComponent component) {
+        public IEntity ReplaceComponent(int index, IComponent component) {
             if(!_isEnabled) {
                 throw new EntityIsNotEnabledException("Cannot replace component '" + _poolMetaData.componentNames[index] + "' on " + this + "!");
             }
@@ -270,9 +278,9 @@ namespace Entitas {
         }
 
         /// Returns a new or reusable component from the componentPool for the specified component index.
-        public T CreateComponent<T>(int index) where T : new() {
+        public TComponent CreateComponent<TComponent>(int index) where TComponent : new() {
             var componentPool = GetComponentPool(index);
-            return componentPool.Count > 0 ? (T)componentPool.Pop() : new T();
+            return componentPool.Count > 0 ? (TComponent)componentPool.Pop() : new TComponent();
         }
 
 #if ENTITAS_FAST_AND_UNSAFE
@@ -295,7 +303,7 @@ namespace Entitas {
         /// Retains the entity. An owner can only retain the same entity once.
         /// Retain/Release is part of AERC (Automatic Entity Reference Counting) and is used internally to prevent pooling retained entities.
         /// If you use retain manually you also have to release it manually at some point.
-        public Entity Retain(object owner) {
+        public IEntity Retain(object owner) {
 
 #if ENTITAS_FAST_AND_UNSAFE
 
@@ -344,7 +352,7 @@ namespace Entitas {
 
         // This method is used internally. Don't call it yourself.
         // Use pool.DestroyEntity(entity);
-        internal void destroy() {
+        public void Destroy() {
             RemoveAllComponents();
             OnComponentAdded = null;
             OnComponentReplaced = null;
@@ -353,7 +361,7 @@ namespace Entitas {
         }
 
         // Do not call this method manually. This method is called by the pool.
-        internal void removeAllOnEntityReleasedHandlers() {
+        public void RemoveAllOnEntityReleasedHandlers() {
             OnEntityReleased = null;
         }
 
@@ -405,28 +413,28 @@ namespace Entitas {
         }
     }
 
-    public class EntityEqualityComparer : IEqualityComparer<Entity> {
+    public class EntityEqualityComparer<TEntity> : IEqualityComparer<TEntity> where TEntity : class, IEntity, new() {
 
-        public static readonly EntityEqualityComparer comparer = new EntityEqualityComparer();
+        public static readonly EntityEqualityComparer<TEntity> comparer = new EntityEqualityComparer<TEntity>();
 
-        public bool Equals(Entity x, Entity y) {
+        public bool Equals(TEntity x, TEntity y) {
             return x == y;
         }
 
-        public int GetHashCode(Entity obj) {
-            return obj._creationIndex;
+        public int GetHashCode(TEntity obj) {
+            return obj.creationIndex;
         }
     }
 
     public class EntityIsAlreadyRetainedByOwnerException : EntitasException {
-        public EntityIsAlreadyRetainedByOwnerException(Entity entity, object owner) :
+        public EntityIsAlreadyRetainedByOwnerException(IEntity entity, object owner) :
             base("'" + owner + "' cannot retain " + entity + "!\nEntity is already retained by this object!",
                 "The entity must be released by this object first.") {
         }
     }
 
     public class EntityIsNotRetainedByOwnerException : EntitasException {
-        public EntityIsNotRetainedByOwnerException(Entity entity, object owner) :
+        public EntityIsNotRetainedByOwnerException(IEntity entity, object owner) :
             base("'" + owner + "' cannot release " + entity + "!\nEntity is not retained by this object!",
                 "An entity can only be released from objects that retain it.") {
         }

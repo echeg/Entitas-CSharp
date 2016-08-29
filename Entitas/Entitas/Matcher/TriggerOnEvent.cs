@@ -1,11 +1,11 @@
 ﻿namespace Entitas {
 
-    public struct TriggerOnEvent {
+    public struct TriggerOnEvent<TEntity> where TEntity : class, IEntity, new() {
 
-        public IMatcher trigger;
+        public IMatcher<TEntity> trigger;
         public GroupEventType eventType;
 
-        public TriggerOnEvent(IMatcher trigger, GroupEventType eventType) {
+        public TriggerOnEvent(IMatcher<TEntity> trigger, GroupEventType eventType) {
             this.trigger = trigger;
             this.eventType = eventType;
         }

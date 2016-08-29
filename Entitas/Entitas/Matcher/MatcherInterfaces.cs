@@ -1,24 +1,24 @@
 ﻿namespace Entitas {
 
-    public interface ICompoundMatcher : IMatcher {
+    public interface ICompoundMatcher<TEntity> : IMatcher<TEntity> where TEntity : class, IEntity, new() {
         int[] allOfIndices { get; }
         int[] anyOfIndices { get; }
         int[] noneOfIndices { get; }
     }
 
-    public interface IAllOfMatcher : ICompoundMatcher {
-        IAnyOfMatcher AnyOf(params int[] indices);
-        IAnyOfMatcher AnyOf(params IMatcher[] matchers);
-        INoneOfMatcher NoneOf(params int[] indices);
-        INoneOfMatcher NoneOf(params IMatcher[] matchers);
+    public interface IAllOfMatcher<TEntity> : ICompoundMatcher<TEntity> where TEntity : class, IEntity, new() {
+        IAnyOfMatcher<TEntity> AnyOf(params int[] indices);
+        IAnyOfMatcher<TEntity> AnyOf(params IMatcher<TEntity>[] matchers);
+        INoneOfMatcher<TEntity> NoneOf(params int[] indices);
+        INoneOfMatcher<TEntity> NoneOf(params IMatcher<TEntity>[] matchers);
     }
 
-    public interface IAnyOfMatcher : ICompoundMatcher {
-        INoneOfMatcher NoneOf(params int[] indices);
-        INoneOfMatcher NoneOf(params IMatcher[] matchers);
+    public interface IAnyOfMatcher<TEntity> : ICompoundMatcher<TEntity> where TEntity : class, IEntity, new() {
+        INoneOfMatcher<TEntity> NoneOf(params int[] indices);
+        INoneOfMatcher<TEntity> NoneOf(params IMatcher<TEntity>[] matchers);
     }
 
-    public interface INoneOfMatcher : ICompoundMatcher {
+    public interface INoneOfMatcher<TEntity> : ICompoundMatcher<TEntity> where TEntity : class, IEntity, new() {
     }
 }
 

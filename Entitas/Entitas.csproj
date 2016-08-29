@@ -93,6 +93,7 @@
     <Compile Include="Entitas\Extensions\EntityExtension.cs" />
     <Compile Include="Entitas\EntitasCache.cs" />
     <Compile Include="Entitas\Interfaces\IEntity.cs" />
+    <Compile Include="Entitas\Interfaces\IPool.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

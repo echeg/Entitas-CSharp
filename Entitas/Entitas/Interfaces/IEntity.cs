@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Entitas {
 
-    public delegate void EntityChanged(Entity entity, int index, IComponent component);
-    public delegate void ComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent);
-    public delegate void EntityReleased(Entity entity);
+    public delegate void EntityChanged(IEntity entity, int index, IComponent component);
+    public delegate void ComponentReplaced(IEntity entity, int index, IComponent previousComponent, IComponent newComponent);
+    public delegate void EntityReleased(IEntity entity);
 
     public interface IEntity {
 
@@ -44,18 +44,21 @@ namespace Entitas {
         /// It's used to provide better error messages.
         PoolMetaData poolMetaData { get; }
 
+        /// Use pool.CreateEntity() to create a new entity and pool.DestroyEntity() to destroy it.
+        void Setup(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, PoolMetaData poolMetaData = null);
+
         /// Adds a component at the specified index. You can only have one component at an index.
         /// Each component type must have its own constant index.
         /// The prefered way is to use the generated methods from the code generator.
-        Entity AddComponent(int index, IComponent component);
+        IEntity AddComponent(int index, IComponent component);
 
         /// Removes a component at the specified index. You can only remove a component at an index if it exists.
         /// The prefered way is to use the generated methods from the code generator.
-        Entity RemoveComponent(int index);
+        IEntity RemoveComponent(int index);
 
         /// Replaces an existing component at the specified index or adds it if it doesn't exist yet.
         /// The prefered way is to use the generated methods from the code generator.
-        Entity ReplaceComponent(int index, IComponent component);
+        IEntity ReplaceComponent(int index, IComponent component);
 
         /// Returns a component at the specified index. You can only get a component at an index if it exists.
         /// The prefered way is to use the generated methods from the code generator.
@@ -89,7 +92,17 @@ namespace Entitas {
         IComponent CreateComponent(int index, Type type);
 
         /// Returns a new or reusable component from the componentPool for the specified component index.
-        T CreateComponent<T>(int index) where T : new();
+        TComponent CreateComponent<TComponent>(int index) where TComponent : new();
+
+        /// Retains the entity. An owner can only retain the same entity once.
+        /// Retain/Release is part of AERC (Automatic Entity Reference Counting) and is used internally to prevent pooling retained entities.
+        /// If you use retain manually you also have to release it manually at some point.
+        IEntity Retain(object owner);
+
+        /// Releases the entity. An owner can only release an entity if it retains it.
+        /// Retain/Release is part of AERC (Automatic Entity Reference Counting) and is used internally to prevent pooling retained entities.
+        /// If you use retain manually you also have to release it manually at some point.
+        void Release(object owner);
 
         #if ENTITAS_FAST_AND_UNSAFE
 
@@ -105,5 +118,14 @@ namespace Entitas {
         HashSet<object> owners { get; }
 
         #endif
+
+        // This method is used internally. Don't call it yourself.
+        // Use pool.DestroyEntity(entity);
+        void Destroy();
+
+        // Do not call this method manually. This method is called by the pool.
+        void RemoveAllOnEntityReleasedHandlers();
+
+        string ToString();
     }
 }

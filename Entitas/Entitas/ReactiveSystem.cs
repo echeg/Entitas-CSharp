@@ -8,41 +8,41 @@ namespace Entitas {
     /// e.g. a change of the position of an entity to update the gameObject.transform.position of the related gameObject.
     /// Recommended way to create systems in general: pool.CreateSystem(new MySystem());
     /// This will automatically wrap MySystem in a ReactiveSystem if it implements IReactiveSystem, IMultiReactiveSystem or IGroupObserverSystem.
-    public class ReactiveSystem : IExecuteSystem {
+    public class ReactiveSystem<TEntity> : IReactiveSystemWrapper where TEntity : class, IEntity, new() {
 
         /// Returns the subsystem which will be managed by this instance of ReactiveSystem.
-        public IReactiveExecuteSystem subsystem { get { return _subsystem; } }
+        public IReactiveExecuteSystem<TEntity> subsystem { get { return _subsystem; } }
 
-        readonly IReactiveExecuteSystem _subsystem;
-        readonly GroupObserver _observer;
-        readonly IMatcher _ensureComponents;
-        readonly IMatcher _excludeComponents;
+        readonly IReactiveExecuteSystem<TEntity> _subsystem;
+        readonly GroupObserver<TEntity> _observer;
+        readonly IMatcher<TEntity> _ensureComponents;
+        readonly IMatcher<TEntity> _excludeComponents;
         readonly bool _clearAfterExecute;
-        readonly List<Entity> _buffer;
+        readonly List<TEntity> _buffer;
         string _toStringCache;
 
         /// Recommended way to create systems in general: pool.CreateSystem(new MySystem());
-        public ReactiveSystem(Pool pool, IReactiveSystem subSystem) :
+        public ReactiveSystem(Pool<TEntity> pool, IReactiveSystem<TEntity> subSystem) :
             this(subSystem, createGroupObserver(pool, new [] { subSystem.trigger })) {
         }
 
         /// Recommended way to create systems in general: pool.CreateSystem(new MySystem());
-        public ReactiveSystem(Pool pool, IMultiReactiveSystem subSystem) :
+        public ReactiveSystem(Pool<TEntity> pool, IMultiReactiveSystem<TEntity> subSystem) :
             this(subSystem, createGroupObserver(pool, subSystem.triggers)) {
         }
 
         /// Recommended way to create systems in general: pool.CreateSystem(new MySystem());
-        public ReactiveSystem(IGroupObserverSystem subSystem) :
+        public ReactiveSystem(IGroupObserverSystem<TEntity> subSystem) :
             this(subSystem, subSystem.groupObserver) {
         }
 
-        ReactiveSystem(IReactiveExecuteSystem subSystem, GroupObserver groupObserver) {
+        ReactiveSystem(IReactiveExecuteSystem<TEntity> subSystem, GroupObserver<TEntity> groupObserver) {
             _subsystem = subSystem;
-            var ensureComponents = subSystem as IEnsureComponents;
+            var ensureComponents = subSystem as IEnsureComponents<TEntity>;
             if (ensureComponents != null) {
                 _ensureComponents = ensureComponents.ensureComponents;
             }
-            var excludeComponents = subSystem as IExcludeComponents;
+            var excludeComponents = subSystem as IExcludeComponents<TEntity>;
             if (excludeComponents != null) {
                 _excludeComponents = excludeComponents.excludeComponents;
             }
@@ -50,12 +50,12 @@ namespace Entitas {
             _clearAfterExecute = (subSystem as IClearReactiveSystem) != null;
 
             _observer = groupObserver;
-            _buffer = new List<Entity>();
+            _buffer = new List<TEntity>();
         }
 
-        static GroupObserver createGroupObserver(Pool pool, TriggerOnEvent[] triggers) {
+        static GroupObserver<TEntity> createGroupObserver(Pool<TEntity> pool, TriggerOnEvent<TEntity>[] triggers) {
             var triggersLength = triggers.Length;
-            var groups = new Group[triggersLength];
+            var groups = new Group<TEntity>[triggersLength];
             var eventTypes = new GroupEventType[triggersLength];
             for (int i = 0; i < triggersLength; i++) {
                 var trigger = triggers[i];
@@ -63,7 +63,7 @@ namespace Entitas {
                 eventTypes[i] = trigger.eventType;
             }
 
-            return new GroupObserver(groups, eventTypes);
+            return new GroupObserver<TEntity>(groups, eventTypes);
         }
 
         /// Activates the ReactiveSystem (ReactiveSystem are activated by default) and starts observing changes
@@ -91,25 +91,29 @@ namespace Entitas {
                     if (_excludeComponents != null) {
                         foreach (var e in _observer.collectedEntities) {
                             if (_ensureComponents.Matches(e) && !_excludeComponents.Matches(e)) {
-                                _buffer.Add(e.Retain(this));
+                                e.Retain(this);
+                                _buffer.Add(e);
                             }
                         }
                     } else {
                         foreach (var e in _observer.collectedEntities) {
                             if (_ensureComponents.Matches(e)) {
-                                _buffer.Add(e.Retain(this));
+                                e.Retain(this);
+                                _buffer.Add(e);
                             }
                         }
                     }
                 } else if (_excludeComponents != null) {
                     foreach (var e in _observer.collectedEntities) {
                         if (!_excludeComponents.Matches(e)) {
-                            _buffer.Add(e.Retain(this));
+                            e.Retain(this);
+                            _buffer.Add(e);
                         }
                     }
                 } else {
                     foreach (var e in _observer.collectedEntities) {
-                        _buffer.Add(e.Retain(this));
+                        e.Retain(this);
+                        _buffer.Add(e);
                     }
                 }
 

@@ -2,7 +2,7 @@
 
 namespace Entitas {
 
-    public partial class Matcher {
+    public partial class Matcher<TEntity> {
 
         public string[] componentNames;
 
