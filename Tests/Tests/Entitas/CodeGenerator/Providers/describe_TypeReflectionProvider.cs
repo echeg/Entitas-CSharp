@@ -7,7 +7,7 @@ using NSpec;
 class describe_TypeReflectionProvider : nspec {
 
     TypeReflectionProvider createProviderWithTypes(params Type[] types) {
-        return new TypeReflectionProvider(types, new string[0], new string[0]);
+        return new TypeReflectionProvider(types, new [] { "Pool" }, new string[0]);
     }
 
     TypeReflectionProvider createProviderWithPoolName(params string[] poolNames) {
@@ -15,18 +15,16 @@ class describe_TypeReflectionProvider : nspec {
     }
 
     TypeReflectionProvider createProviderWithBlueprintNames(params string[] blueprintNames) {
-        return new TypeReflectionProvider(new [] { typeof(object) }, new string[0], blueprintNames);
+        return new TypeReflectionProvider(new [] { typeof(object) }, new [] { "Pool" }, blueprintNames);
     }
 
     void when_providing() {
 
         context["pool names"] = () => {
 
-            it["has default pool if pool names is empty"] = () => {
-                var provider = createProviderWithPoolName();
-                provider.poolNames.Length.should_be(1);
-                provider.poolNames[0].should_be(CodeGenerator.DEFAULT_POOL_NAME);
-            };
+            it["throws when pool names is empty"] = expect<TypeReflectionProviderException>(() => {
+                createProviderWithPoolName();
+            });
 
             it["adds pool names if set"] = () => {
                 var provider = createProviderWithPoolName("Pool1", "Pool2");

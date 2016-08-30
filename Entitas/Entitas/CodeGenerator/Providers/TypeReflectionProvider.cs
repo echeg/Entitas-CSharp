@@ -18,7 +18,10 @@ namespace Entitas.CodeGenerator {
         public TypeReflectionProvider(Type[] types, string[] poolNames, string[] blueprintNames) {
             var pools = new HashSet<string>(poolNames);
             if (poolNames.Length == 0) {
-                pools.Add(CodeGenerator.DEFAULT_POOL_NAME);
+                throw new TypeReflectionProviderException(
+                    "No pool names set!",
+                    "Provide at least one pool name."
+                );
             }
             _componentInfos = GetComponentInfos(types);
             _poolNames = pools.OrderBy(poolName => poolName).ToArray();
@@ -154,6 +157,11 @@ namespace Entitas.CodeGenerator {
             }
 
             return false;
+        }
+    }
+
+    public class TypeReflectionProviderException : EntitasException {
+        public TypeReflectionProviderException(string message, string hint) : base(message, hint) {
         }
     }
 }
