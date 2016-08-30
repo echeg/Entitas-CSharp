@@ -1,5 +1,6 @@
 ﻿using System;
 using Entitas;
+using Entitas.CodeGenerator;
 using Entitas.Serialization.Blueprints;
 using NSpec;
 
@@ -190,6 +191,13 @@ class describe_EntitasErrorMessages : EntitasTest {
                 var nameAge = createNameAge();
                 _pool.CreateEntity().AddComponent(CID.ComponentA, nameAge);
                 _pool.CreateEntity().AddComponent(CID.ComponentA, nameAge);
+            });
+        };
+
+        context["TypeReflectionProvider"] = () => {
+
+            it["no pool names"] = () => printErrorMessage(() => {
+                new TypeReflectionProvider(new Type[0], new string[0] , new string[0]);
             });
         };
     }
