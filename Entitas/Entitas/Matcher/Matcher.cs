@@ -23,7 +23,7 @@ namespace Entitas {
         int[] _anyOfIndices;
         int[] _noneOfIndices;
 
-        Matcher() {
+        protected Matcher() {
         }
 
         IAnyOfMatcher<TEntity> IAllOfMatcher<TEntity>.AnyOf(params int[] indices) {

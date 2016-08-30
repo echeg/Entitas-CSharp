@@ -79,7 +79,7 @@ namespace Entitas.Unity.VisualDebugging {
             updateName();
         }
 
-        public override Systems Add(ISystem system) {
+        public override Systems Add<TEntity>(ISystem system) {
             _systems.Add(system);
             var debugSystems = system as DebugSystems;
             if (debugSystems != null) {
@@ -94,7 +94,7 @@ namespace Entitas.Unity.VisualDebugging {
                 _executeSystemInfos.Add(systemInfo);
             }
 
-            return base.Add(system);
+            return base.Add<TEntity>(system);
         }
 
         public void ResetDurations() {

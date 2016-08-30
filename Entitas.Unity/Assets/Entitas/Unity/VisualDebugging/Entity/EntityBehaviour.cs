@@ -20,7 +20,7 @@ namespace Entitas.Unity.VisualDebugging {
             Update();
         }
 
-        void onEntityReleased(Entity e) {
+        void onEntityReleased(IEntity e) {
             gameObject.DestroyGameObject();
         }
 
