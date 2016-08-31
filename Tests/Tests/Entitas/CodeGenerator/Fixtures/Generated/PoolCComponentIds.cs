@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class PoolCComponentIds {
+
     public const int C = 0;
     public const int E = 1;
     public const int D = 2;

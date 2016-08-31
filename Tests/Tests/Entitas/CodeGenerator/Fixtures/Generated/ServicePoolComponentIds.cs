@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class ServicePoolComponentIds {
+
     public const int GeneratedService = 0;
 
     public const int TotalComponents = 1;

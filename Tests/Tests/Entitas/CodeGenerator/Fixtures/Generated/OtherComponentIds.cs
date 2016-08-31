@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class OtherComponentIds {
+
     public const int OtherPool = 0;
     public const int SomeClass = 4;
 

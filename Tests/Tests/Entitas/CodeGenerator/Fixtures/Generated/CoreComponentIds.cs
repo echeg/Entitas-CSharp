@@ -7,6 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class CoreComponentIds {
+
     public const int Animating = 0;
     public const int ComponentWithFieldsAndProperties = 1;
     public const int CustomPrefix = 2;

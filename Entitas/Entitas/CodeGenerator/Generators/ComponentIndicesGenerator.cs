@@ -101,7 +101,7 @@ namespace Entitas.CodeGenerator {
         }
 
         static string addClassHeader(string lookupTag) {
-            return string.Format("public static class {0} {{\n", lookupTag);
+            return string.Format("public static class {0} {{\n\n", lookupTag);
         }
 
         static string addIndices(ComponentInfo[] componentInfos) {
