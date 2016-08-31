@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Entitas;
 
-public class TestMultiReactiveSystem : IMultiReactiveSystem {
+public class TestMultiReactiveSystem : IMultiReactiveSystem<Entity> {
 
-    public TriggerOnEvent[] triggers {
+    public TriggerOnEvent<Entity>[] triggers {
         get {
             return new [] {
                 Matcher.AllOf(0).OnEntityAdded(),

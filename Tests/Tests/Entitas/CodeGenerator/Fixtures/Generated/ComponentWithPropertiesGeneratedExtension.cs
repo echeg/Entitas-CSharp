@@ -17,7 +17,8 @@ namespace Entitas {
         public Entity AddComponentWithProperties(string newPublicProperty) {
             var component = CreateComponent<ComponentWithProperties>(ComponentIds.ComponentWithProperties);
             component.publicProperty = newPublicProperty;
-            return AddComponent(ComponentIds.ComponentWithProperties, component);
+            AddComponent(ComponentIds.ComponentWithProperties, component);
+            return this;
         }
 
         public Entity ReplaceComponentWithProperties(string newPublicProperty) {
@@ -28,7 +29,8 @@ namespace Entitas {
         }
 
         public Entity RemoveComponentWithProperties() {
-            return RemoveComponent(ComponentIds.ComponentWithProperties);
+            RemoveComponent(ComponentIds.ComponentWithProperties);
+            return this;
         }
     }
 

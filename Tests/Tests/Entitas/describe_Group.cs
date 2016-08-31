@@ -90,7 +90,7 @@ class describe_Group : nspec {
             _groupA.GetSingleEntity().should_be_same(eA1);
         };
 
-        it["throws when attempting to get single entity and multiple matching entities exist"] = expect<GroupSingleEntityException>(() => {
+        it["throws when attempting to get single entity and multiple matching entities exist"] = expect<GroupSingleEntityException<Entity>>(() => {
             handleSilently(eA1);
             handleSilently(eA2);
             _groupA.GetSingleEntity();

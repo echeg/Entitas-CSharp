@@ -20,7 +20,8 @@ namespace Entitas {
             var component = CreateComponent<OtherPoolComponent>(OtherComponentIds.OtherPool);
             component.timestamp = newTimestamp;
             component.isLoggedIn = newIsLoggedIn;
-            return AddComponent(OtherComponentIds.OtherPool, component);
+            AddComponent(OtherComponentIds.OtherPool, component);
+            return this;
         }
 
         public Entity ReplaceOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
@@ -32,7 +33,8 @@ namespace Entitas {
         }
 
         public Entity RemoveOtherPool() {
-            return RemoveComponent(OtherComponentIds.OtherPool);
+            RemoveComponent(OtherComponentIds.OtherPool);
+            return this;
         }
     }
 

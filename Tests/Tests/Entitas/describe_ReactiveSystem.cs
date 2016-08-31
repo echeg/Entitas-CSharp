@@ -3,7 +3,7 @@ using NSpec;
 
 class describe_ReactiveSystem : nspec {
 
-    readonly IMatcher _matcherAB = Matcher.AllOf(CID.ComponentA, CID.ComponentB);
+    readonly IMatcher<Entity> _matcherAB = Matcher.AllOf(CID.ComponentA, CID.ComponentB);
 
     static void assertEntities(IReactiveSubSystemSpy system, Entity entity, int didExecute = 1) {
         if (entity == null) {

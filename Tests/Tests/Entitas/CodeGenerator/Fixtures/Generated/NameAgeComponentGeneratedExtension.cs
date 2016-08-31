@@ -18,7 +18,8 @@ namespace Entitas {
             var component = CreateComponent<NameAgeComponent>(ComponentIds.NameAge);
             component.name = newName;
             component.age = newAge;
-            return AddComponent(ComponentIds.NameAge, component);
+            AddComponent(ComponentIds.NameAge, component);
+            return this;
         }
 
         public Entity ReplaceNameAge(string newName, int newAge) {
@@ -30,7 +31,8 @@ namespace Entitas {
         }
 
         public Entity RemoveNameAge() {
-            return RemoveComponent(ComponentIds.NameAge);
+            RemoveComponent(ComponentIds.NameAge);
+            return this;
         }
     }
 

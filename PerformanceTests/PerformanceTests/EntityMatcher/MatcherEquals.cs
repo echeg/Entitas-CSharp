@@ -2,8 +2,8 @@
 
 public class MatcherEquals : IPerformanceTest {
     const int n = 10000000;
-    IMatcher _m1;
-    IMatcher _m2;
+    IMatcher<Entity> _m1;
+    IMatcher<Entity> _m2;
 
     public void Before() {
         _m1 = Matcher.AllOf(new [] {

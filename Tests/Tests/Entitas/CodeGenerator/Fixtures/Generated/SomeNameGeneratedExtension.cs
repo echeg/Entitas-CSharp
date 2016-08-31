@@ -23,7 +23,8 @@ namespace Entitas {
         public Entity AddSomeName(CustomNames newValue) {
             var component = CreateComponent<SomeName>(SomePoolComponentIds.SomeName);
             component.value = newValue;
-            return AddComponent(SomePoolComponentIds.SomeName, component);
+            AddComponent(SomePoolComponentIds.SomeName, component);
+            return this;
         }
 
         public Entity ReplaceSomeName(CustomNames newValue) {
@@ -34,7 +35,8 @@ namespace Entitas {
         }
 
         public Entity RemoveSomeName() {
-            return RemoveComponent(SomePoolComponentIds.SomeName);
+            RemoveComponent(SomePoolComponentIds.SomeName);
+            return this;
         }
     }
 }

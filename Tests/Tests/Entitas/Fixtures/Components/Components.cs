@@ -25,23 +25,23 @@ public static class CID {
 
 public static class EntityTestExtensions {
 
-    public static Entity AddComponentA(this Entity e) { return e.AddComponent(CID.ComponentA, Component.A); }
-    public static Entity AddComponentB(this Entity e) { return e.AddComponent(CID.ComponentB, Component.B); }
-    public static Entity AddComponentC(this Entity e) { return e.AddComponent(CID.ComponentC, Component.C); }
+    public static Entity AddComponentA(this Entity e) { return (Entity)e.AddComponent(CID.ComponentA, Component.A); }
+    public static Entity AddComponentB(this Entity e) { return (Entity)e.AddComponent(CID.ComponentB, Component.B); }
+    public static Entity AddComponentC(this Entity e) { return (Entity)e.AddComponent(CID.ComponentC, Component.C); }
 
     public static bool HasComponentA(this Entity e) { return e.HasComponent(CID.ComponentA); }
     public static bool HasComponentB(this Entity e) { return e.HasComponent(CID.ComponentB); }
     public static bool HasComponentC(this Entity e) { return e.HasComponent(CID.ComponentC); }
 
-    public static Entity RemoveComponentA(this Entity e) { return e.RemoveComponent(CID.ComponentA); }
-    public static Entity RemoveComponentB(this Entity e) { return e.RemoveComponent(CID.ComponentB); }
-    public static Entity RemoveComponentC(this Entity e) { return e.RemoveComponent(CID.ComponentC); }
+    public static Entity RemoveComponentA(this Entity e) { return (Entity)e.RemoveComponent(CID.ComponentA); }
+    public static Entity RemoveComponentB(this Entity e) { return (Entity)e.RemoveComponent(CID.ComponentB); }
+    public static Entity RemoveComponentC(this Entity e) { return (Entity)e.RemoveComponent(CID.ComponentC); }
 
     public static ComponentA GetComponentA(this Entity e) { return (ComponentA)e.GetComponent(CID.ComponentA); }
     public static ComponentB GetComponentB(this Entity e) { return (ComponentB)e.GetComponent(CID.ComponentB); }
     public static ComponentC GetComponentC(this Entity e) { return (ComponentC)e.GetComponent(CID.ComponentC); }
 
-    public static Entity ReplaceComponentA(this Entity e, ComponentA component) { return e.ReplaceComponent(CID.ComponentA, component); }
-    public static Entity ReplaceComponentB(this Entity e, ComponentB component) { return e.ReplaceComponent(CID.ComponentB, component); }
-    public static Entity ReplaceComponentC(this Entity e, ComponentC component) { return e.ReplaceComponent(CID.ComponentC, component); }
+    public static Entity ReplaceComponentA(this Entity e, ComponentA component) { return (Entity)e.ReplaceComponent(CID.ComponentA, component); }
+    public static Entity ReplaceComponentB(this Entity e, ComponentB component) { return (Entity)e.ReplaceComponent(CID.ComponentB, component); }
+    public static Entity ReplaceComponentC(this Entity e, ComponentC component) { return (Entity)e.ReplaceComponent(CID.ComponentC, component); }
 }

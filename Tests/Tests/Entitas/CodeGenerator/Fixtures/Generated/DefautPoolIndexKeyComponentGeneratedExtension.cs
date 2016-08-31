@@ -17,7 +17,8 @@ namespace Entitas {
         public Entity AddDefautPoolIndexKey(string newName) {
             var component = CreateComponent<DefautPoolIndexKeyComponent>(ComponentIds.DefautPoolIndexKey);
             component.name = newName;
-            return AddComponent(ComponentIds.DefautPoolIndexKey, component);
+            AddComponent(ComponentIds.DefautPoolIndexKey, component);
+            return this;
         }
 
         public Entity ReplaceDefautPoolIndexKey(string newName) {
@@ -28,7 +29,8 @@ namespace Entitas {
         }
 
         public Entity RemoveDefautPoolIndexKey() {
-            return RemoveComponent(ComponentIds.DefautPoolIndexKey);
+            RemoveComponent(ComponentIds.DefautPoolIndexKey);
+            return this;
         }
     }
 

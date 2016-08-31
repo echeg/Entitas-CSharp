@@ -19,7 +19,8 @@ namespace Entitas {
         public Entity AddMetaIndexKey(string newName) {
             var component = CreateComponent<MetaIndexKeyComponent>(MetaComponentIds.MetaIndexKey);
             component.name = newName;
-            return AddComponent(MetaComponentIds.MetaIndexKey, component);
+            AddComponent(MetaComponentIds.MetaIndexKey, component);
+            return this;
         }
 
         public Entity ReplaceMetaIndexKey(string newName) {
@@ -30,7 +31,8 @@ namespace Entitas {
         }
 
         public Entity RemoveMetaIndexKey() {
-            return RemoveComponent(MetaComponentIds.MetaIndexKey);
+            RemoveComponent(MetaComponentIds.MetaIndexKey);
+            return this;
         }
     }
 }

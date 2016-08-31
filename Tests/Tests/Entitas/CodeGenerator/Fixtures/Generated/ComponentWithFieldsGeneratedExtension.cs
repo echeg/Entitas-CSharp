@@ -17,7 +17,8 @@ namespace Entitas {
         public Entity AddComponentWithFields(string newPublicField) {
             var component = CreateComponent<ComponentWithFields>(ComponentIds.ComponentWithFields);
             component.publicField = newPublicField;
-            return AddComponent(ComponentIds.ComponentWithFields, component);
+            AddComponent(ComponentIds.ComponentWithFields, component);
+            return this;
         }
 
         public Entity ReplaceComponentWithFields(string newPublicField) {
@@ -28,7 +29,8 @@ namespace Entitas {
         }
 
         public Entity RemoveComponentWithFields() {
-            return RemoveComponent(ComponentIds.ComponentWithFields);
+            RemoveComponent(ComponentIds.ComponentWithFields);
+            return this;
         }
     }
 

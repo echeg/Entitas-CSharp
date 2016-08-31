@@ -123,7 +123,7 @@ class describe_EntitasErrorMessages : EntitasTest {
             });
 
             it["destroy entity which is not in pool"] = () => printErrorMessage(() => {
-                _pool.DestroyEntity(new Entity(0, null));
+                _pool.DestroyEntity(new Entity());
             });
 
             it["destroy retained entities"] = () => printErrorMessage(() => {

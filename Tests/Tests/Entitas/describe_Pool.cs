@@ -271,7 +271,7 @@ class describe_Pool : nspec {
             });
 
             it["dispatches OnGroupCreated when creating a new group"] = () => {
-                Group eventGroup = null;
+                Group<Entity> eventGroup = null;
                 pool.OnGroupCreated += (p, g) => {
                     didDispatch += 1;
                     p.should_be_same(pool);
@@ -289,7 +289,7 @@ class describe_Pool : nspec {
             };
 
             it["dispatches OnGroupCleared when clearing groups"] = () => {
-                Group eventGroup = null;
+                Group<Entity> eventGroup = null;
                 pool.OnGroupCleared += (p, g) => {
                     didDispatch += 1;
                     p.should_be_same(pool);
@@ -434,7 +434,7 @@ class describe_Pool : nspec {
                 Entity eAB2 = null;
                 Entity eA = null;
 
-                IMatcher matcherAB = Matcher.AllOf(new[] {
+                IMatcher<Entity> matcherAB = Matcher.AllOf(new[] {
                     CID.ComponentA,
                     CID.ComponentB
                 });
@@ -592,7 +592,7 @@ class describe_Pool : nspec {
 
                     var m = Matcher.AllOf(CID.ComponentA);
                     var groupsCreated = 0;
-                    Group createdGroup = null;
+                    Group<Entity> createdGroup = null;
                     pool.OnGroupCreated += (p, g) => {
                         groupsCreated += 1;
                         createdGroup = g;

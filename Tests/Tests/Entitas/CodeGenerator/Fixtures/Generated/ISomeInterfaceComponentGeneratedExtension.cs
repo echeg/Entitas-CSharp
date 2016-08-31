@@ -23,7 +23,8 @@ namespace Entitas {
         public Entity AddISomeInterface(ISomeInterface newValue) {
             var component = CreateComponent<ISomeInterfaceComponent>(SomePoolComponentIds.ISomeInterface);
             component.value = newValue;
-            return AddComponent(SomePoolComponentIds.ISomeInterface, component);
+            AddComponent(SomePoolComponentIds.ISomeInterface, component);
+            return this;
         }
 
         public Entity ReplaceISomeInterface(ISomeInterface newValue) {
@@ -34,7 +35,8 @@ namespace Entitas {
         }
 
         public Entity RemoveISomeInterface() {
-            return RemoveComponent(SomePoolComponentIds.ISomeInterface);
+            RemoveComponent(SomePoolComponentIds.ISomeInterface);
+            return this;
         }
     }
 }

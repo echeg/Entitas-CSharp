@@ -40,7 +40,7 @@ class describe_Matcher : nspec {
 
         context["allOf"] = () => {
 
-            IAllOfMatcher m = null;
+            IAllOfMatcher<Entity> m = null;
             before = () => m = Matcher.AllOf(CID.ComponentA, CID.ComponentB);
 
             it["has all indices"] = () => {
@@ -84,7 +84,7 @@ class describe_Matcher : nspec {
                 assertIndicesContain(mergedMatcher.allOfIndices, CID.ComponentA, CID.ComponentB);
             };
 
-            it["throws when merging matcher with more than one index"] = expect<MatcherException>(() => {
+            it["throws when merging matcher with more than one index"] = expect<MatcherException<Entity>>(() => {
                 var m1 = Matcher.AllOf(new [] { CID.ComponentA, CID.ComponentB });
                 Matcher.AllOf(m1);
             });
@@ -111,7 +111,7 @@ class describe_Matcher : nspec {
 
         context["anyOf"] = () => {
 
-            IAnyOfMatcher m = null;
+            IAnyOfMatcher<Entity> m = null;
 
             before = () => m = Matcher.AnyOf(new [] {
                 CID.ComponentA,
@@ -164,7 +164,7 @@ class describe_Matcher : nspec {
                 assertIndicesContain(mergedMatcher.anyOfIndices, CID.ComponentA, CID.ComponentB);
             };
 
-            it["throws when merging matcher with more than one index"] = expect<MatcherException>(() => {
+            it["throws when merging matcher with more than one index"] = expect<MatcherException<Entity>>(() => {
                 var m1 = Matcher.AnyOf(new [] { CID.ComponentA, CID.ComponentB });
                 Matcher.AnyOf(m1);
             });
@@ -174,7 +174,7 @@ class describe_Matcher : nspec {
 
         context["allOf.noneOf"] = () => {
 
-            ICompoundMatcher m = null;
+            ICompoundMatcher<Entity> m = null;
 
             before = () => m = Matcher.AllOf(new [] {
                 CID.ComponentA,
@@ -233,7 +233,7 @@ class describe_Matcher : nspec {
 
         context["anyOf.noneOf"] = () => {
 
-            ICompoundMatcher m = null;
+            ICompoundMatcher<Entity> m = null;
 
             before = () => m = Matcher.AnyOf(new [] {
                 CID.ComponentA,
@@ -287,7 +287,7 @@ class describe_Matcher : nspec {
 
         context["allOf.anyOf"] = () => {
 
-            ICompoundMatcher m = null;
+            ICompoundMatcher<Entity> m = null;
 
             before = () => m = Matcher.AllOf(new [] {
                 CID.ComponentA,
@@ -425,11 +425,11 @@ class describe_Matcher : nspec {
         };
     }
 
-    static IMatcher allOfAB() {
+    static IMatcher<Entity> allOfAB() {
         return Matcher.AllOf(new [] { CID.ComponentA, CID.ComponentB });
     }
 
-    static IMatcher allOfBA() {
+    static IMatcher<Entity> allOfBA() {
         return Matcher.AllOf(new [] { CID.ComponentB, CID.ComponentA });
     }
 }

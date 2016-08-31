@@ -2,7 +2,7 @@
 
 public class MatcherGetHashCode : IPerformanceTest {
     const int n = 10000000;
-    IMatcher _m;
+    IMatcher<Entity> _m;
 
     public void Before() {
         _m = Matcher.AllOf(new [] {

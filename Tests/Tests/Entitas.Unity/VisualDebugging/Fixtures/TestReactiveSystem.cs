@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Entitas;
 
-public class TestReactiveSystem : IReactiveSystem {
+public class TestReactiveSystem : IReactiveSystem<Entity> {
 
-    public TriggerOnEvent trigger { get { return Matcher.AllOf(0).OnEntityAdded(); } }
+    public TriggerOnEvent<Entity> trigger { get { return Matcher.AllOf(0).OnEntityAdded(); } }
 
     public void Execute(List<Entity> entities) {
     }

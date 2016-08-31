@@ -2,7 +2,7 @@
 
 public class ObserverIterateCollectedEntities : IPerformanceTest {
     const int n = 100000;
-    GroupObserver _observer;
+    GroupObserver<Entity> _observer;
 
     public void Before() {
         var pool = Helper.CreatePool();

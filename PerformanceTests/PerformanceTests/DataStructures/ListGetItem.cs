@@ -11,7 +11,9 @@ public class ListGetItem : IPerformanceTest {
         _random = new Random();
         _l = new List<Entity>();
         for (int i = 0; i < n; i++) {
-            _l.Add(new Entity(CP.NumComponents, null));
+            var e = new Entity();
+            e.Setup(0, CP.NumComponents, null);
+            _l.Add(e);
         }
     }
 

@@ -7,10 +7,10 @@ class describe_GroupObserver : nspec {
 
     void when_created() {
 
-        Group groupA = null;
+        Group<Entity> groupA = null;
         GroupObserver observerA = null;
 
-        IMatcher matcherA = Matcher.AllOf(CID.ComponentA);
+        IMatcher<Entity> matcherA = Matcher.AllOf(CID.ComponentA);
 
         before = () => {
             _pool = new Pool(CID.TotalComponents);
@@ -161,7 +161,7 @@ class describe_GroupObserver : nspec {
 
         context["when observing multiple groups"] = () => {
 
-            Group groupB = null;
+            Group<Entity> groupB = null;
 
             before = () => {
                 groupB = _pool.GetGroup(Matcher.AllOf(CID.ComponentB));

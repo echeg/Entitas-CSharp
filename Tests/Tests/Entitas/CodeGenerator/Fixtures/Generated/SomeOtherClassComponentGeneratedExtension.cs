@@ -23,7 +23,8 @@ namespace Entitas {
         public Entity AddSomeOtherClass(SomeNamespace.SomeOtherClass newValue) {
             var component = CreateComponent<SomeOtherClassComponent>(SomePoolComponentIds.SomeOtherClass);
             component.value = newValue;
-            return AddComponent(SomePoolComponentIds.SomeOtherClass, component);
+            AddComponent(SomePoolComponentIds.SomeOtherClass, component);
+            return this;
         }
 
         public Entity ReplaceSomeOtherClass(SomeNamespace.SomeOtherClass newValue) {
@@ -34,7 +35,8 @@ namespace Entitas {
         }
 
         public Entity RemoveSomeOtherClass() {
-            return RemoveComponent(SomePoolComponentIds.SomeOtherClass);
+            RemoveComponent(SomePoolComponentIds.SomeOtherClass);
+            return this;
         }
     }
 }

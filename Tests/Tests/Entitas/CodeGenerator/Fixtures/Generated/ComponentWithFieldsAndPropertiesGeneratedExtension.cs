@@ -18,7 +18,8 @@ namespace Entitas {
             var component = CreateComponent<ComponentWithFieldsAndProperties>(ComponentIds.ComponentWithFieldsAndProperties);
             component.publicField = newPublicField;
             component.publicProperty = newPublicProperty;
-            return AddComponent(ComponentIds.ComponentWithFieldsAndProperties, component);
+            AddComponent(ComponentIds.ComponentWithFieldsAndProperties, component);
+            return this;
         }
 
         public Entity ReplaceComponentWithFieldsAndProperties(string newPublicField, string newPublicProperty) {
@@ -30,7 +31,8 @@ namespace Entitas {
         }
 
         public Entity RemoveComponentWithFieldsAndProperties() {
-            return RemoveComponent(ComponentIds.ComponentWithFieldsAndProperties);
+            RemoveComponent(ComponentIds.ComponentWithFieldsAndProperties);
+            return this;
         }
     }
 

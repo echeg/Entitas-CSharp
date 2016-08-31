@@ -12,7 +12,9 @@ public class DictionaryGetItem : IPerformanceTest {
         _random = new Random();
         _dict = new Dictionary<int, Entity>();
         for (int i = 0; i < elements; i++) {
-            _dict.Add(i, new Entity(CP.NumComponents, null));
+            var e = new Entity();
+            e.Setup(0, CP.NumComponents, null);
+            _dict.Add(i, e);
         }
     }
 

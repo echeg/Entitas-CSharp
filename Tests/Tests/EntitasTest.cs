@@ -3,7 +3,7 @@ using Entitas;
 
 class EntitasTest : nspec {
 
-    protected Pool _pool;
+    protected Pool<Entity> _pool;
     protected Entity _entity;
 
     protected Entity createEntity() {
@@ -18,7 +18,7 @@ class EntitasTest : nspec {
         return (Matcher)Matcher.AllOf(CID.ComponentA);
     }
 
-    protected Group getGroupA() {
+    protected Group<Entity> getGroupA() {
         return _pool.GetGroup(createMatcherA());
     }
 

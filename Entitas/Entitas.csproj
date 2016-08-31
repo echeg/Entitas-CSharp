@@ -101,6 +101,7 @@
     <Compile Include="Entitas\Default\DefaultGroup.cs" />
     <Compile Include="Entitas\Default\DefaultTriggerOnEvent.cs" />
     <Compile Include="Entitas\Default\DefaultGroupObserver.cs" />
+    <Compile Include="Entitas\Default\DefaultEntityIndex.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

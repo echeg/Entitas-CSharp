@@ -9,7 +9,9 @@ public static class TestExtensions {
     }
 
     public static Entity CreateEntity(this nspec spec) {
-        return new Entity(CID.TotalComponents, new Stack<IComponent>[CID.TotalComponents]);
+        var entity = new Entity();
+        entity.Setup(0, CID.TotalComponents, new Stack<IComponent>[CID.TotalComponents]);
+        return entity;
     }
 }
 

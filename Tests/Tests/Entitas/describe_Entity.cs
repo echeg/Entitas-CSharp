@@ -58,7 +58,8 @@ class describe_Entity : nspec {
 
             it["has custom PoolMetaData when set"] = () => {
                 var poolMetaData = new PoolMetaData(null, null, null);
-                e = new Entity(0, null, poolMetaData);
+                e = new Entity();
+                e.Setup(0, 0, null, poolMetaData);
                 e.poolMetaData.should_be_same(poolMetaData);
             };
 

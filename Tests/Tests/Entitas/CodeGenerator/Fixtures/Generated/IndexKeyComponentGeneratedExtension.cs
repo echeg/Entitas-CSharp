@@ -17,7 +17,8 @@ namespace Entitas {
         public Entity AddIndexKey(string newName) {
             var component = CreateComponent<IndexKeyComponent>(ComponentIds.IndexKey);
             component.name = newName;
-            return AddComponent(ComponentIds.IndexKey, component);
+            AddComponent(ComponentIds.IndexKey, component);
+            return this;
         }
 
         public Entity ReplaceIndexKey(string newName) {
@@ -28,7 +29,8 @@ namespace Entitas {
         }
 
         public Entity RemoveIndexKey() {
-            return RemoveComponent(ComponentIds.IndexKey);
+            RemoveComponent(ComponentIds.IndexKey);
+            return this;
         }
     }
 

@@ -377,6 +377,33 @@
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomePoolComponentIds.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeStructComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\UserComponentGeneratedExtension.cs" />
+    <Compile Include="..\Entitas\Entitas\Default\DefaultGroup.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Default\DefaultGroupObserver.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultGroupObserver.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Default\DefaultISetPool.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultISetPool.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Default\DefaultMatcher.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultMatcher.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Default\DefaultPool.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultPool.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Default\DefaultReactiveSystem.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultReactiveSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Default\DefaultTriggerOnEvent.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultTriggerOnEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Interfaces\IPool.cs">
+      <Link>Linked Libraries\Entitas\Interfaces\IPool.cs</Link>
+    </Compile>
+    <Compile Include="..\Entitas\Entitas\Default\DefaultEntityIndex.cs">
+      <Link>Linked Libraries\Entitas\Default\DefaultEntityIndex.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
