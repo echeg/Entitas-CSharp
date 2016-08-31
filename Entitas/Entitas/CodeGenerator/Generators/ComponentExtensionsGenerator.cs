@@ -64,7 +64,7 @@ namespace Entitas.CodeGenerator {
         }
 
         static string addNamespace() {
-            return @"namespace Entitas {";
+            return "namespace Entitas {\n";
         }
 
         static string closeNamespace() {
@@ -88,7 +88,7 @@ namespace Entitas.CodeGenerator {
         }
 
         static string addEntityClassHeader() {
-            return "\n    public partial class Entity {";
+            return "\n    public partial class Entity {\n";
         }
 
         static string addGetMethods(ComponentInfo componentInfo) {
@@ -170,7 +170,7 @@ $assign
         }
 
         static string addPoolClassHeader() {
-            return "\n    public partial class Pool {";
+            return "\n    public partial class Pool {\n";
         }
 
         static string addPoolGetMethods(ComponentInfo componentInfo) {
@@ -251,6 +251,7 @@ $assign
        static string addMatcher(ComponentInfo componentInfo, bool onlyDefault = false) {
             const string matcherFormat = @"
     public partial class $TagMatcher {
+
         static IMatcher _matcher$Name;
 
         public static IMatcher $Name {

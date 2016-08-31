@@ -6,27 +6,16 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public static class OtherComponentIds {
-    public const int OtherPool = 0;
-    public const int MultiplePoolAndDefaultPool = 5;
+public static class MetaComponentIds {
+    public const int MetaIndexKey = 0;
 
-    public const int TotalComponents = 6;
+    public const int TotalComponents = 1;
 
     public static readonly string[] componentNames = {
-        "OtherPool",
-        null,
-        null,
-        null,
-        null,
-        "MultiplePoolAndDefaultPool"
+        "MetaIndexKey"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(OtherPoolComponent),
-        null,
-        null,
-        null,
-        null,
-        typeof(MultiplePoolAndDefaultPoolComponent)
+        typeof(MetaIndexKeyComponent)
     };
 }
