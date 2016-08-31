@@ -6,50 +6,49 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Entitas {
+using Entitas;
 
-    public partial class Entity {
+public partial class Core : Entity {
 
-        public PersonComponent person { get { return (PersonComponent)GetComponent(ComponentIds.Person); } }
+    public PersonComponent person { get { return (PersonComponent)GetComponent(CoreComponentIds.Person); } }
 
-        public bool hasPerson { get { return HasComponent(ComponentIds.Person); } }
+    public bool hasPerson { get { return HasComponent(CoreComponentIds.Person); } }
 
-        public Entity AddPerson(int newAge, string newName) {
-            var component = CreateComponent<PersonComponent>(ComponentIds.Person);
-            component.age = newAge;
-            component.name = newName;
-            AddComponent(ComponentIds.Person, component);
-            return this;
-        }
-
-        public Entity ReplacePerson(int newAge, string newName) {
-            var component = CreateComponent<PersonComponent>(ComponentIds.Person);
-            component.age = newAge;
-            component.name = newName;
-            ReplaceComponent(ComponentIds.Person, component);
-            return this;
-        }
-
-        public Entity RemovePerson() {
-            RemoveComponent(ComponentIds.Person);
-            return this;
-        }
+    public Core AddPerson(int newAge, string newName) {
+        var component = CreateComponent<PersonComponent>(CoreComponentIds.Person);
+        component.age = newAge;
+        component.name = newName;
+        AddComponent(CoreComponentIds.Person, component);
+        return this;
     }
 
-    public partial class Matcher {
+    public Core ReplacePerson(int newAge, string newName) {
+        var component = CreateComponent<PersonComponent>(CoreComponentIds.Person);
+        component.age = newAge;
+        component.name = newName;
+        ReplaceComponent(CoreComponentIds.Person, component);
+        return this;
+    }
 
-        static IMatcher _matcherPerson;
+    public Core RemovePerson() {
+        RemoveComponent(CoreComponentIds.Person);
+        return this;
+    }
+}
 
-        public static IMatcher Person {
-            get {
-                if (_matcherPerson == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Person);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherPerson = matcher;
-                }
+public partial class CoreMatcher {
 
-                return _matcherPerson;
+    static IMatcher<Core> _matcherPerson;
+
+    public static IMatcher<Core> Person {
+        get {
+            if(_matcherPerson == null) {
+                var matcher = (Matcher<Core>)Matcher<Core>.AllOf(CoreComponentIds.Person);
+                matcher.componentNames = CoreComponentIds.componentNames;
+                _matcherPerson = matcher;
             }
+
+            return _matcherPerson;
         }
     }
 }

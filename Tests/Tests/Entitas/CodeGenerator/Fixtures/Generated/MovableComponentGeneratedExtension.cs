@@ -6,45 +6,44 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Entitas {
+using Entitas;
 
-    public partial class Entity {
+public partial class Core : Entity {
 
-        static readonly MovableComponent movableComponent = new MovableComponent();
+    static readonly MovableComponent movableComponent = new MovableComponent();
 
-        public bool isMovable {
-            get { return HasComponent(ComponentIds.Movable); }
-            set {
-                if (value != isMovable) {
-                    if (value) {
-                        AddComponent(ComponentIds.Movable, movableComponent);
-                    } else {
-                        RemoveComponent(ComponentIds.Movable);
-                    }
+    public bool isMovable {
+        get { return HasComponent(CoreComponentIds.Movable); }
+        set {
+            if(value != isMovable) {
+                if(value) {
+                    AddComponent(CoreComponentIds.Movable, movableComponent);
+                } else {
+                    RemoveComponent(CoreComponentIds.Movable);
                 }
             }
-        }
-
-        public Entity IsMovable(bool value) {
-            isMovable = value;
-            return this;
         }
     }
 
-    public partial class Matcher {
+    public Core IsMovable(bool value) {
+        isMovable = value;
+        return this;
+    }
+}
 
-        static IMatcher _matcherMovable;
+public partial class CoreMatcher {
 
-        public static IMatcher Movable {
-            get {
-                if (_matcherMovable == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Movable);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherMovable = matcher;
-                }
+    static IMatcher<Core> _matcherMovable;
 
-                return _matcherMovable;
+    public static IMatcher<Core> Movable {
+        get {
+            if(_matcherMovable == null) {
+                var matcher = (Matcher<Core>)Matcher<Core>.AllOf(CoreComponentIds.Movable);
+                matcher.componentNames = CoreComponentIds.componentNames;
+                _matcherMovable = matcher;
             }
+
+            return _matcherMovable;
         }
     }
 }

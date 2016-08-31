@@ -6,64 +6,63 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Entitas {
+using Entitas;
 
-    public partial class Entity {
+public partial class Core : Entity {
 
-        static readonly AnimatingComponent animatingComponent = new AnimatingComponent();
+    static readonly AnimatingComponent animatingComponent = new AnimatingComponent();
 
-        public bool isAnimating {
-            get { return HasComponent(ComponentIds.Animating); }
-            set {
-                if (value != isAnimating) {
-                    if (value) {
-                        AddComponent(ComponentIds.Animating, animatingComponent);
-                    } else {
-                        RemoveComponent(ComponentIds.Animating);
-                    }
-                }
-            }
-        }
-
-        public Entity IsAnimating(bool value) {
-            isAnimating = value;
-            return this;
-        }
-    }
-
-    public partial class Pool {
-
-        public Entity animatingEntity { get { return GetGroup(Matcher.Animating).GetSingleEntity(); } }
-
-        public bool isAnimating {
-            get { return animatingEntity != null; }
-            set {
-                var entity = animatingEntity;
-                if (value != (entity != null)) {
-                    if (value) {
-                        CreateEntity().isAnimating = true;
-                    } else {
-                        DestroyEntity(entity);
-                    }
+    public bool isAnimating {
+        get { return HasComponent(CoreComponentIds.Animating); }
+        set {
+            if(value != isAnimating) {
+                if(value) {
+                    AddComponent(CoreComponentIds.Animating, animatingComponent);
+                } else {
+                    RemoveComponent(CoreComponentIds.Animating);
                 }
             }
         }
     }
 
-    public partial class Matcher {
+    public Core IsAnimating(bool value) {
+        isAnimating = value;
+        return this;
+    }
+}
 
-        static IMatcher _matcherAnimating;
+public partial class CorePool : Pool<Core> {
 
-        public static IMatcher Animating {
-            get {
-                if (_matcherAnimating == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Animating);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherAnimating = matcher;
+    public Core animatingEntity { get { return GetGroup(CoreMatcher.Animating).GetSingleEntity(); } }
+
+    public bool isAnimating {
+        get { return animatingEntity != null; }
+        set {
+            var entity = animatingEntity;
+            if(value != (entity != null)) {
+                if(value) {
+                    CreateEntity().isAnimating = true;
+                } else {
+                    DestroyEntity(entity);
                 }
-
-                return _matcherAnimating;
             }
+        }
+    }
+}
+
+public partial class CoreMatcher {
+
+    static IMatcher<Core> _matcherAnimating;
+
+    public static IMatcher<Core> Animating {
+        get {
+            if(_matcherAnimating == null) {
+                var matcher = (Matcher<Core>)Matcher<Core>.AllOf(CoreComponentIds.Animating);
+                matcher.componentNames = CoreComponentIds.componentNames;
+                _matcherAnimating = matcher;
+            }
+
+            return _matcherAnimating;
         }
     }
 }

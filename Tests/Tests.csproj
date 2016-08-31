@@ -270,8 +270,6 @@
       <Link>Linked Libraries\Entitas\CodeGenerator\Attributes\CustomComponentNameAttribute.cs</Link>
     </Compile>
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Components\GeneratedComponent.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Components\DefaultPoolComponent.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Components\MultiplePoolAndDefaultPoolComponent.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Classes\CustomNames.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Classes\SomeStruct.cs" />
     <Compile Include="..\Entitas\Entitas\Serialization\Configuration\CodeGeneratorConfig.cs">
@@ -331,35 +329,14 @@
     <Compile Include="..\Entitas\Entitas\Interfaces\IEntity.cs">
       <Link>Linked Libraries\Entitas\Interfaces\IEntity.cs</Link>
     </Compile>
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\AComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\AnimatingComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\BComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\CComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentAGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentBGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentCGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentDGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentEGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentFGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentIds.cs" />
+    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\CoreComponentIds.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentWithFieldsAndPropertiesGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentWithFieldsGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ComponentWithPropertiesGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\CustomPrefixComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\DComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\DefaultPoolComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\DefautPoolIndexKeyComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\EComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\FComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\GComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ISomeInterfaceComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\IndexKeyComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\MetaComponentIds.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\MetaIndexKeyComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\MovableComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\MultiplePoolAndDefaultPoolComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\My.Namespace.NamespaceComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\NameAgeComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\OtherComponentIds.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\OtherPoolComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\PersonComponentGeneratedExtension.cs" />
@@ -369,12 +346,6 @@
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\Pools.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\ServicePoolComponentIds.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeClassComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeNameGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeOtherClassComponentGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeOtherNameGeneratedExtension.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeOtherPoolComponentIds.cs" />
-    <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomePoolComponentIds.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\SomeStructComponentGeneratedExtension.cs" />
     <Compile Include="Tests\Entitas\CodeGenerator\Fixtures\Generated\UserComponentGeneratedExtension.cs" />
     <Compile Include="..\Entitas\Entitas\Default\DefaultGroup.cs">

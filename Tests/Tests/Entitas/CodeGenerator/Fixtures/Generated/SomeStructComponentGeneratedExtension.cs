@@ -12,48 +12,45 @@ public class SomeStructComponent : IComponent {
     public SomeStruct value;
 }
 
-namespace Entitas {
+public partial class Core : Entity {
 
-    public partial class Entity {
+    public SomeStructComponent someStruct { get { return (SomeStructComponent)GetComponent(CoreComponentIds.SomeStruct); } }
 
-        public SomeStructComponent someStruct { get { return (SomeStructComponent)GetComponent(ComponentIds.SomeStruct); } }
+    public bool hasSomeStruct { get { return HasComponent(CoreComponentIds.SomeStruct); } }
 
-        public bool hasSomeStruct { get { return HasComponent(ComponentIds.SomeStruct); } }
-
-        public Entity AddSomeStruct(SomeStruct newValue) {
-            var component = CreateComponent<SomeStructComponent>(ComponentIds.SomeStruct);
-            component.value = newValue;
-            AddComponent(ComponentIds.SomeStruct, component);
-            return this;
-        }
-
-        public Entity ReplaceSomeStruct(SomeStruct newValue) {
-            var component = CreateComponent<SomeStructComponent>(ComponentIds.SomeStruct);
-            component.value = newValue;
-            ReplaceComponent(ComponentIds.SomeStruct, component);
-            return this;
-        }
-
-        public Entity RemoveSomeStruct() {
-            RemoveComponent(ComponentIds.SomeStruct);
-            return this;
-        }
+    public Core AddSomeStruct(SomeStruct newValue) {
+        var component = CreateComponent<SomeStructComponent>(CoreComponentIds.SomeStruct);
+        component.value = newValue;
+        AddComponent(CoreComponentIds.SomeStruct, component);
+        return this;
     }
 
-    public partial class Matcher {
+    public Core ReplaceSomeStruct(SomeStruct newValue) {
+        var component = CreateComponent<SomeStructComponent>(CoreComponentIds.SomeStruct);
+        component.value = newValue;
+        ReplaceComponent(CoreComponentIds.SomeStruct, component);
+        return this;
+    }
 
-        static IMatcher _matcherSomeStruct;
+    public Core RemoveSomeStruct() {
+        RemoveComponent(CoreComponentIds.SomeStruct);
+        return this;
+    }
+}
 
-        public static IMatcher SomeStruct {
-            get {
-                if (_matcherSomeStruct == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.SomeStruct);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherSomeStruct = matcher;
-                }
+public partial class CoreMatcher {
 
-                return _matcherSomeStruct;
+    static IMatcher<Core> _matcherSomeStruct;
+
+    public static IMatcher<Core> SomeStruct {
+        get {
+            if(_matcherSomeStruct == null) {
+                var matcher = (Matcher<Core>)Matcher<Core>.AllOf(CoreComponentIds.SomeStruct);
+                matcher.componentNames = CoreComponentIds.componentNames;
+                _matcherSomeStruct = matcher;
             }
+
+            return _matcherSomeStruct;
         }
     }
 }

@@ -6,50 +6,49 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Entitas {
+using Entitas;
 
-    public partial class Entity {
+public partial class Core : Entity {
 
-        public ComponentWithFieldsAndProperties componentWithFieldsAndProperties { get { return (ComponentWithFieldsAndProperties)GetComponent(ComponentIds.ComponentWithFieldsAndProperties); } }
+    public ComponentWithFieldsAndProperties componentWithFieldsAndProperties { get { return (ComponentWithFieldsAndProperties)GetComponent(CoreComponentIds.ComponentWithFieldsAndProperties); } }
 
-        public bool hasComponentWithFieldsAndProperties { get { return HasComponent(ComponentIds.ComponentWithFieldsAndProperties); } }
+    public bool hasComponentWithFieldsAndProperties { get { return HasComponent(CoreComponentIds.ComponentWithFieldsAndProperties); } }
 
-        public Entity AddComponentWithFieldsAndProperties(string newPublicField, string newPublicProperty) {
-            var component = CreateComponent<ComponentWithFieldsAndProperties>(ComponentIds.ComponentWithFieldsAndProperties);
-            component.publicField = newPublicField;
-            component.publicProperty = newPublicProperty;
-            AddComponent(ComponentIds.ComponentWithFieldsAndProperties, component);
-            return this;
-        }
-
-        public Entity ReplaceComponentWithFieldsAndProperties(string newPublicField, string newPublicProperty) {
-            var component = CreateComponent<ComponentWithFieldsAndProperties>(ComponentIds.ComponentWithFieldsAndProperties);
-            component.publicField = newPublicField;
-            component.publicProperty = newPublicProperty;
-            ReplaceComponent(ComponentIds.ComponentWithFieldsAndProperties, component);
-            return this;
-        }
-
-        public Entity RemoveComponentWithFieldsAndProperties() {
-            RemoveComponent(ComponentIds.ComponentWithFieldsAndProperties);
-            return this;
-        }
+    public Core AddComponentWithFieldsAndProperties(string newPublicField, string newPublicProperty) {
+        var component = CreateComponent<ComponentWithFieldsAndProperties>(CoreComponentIds.ComponentWithFieldsAndProperties);
+        component.publicField = newPublicField;
+        component.publicProperty = newPublicProperty;
+        AddComponent(CoreComponentIds.ComponentWithFieldsAndProperties, component);
+        return this;
     }
 
-    public partial class Matcher {
+    public Core ReplaceComponentWithFieldsAndProperties(string newPublicField, string newPublicProperty) {
+        var component = CreateComponent<ComponentWithFieldsAndProperties>(CoreComponentIds.ComponentWithFieldsAndProperties);
+        component.publicField = newPublicField;
+        component.publicProperty = newPublicProperty;
+        ReplaceComponent(CoreComponentIds.ComponentWithFieldsAndProperties, component);
+        return this;
+    }
 
-        static IMatcher _matcherComponentWithFieldsAndProperties;
+    public Core RemoveComponentWithFieldsAndProperties() {
+        RemoveComponent(CoreComponentIds.ComponentWithFieldsAndProperties);
+        return this;
+    }
+}
 
-        public static IMatcher ComponentWithFieldsAndProperties {
-            get {
-                if (_matcherComponentWithFieldsAndProperties == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.ComponentWithFieldsAndProperties);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherComponentWithFieldsAndProperties = matcher;
-                }
+public partial class CoreMatcher {
 
-                return _matcherComponentWithFieldsAndProperties;
+    static IMatcher<Core> _matcherComponentWithFieldsAndProperties;
+
+    public static IMatcher<Core> ComponentWithFieldsAndProperties {
+        get {
+            if(_matcherComponentWithFieldsAndProperties == null) {
+                var matcher = (Matcher<Core>)Matcher<Core>.AllOf(CoreComponentIds.ComponentWithFieldsAndProperties);
+                matcher.componentNames = CoreComponentIds.componentNames;
+                _matcherComponentWithFieldsAndProperties = matcher;
             }
+
+            return _matcherComponentWithFieldsAndProperties;
         }
     }
 }

@@ -10,16 +10,31 @@ namespace Entitas {
 
     public partial class Pools {
 
-        //public static Pool CreatePool() {
-        //    return CreatePool("Pool", ComponentIds.TotalComponents, ComponentIds.componentNames, ComponentIds.componentTypes);
-        //}
+        public static Pool<Core> CreateCorePool() {
+            return CreatePool<Core>("Core Pool", CoreComponentIds.TotalComponents, CoreComponentIds.componentNames, CoreComponentIds.componentTypes);
+        }
 
-        //public Pool[] allPools { get { return new[] { pool }; } }
+        //public IPool[] allPools { get { return new IPool[] { pool }; } }
 
-        //public Pool pool;
+        public CorePool core;
 
-        //public void SetAllPools() {
-        //    pool = CreatePool();
-        //}
+        public void SetAllPools() {
+            core = (CorePool)CreateCorePool();
+        }
     }
+}
+
+public partial class CorePool : Entitas.Pool<Core> {
+    public CorePool() : base(CoreComponentIds.TotalComponents) { }
+    public CorePool(int startCreationIndex) : base(CoreComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData("Core", CoreComponentIds.componentNames, CoreComponentIds.componentTypes)) { }
+}
+
+public partial class OtherPool : Entitas.Pool<Other> {
+    public OtherPool() : base(OtherComponentIds.TotalComponents) { }
+    public OtherPool(int startCreationIndex) : base(OtherComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData("Other", OtherComponentIds.componentNames, OtherComponentIds.componentTypes)) { }
+}
+
+public partial class PoolAPool : Entitas.Pool<PoolA> {
+    public PoolAPool() : base(PoolAComponentIds.TotalComponents) { }
+    public PoolAPool(int startCreationIndex) : base(PoolAComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData("PoolA", PoolAComponentIds.componentNames, PoolAComponentIds.componentTypes)) { }
 }

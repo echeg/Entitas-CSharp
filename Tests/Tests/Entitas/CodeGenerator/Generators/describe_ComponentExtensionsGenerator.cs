@@ -7,7 +7,7 @@ using NSpec;
 
 class describe_ComponentExtensionsGenerator : nspec {
 
-    const bool logResults = false;
+    const bool logResults = !false;
 
     const string classSuffix = "GeneratedExtension";
 
@@ -51,8 +51,6 @@ class describe_ComponentExtensionsGenerator : nspec {
         it["works with namespaces"] = () => generates<NamespaceComponent>();
         it["generates matchers for each pool"] = () => generates<CComponent>();
         it["generates custom prefix"] = () => generates<CustomPrefixComponent>();
-        it["generates component with default pool"] = () => generates<DefaultPoolComponent>();
-        it["generates component with default pool and others"] = () => generates<MultiplePoolAndDefaultPoolComponent>();
 
         it["generates component for class"] = () => generates<SomeClass>("SomeClassComponent");
         it["generates component for struct"] = () => generates<SomeStruct>("SomeStructComponent");

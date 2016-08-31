@@ -8,84 +8,81 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
+public partial class Other : Entity {
 
-    public partial class Entity {
+    public OtherPoolComponent otherPool { get { return (OtherPoolComponent)GetComponent(OtherComponentIds.OtherPool); } }
 
-        public OtherPoolComponent otherPool { get { return (OtherPoolComponent)GetComponent(OtherComponentIds.OtherPool); } }
+    public bool hasOtherPool { get { return HasComponent(OtherComponentIds.OtherPool); } }
 
-        public bool hasOtherPool { get { return HasComponent(OtherComponentIds.OtherPool); } }
-
-        public Entity AddOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            var component = CreateComponent<OtherPoolComponent>(OtherComponentIds.OtherPool);
-            component.timestamp = newTimestamp;
-            component.isLoggedIn = newIsLoggedIn;
-            AddComponent(OtherComponentIds.OtherPool, component);
-            return this;
-        }
-
-        public Entity ReplaceOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            var component = CreateComponent<OtherPoolComponent>(OtherComponentIds.OtherPool);
-            component.timestamp = newTimestamp;
-            component.isLoggedIn = newIsLoggedIn;
-            ReplaceComponent(OtherComponentIds.OtherPool, component);
-            return this;
-        }
-
-        public Entity RemoveOtherPool() {
-            RemoveComponent(OtherComponentIds.OtherPool);
-            return this;
-        }
+    public Other AddOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        var component = CreateComponent<OtherPoolComponent>(OtherComponentIds.OtherPool);
+        component.timestamp = newTimestamp;
+        component.isLoggedIn = newIsLoggedIn;
+        AddComponent(OtherComponentIds.OtherPool, component);
+        return this;
     }
 
-    public partial class Pool {
+    public Other ReplaceOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        var component = CreateComponent<OtherPoolComponent>(OtherComponentIds.OtherPool);
+        component.timestamp = newTimestamp;
+        component.isLoggedIn = newIsLoggedIn;
+        ReplaceComponent(OtherComponentIds.OtherPool, component);
+        return this;
+    }
 
-        public Entity otherPoolEntity { get { return GetGroup(OtherMatcher.OtherPool).GetSingleEntity(); } }
-
-        public OtherPoolComponent otherPool { get { return otherPoolEntity.otherPool; } }
-
-        public bool hasOtherPool { get { return otherPoolEntity != null; } }
-
-        public Entity SetOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            if (hasOtherPool) {
-                throw new EntitasException("Could not set otherPool!\n" + this + " already has an entity with OtherPoolComponent!",
-                    "You should check if the pool already has a otherPoolEntity before setting it or use pool.ReplaceOtherPool().");
-            }
-            var entity = CreateEntity();
-            entity.AddOtherPool(newTimestamp, newIsLoggedIn);
-            return entity;
-        }
-
-        public Entity ReplaceOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            var entity = otherPoolEntity;
-            if (entity == null) {
-                entity = SetOtherPool(newTimestamp, newIsLoggedIn);
-            } else {
-                entity.ReplaceOtherPool(newTimestamp, newIsLoggedIn);
-            }
-
-            return entity;
-        }
-
-        public void RemoveOtherPool() {
-            DestroyEntity(otherPoolEntity);
-        }
+    public Other RemoveOtherPool() {
+        RemoveComponent(OtherComponentIds.OtherPool);
+        return this;
     }
 }
 
-    public partial class OtherMatcher {
+public partial class OtherPool : Pool<Other> {
 
-        static IMatcher _matcherOtherPool;
+    public Other otherPoolEntity { get { return GetGroup(OtherMatcher.OtherPool).GetSingleEntity(); } }
 
-        public static IMatcher OtherPool {
-            get {
-                if (_matcherOtherPool == null) {
-                    var matcher = (Matcher)Matcher.AllOf(OtherComponentIds.OtherPool);
-                    matcher.componentNames = OtherComponentIds.componentNames;
-                    _matcherOtherPool = matcher;
-                }
+    public OtherPoolComponent otherPool { get { return otherPoolEntity.otherPool; } }
 
-                return _matcherOtherPool;
+    public bool hasOtherPool { get { return otherPoolEntity != null; } }
+
+    public Other SetOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        if(hasOtherPool) {
+            throw new EntitasException("Could not set otherPool!\n" + this + " already has an entity with OtherPoolComponent!",
+                "You should check if the pool already has a otherPoolEntity before setting it or use pool.ReplaceOtherPool().");
+        }
+        var entity = CreateEntity();
+        entity.AddOtherPool(newTimestamp, newIsLoggedIn);
+        return entity;
+    }
+
+    public Other ReplaceOtherPool(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        var entity = otherPoolEntity;
+        if(entity == null) {
+            entity = SetOtherPool(newTimestamp, newIsLoggedIn);
+        } else {
+            entity.ReplaceOtherPool(newTimestamp, newIsLoggedIn);
+        }
+
+        return entity;
+    }
+
+    public void RemoveOtherPool() {
+        DestroyEntity(otherPoolEntity);
+    }
+}
+
+public partial class OtherMatcher {
+
+    static IMatcher<Other> _matcherOtherPool;
+
+    public static IMatcher<Other> OtherPool {
+        get {
+            if(_matcherOtherPool == null) {
+                var matcher = (Matcher<Other>)Matcher<Other>.AllOf(OtherComponentIds.OtherPool);
+                matcher.componentNames = OtherComponentIds.componentNames;
+                _matcherOtherPool = matcher;
             }
+
+            return _matcherOtherPool;
         }
     }
+}

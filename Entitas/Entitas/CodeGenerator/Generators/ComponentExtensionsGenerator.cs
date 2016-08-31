@@ -18,57 +18,34 @@ namespace Entitas.CodeGenerator {
         }
 
         static string generateComponentExtension(ComponentInfo componentInfo) {
-            var code = addNamespace();
+            var code = addUsings("Entitas");
+            if(componentInfo.generateComponent) {
+                code += generateComponent(componentInfo);
+            }
+
             code += addEntityMethods(componentInfo);
-            if (componentInfo.isSingleEntity) {
+            if(componentInfo.isSingleEntity) {
                 code += addPoolMethods(componentInfo);
             }
 
-            if (componentInfo.generateComponent) {
-                // Add default matcher
-                code += addMatcher(componentInfo, true);
-                code += closeNamespace();
-                // Add custom matchers
-                code += addMatcher(componentInfo);
-                return addUsings("Entitas")
-                    + generateComponent(componentInfo)
-                    + code;
-            }
-
-            code += addMatcher(componentInfo, true);
-            code += closeNamespace();
-
-            var hasCustomPools = componentInfo.pools.Length > 1 || !componentInfo.pools[0].IsDefaultPoolName();
-            if (hasCustomPools) {
-                code += addMatcher(componentInfo);
-                code = addUsings("Entitas") + code;
-            }
-
+            code += addMatchers(componentInfo);
             return code;
-        }
-
-        static string generateComponent(ComponentInfo componentInfo) {
-            const string componentFormat = @"public class {0} : IComponent {{
-    public {1} {2};
-}}
-
-";
-            var memberInfo = componentInfo.memberInfos[0];
-            return string.Format(componentFormat, componentInfo.fullTypeName, memberInfo.type, memberInfo.name);
         }
 
         static string addUsings(params string[] usings) {
             return string.Join("\n", usings
                 .Select(name => "using " + name + ";")
-                .ToArray()) + "\n\n";
+                .ToArray()) + "\n";
         }
 
-        static string addNamespace() {
-            return "namespace Entitas {\n";
-        }
-
-        static string closeNamespace() {
-            return "}\n";
+        static string generateComponent(ComponentInfo componentInfo) {
+            const string componentFormat = @"
+public class {0} : IComponent {{
+    public {1} {2};
+}}
+";
+            var memberInfo = componentInfo.memberInfos[0];
+            return string.Format(componentFormat, componentInfo.fullTypeName, memberInfo.type, memberInfo.name);
         }
 
         /*
@@ -78,79 +55,87 @@ namespace Entitas.CodeGenerator {
          */
 
         static string addEntityMethods(ComponentInfo componentInfo) {
-            return addEntityClassHeader()
-                    + addGetMethods(componentInfo)
-                    + addHasMethods(componentInfo)
-                    + addAddMethods(componentInfo)
-                    + addReplaceMethods(componentInfo)
-                    + addRemoveMethods(componentInfo)
-                    + addCloseClass();
+            var code = string.Empty;
+            for(int i = 0; i < componentInfo.pools.Length; i++) {
+                code += addEntityClassHeader(componentInfo, i)
+                            + addGetMethods(componentInfo, i)
+                            + addHasMethods(componentInfo, i)
+                            + addAddMethods(componentInfo, i)
+                            + addReplaceMethods(componentInfo, i)
+                            + addRemoveMethods(componentInfo, i)
+                            + addCloseClass();
+            }
+
+            return code;
         }
 
-        static string addEntityClassHeader() {
-            return "\n    public partial class Entity {\n";
+        static string addEntityClassHeader(ComponentInfo componentInfo, int poolIndex) {
+            const string classHeader = "\npublic partial class $Tag : Entity {\n";
+            return buildString(componentInfo, classHeader, poolIndex);
         }
 
-        static string addGetMethods(ComponentInfo componentInfo) {
+        static string addGetMethods(ComponentInfo componentInfo, int poolIndex) {
             var getMethod = componentInfo.isSingletonComponent
-                    ? "\n        static readonly $Type $nameComponent = new $Type();\n"
-                    : "\n        public $Type $name { get { return ($Type)GetComponent($Ids.$Name); } }\n";
+                    ? "\n    static readonly $Type $nameComponent = new $Type();\n"
+                    : "\n    public $Type $name { get { return ($Type)GetComponent($Ids.$Name); } }\n";
 
-            return buildString(componentInfo, getMethod);
+            return buildString(componentInfo, getMethod, poolIndex);
         }
 
-        static string addHasMethods(ComponentInfo componentInfo) {
+        static string addHasMethods(ComponentInfo componentInfo, int poolIndex) {
             var hasMethod = componentInfo.isSingletonComponent ? @"
-        public bool $prefix$Name {
-            get { return HasComponent($Ids.$Name); }
-            set {
-                if (value != $prefix$Name) {
-                    if (value) {
-                        AddComponent($Ids.$Name, $nameComponent);
-                    } else {
-                        RemoveComponent($Ids.$Name);
-                    }
+    public bool $prefix$Name {
+        get { return HasComponent($Ids.$Name); }
+        set {
+            if(value != $prefix$Name) {
+                if(value) {
+                    AddComponent($Ids.$Name, $nameComponent);
+                } else {
+                    RemoveComponent($Ids.$Name);
                 }
             }
         }
+    }
 
-        public Entity $Prefix$Name(bool value) {
-            $prefix$Name = value;
-            return this;
-        }
+    public $Tag $Prefix$Name(bool value) {
+        $prefix$Name = value;
+        return this;
+    }
 " : @"
-        public bool has$Name { get { return HasComponent($Ids.$Name); } }
+    public bool has$Name { get { return HasComponent($Ids.$Name); } }
 ";
-            return buildString(componentInfo, hasMethod);
+            return buildString(componentInfo, hasMethod, poolIndex);
         }
 
-        static string addAddMethods(ComponentInfo componentInfo) {
+        static string addAddMethods(ComponentInfo componentInfo, int poolIndex) {
             return componentInfo.isSingletonComponent ? string.Empty : buildString(componentInfo, @"
-        public Entity Add$Name($typedArgs) {
-            var component = CreateComponent<$Type>($Ids.$Name);
+    public $Tag Add$Name($typedArgs) {
+        var component = CreateComponent<$Type>($Ids.$Name);
 $assign
-            return AddComponent($Ids.$Name, component);
-        }
-");
+        AddComponent($Ids.$Name, component);
+        return this;
+    }
+", poolIndex);
         }
 
-        static string addReplaceMethods(ComponentInfo componentInfo) {
+        static string addReplaceMethods(ComponentInfo componentInfo, int poolIndex) {
             return componentInfo.isSingletonComponent ? string.Empty : buildString(componentInfo, @"
-        public Entity Replace$Name($typedArgs) {
-            var component = CreateComponent<$Type>($Ids.$Name);
+    public $Tag Replace$Name($typedArgs) {
+        var component = CreateComponent<$Type>($Ids.$Name);
 $assign
-            ReplaceComponent($Ids.$Name, component);
-            return this;
-        }
-");
+        ReplaceComponent($Ids.$Name, component);
+        return this;
+    }
+", poolIndex);
         }
 
-        static string addRemoveMethods(ComponentInfo componentInfo) {
+        static string addRemoveMethods(ComponentInfo componentInfo, int poolIndex) {
             return componentInfo.isSingletonComponent ? string.Empty : buildString(componentInfo, @"
-        public Entity Remove$Name() {
-            return RemoveComponent($Ids.$Name);
-        }
-");
+    public $Tag Remove$Name() {
+        RemoveComponent($Ids.$Name);
+        return this;
+    }
+", poolIndex);
         }
 
         /*
@@ -160,7 +145,7 @@ $assign
          */
 
         static string addPoolMethods(ComponentInfo componentInfo) {
-            return addPoolClassHeader()
+            return addPoolClassHeader(componentInfo)
                     + addPoolGetMethods(componentInfo)
                     + addPoolHasMethods(componentInfo)
                     + addPoolAddMethods(componentInfo)
@@ -169,76 +154,77 @@ $assign
                     + addCloseClass();
         }
 
-        static string addPoolClassHeader() {
-            return "\n    public partial class Pool {\n";
+        static string addPoolClassHeader(ComponentInfo componentInfo) {
+            const string classHeader = "\npublic partial class $TagPool : Pool<$Tag> {\n";
+            return buildString(componentInfo, classHeader);
         }
 
         static string addPoolGetMethods(ComponentInfo componentInfo) {
             var getMehod = componentInfo.isSingletonComponent ? @"
-        public Entity $nameEntity { get { return GetGroup($TagMatcher.$Name).GetSingleEntity(); } }
+    public $Tag $nameEntity { get { return GetGroup($TagMatcher.$Name).GetSingleEntity(); } }
 " : @"
-        public Entity $nameEntity { get { return GetGroup($TagMatcher.$Name).GetSingleEntity(); } }
+    public $Tag $nameEntity { get { return GetGroup($TagMatcher.$Name).GetSingleEntity(); } }
 
-        public $Type $name { get { return $nameEntity.$name; } }
+    public $Type $name { get { return $nameEntity.$name; } }
 ";
             return buildString(componentInfo, getMehod);
         }
 
         static string addPoolHasMethods(ComponentInfo componentInfo) {
             var hasMethod = componentInfo.isSingletonComponent ? @"
-        public bool $prefix$Name {
-            get { return $nameEntity != null; }
-            set {
-                var entity = $nameEntity;
-                if (value != (entity != null)) {
-                    if (value) {
-                        CreateEntity().$prefix$Name = true;
-                    } else {
-                        DestroyEntity(entity);
-                    }
+    public bool $prefix$Name {
+        get { return $nameEntity != null; }
+        set {
+            var entity = $nameEntity;
+            if(value != (entity != null)) {
+                if(value) {
+                    CreateEntity().$prefix$Name = true;
+                } else {
+                    DestroyEntity(entity);
                 }
             }
         }
+    }
 " : @"
-        public bool has$Name { get { return $nameEntity != null; } }
+    public bool has$Name { get { return $nameEntity != null; } }
 ";
             return buildString(componentInfo, hasMethod);
         }
 
         static object addPoolAddMethods(ComponentInfo componentInfo) {
             return componentInfo.isSingletonComponent ? string.Empty : buildString(componentInfo, @"
-        public Entity Set$Name($typedArgs) {
-            if (has$Name) {
-                throw new EntitasException(""Could not set $name!\n"" + this + "" already has an entity with $Type!"",
-                    ""You should check if the pool already has a $nameEntity before setting it or use pool.Replace$Name()."");
-            }
-            var entity = CreateEntity();
-            entity.Add$Name($args);
-            return entity;
+    public $Tag Set$Name($typedArgs) {
+        if(has$Name) {
+            throw new EntitasException(""Could not set $name!\n"" + this + "" already has an entity with $Type!"",
+                ""You should check if the pool already has a $nameEntity before setting it or use pool.Replace$Name()."");
         }
+        var entity = CreateEntity();
+        entity.Add$Name($args);
+        return entity;
+    }
 ");
         }
 
         static string addPoolReplaceMethods(ComponentInfo componentInfo) {
             return componentInfo.isSingletonComponent ? string.Empty : buildString(componentInfo, @"
-        public Entity Replace$Name($typedArgs) {
-            var entity = $nameEntity;
-            if (entity == null) {
-                entity = Set$Name($args);
-            } else {
-                entity.Replace$Name($args);
-            }
-
-            return entity;
+    public $Tag Replace$Name($typedArgs) {
+        var entity = $nameEntity;
+        if(entity == null) {
+            entity = Set$Name($args);
+        } else {
+            entity.Replace$Name($args);
         }
+
+        return entity;
+    }
 ");
         }
 
         static string addPoolRemoveMethods(ComponentInfo componentInfo) {
             return componentInfo.isSingletonComponent ? string.Empty : buildString(componentInfo, @"
-        public void Remove$Name() {
-            DestroyEntity($nameEntity);
-        }
+    public void Remove$Name() {
+        DestroyEntity($nameEntity);
+    }
 ");
         }
 
@@ -248,45 +234,32 @@ $assign
         *
         */
 
-       static string addMatcher(ComponentInfo componentInfo, bool onlyDefault = false) {
+        static string addMatchers(ComponentInfo componentInfo) {
             const string matcherFormat = @"
-    public partial class $TagMatcher {
+public partial class $TagMatcher {
 
-        static IMatcher _matcher$Name;
+    static IMatcher<$Tag> _matcher$Name;
 
-        public static IMatcher $Name {
-            get {
-                if (_matcher$Name == null) {
-                    var matcher = (Matcher)Matcher.AllOf($Ids.$Name);
-                    matcher.componentNames = $Ids.componentNames;
-                    _matcher$Name = matcher;
-                }
-
-                return _matcher$Name;
+    public static IMatcher<$Tag> $Name {
+        get {
+            if(_matcher$Name == null) {
+                var matcher = (Matcher<$Tag>)Matcher<$Tag>.AllOf($Ids.$Name);
+                matcher.componentNames = $Ids.componentNames;
+                _matcher$Name = matcher;
             }
+
+            return _matcher$Name;
         }
     }
+}
 ";
 
-            if (onlyDefault) {
-                if (componentInfo.pools.Contains(CodeGenerator.DEFAULT_POOL_NAME)) {
-                    return buildString(componentInfo, matcherFormat);
-                } else {
-                    return string.Empty;
-                }
-            } else {
-                var poolIndex = 0;
-                var matchers = componentInfo.pools.Aggregate(string.Empty, (acc, poolName) => {
-                    if (!poolName.IsDefaultPoolName()) {
-                        return acc + buildString(componentInfo, matcherFormat, poolIndex++);
-                    } else {
-                        poolIndex += 1;
-                        return acc;
-                    }
-                });
+            var poolIndex = 0;
+            var matchers = componentInfo.pools.Aggregate(string.Empty, (acc, poolName) => {
+                return acc + buildString(componentInfo, matcherFormat, poolIndex++);
+            });
 
-                return buildString(componentInfo, matchers);
-            }
+            return buildString(componentInfo, matchers);
         }
 
         /*
@@ -341,7 +314,7 @@ $assign
         }
 
         static string memberAssignments(List<PublicMemberInfo> memberInfos) {
-            const string format = "            component.{0} = {1};";
+            const string format = "        component.{0} = {1};";
             var assignments = memberInfos.Select(info => {
                 var newArg = "new" + info.name.UppercaseFirst();
                 return string.Format(format, info.name, newArg);
@@ -356,7 +329,7 @@ $assign
         }
 
         static string addCloseClass() {
-            return "    }\n";
+            return "}\n";
         }
     }
 }

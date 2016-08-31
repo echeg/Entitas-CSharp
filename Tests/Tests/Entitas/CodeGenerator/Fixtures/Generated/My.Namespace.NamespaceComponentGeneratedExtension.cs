@@ -6,45 +6,44 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Entitas {
+using Entitas;
 
-    public partial class Entity {
+public partial class Core : Entity {
 
-        static readonly My.Namespace.NamespaceComponent namespaceComponent = new My.Namespace.NamespaceComponent();
+    static readonly My.Namespace.NamespaceComponent namespaceComponent = new My.Namespace.NamespaceComponent();
 
-        public bool isNamespace {
-            get { return HasComponent(ComponentIds.Namespace); }
-            set {
-                if (value != isNamespace) {
-                    if (value) {
-                        AddComponent(ComponentIds.Namespace, namespaceComponent);
-                    } else {
-                        RemoveComponent(ComponentIds.Namespace);
-                    }
+    public bool isNamespace {
+        get { return HasComponent(CoreComponentIds.Namespace); }
+        set {
+            if(value != isNamespace) {
+                if(value) {
+                    AddComponent(CoreComponentIds.Namespace, namespaceComponent);
+                } else {
+                    RemoveComponent(CoreComponentIds.Namespace);
                 }
             }
-        }
-
-        public Entity IsNamespace(bool value) {
-            isNamespace = value;
-            return this;
         }
     }
 
-    public partial class Matcher {
+    public Core IsNamespace(bool value) {
+        isNamespace = value;
+        return this;
+    }
+}
 
-        static IMatcher _matcherNamespace;
+public partial class CoreMatcher {
 
-        public static IMatcher Namespace {
-            get {
-                if (_matcherNamespace == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Namespace);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherNamespace = matcher;
-                }
+    static IMatcher<Core> _matcherNamespace;
 
-                return _matcherNamespace;
+    public static IMatcher<Core> Namespace {
+        get {
+            if(_matcherNamespace == null) {
+                var matcher = (Matcher<Core>)Matcher<Core>.AllOf(CoreComponentIds.Namespace);
+                matcher.componentNames = CoreComponentIds.componentNames;
+                _matcherNamespace = matcher;
             }
+
+            return _matcherNamespace;
         }
     }
 }

@@ -6,21 +6,21 @@ class describe_GeneratedComponents : nspec {
 
     void when_generated() {
 
-        Pool pool = null;
+        CorePool pool = null;
 
         before = () => {
-            pool = new Pool(ComponentIds.TotalComponents);
+            pool = new CorePool(CoreComponentIds.TotalComponents);
         };
 
         context["component without fields"] = () => {
 
-            Entity e = null;
+            Core e = null;
             int index = -1;
 
             before = () => {
                 e = pool.CreateEntity();
                 e.isMovable = true;
-                index = ComponentIds.Movable;
+                index = CoreComponentIds.Movable;
             };
 
             it["adds component"] = () => {
@@ -63,10 +63,10 @@ class describe_GeneratedComponents : nspec {
 
             context["matcher"] = () => {
 
-                IMatcher matcher = null;
+                IMatcher<Core> matcher = null;
 
                 before = () => {
-                    matcher = Matcher.Movable;
+                    matcher = CoreMatcher.Movable;
                 };
 
                 it["generates matcher"] = () => {
@@ -75,19 +75,19 @@ class describe_GeneratedComponents : nspec {
                 };
 
                 it["gets same instance"] = () => {
-                    matcher.should_be_same(Matcher.Movable);
+                    matcher.should_be_same(CoreMatcher.Movable);
                 };
 
                 it["has component names"] = () => {
-                    ((Matcher)matcher).componentNames.should_be(ComponentIds.componentNames);
+                    ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                 };
             };
         };
 
         context["component with fields"] = () => {
 
-            Entity e = null;
-            int index = ComponentIds.Person;
+            Core e = null;
+            int index = CoreComponentIds.Person;
 
             before = () => {
                 e = pool.CreateEntity();
@@ -168,10 +168,10 @@ class describe_GeneratedComponents : nspec {
 
             context["matcher"] = () => {
 
-                IMatcher matcher = null;
+                IMatcher<Core> matcher = null;
 
                 before = () => {
-                    matcher = Matcher.Person;
+                    matcher = CoreMatcher.Person;
                 };
 
                 it["generates matcher"] = () => {
@@ -180,22 +180,22 @@ class describe_GeneratedComponents : nspec {
                 };
 
                 it["gets same instance"] = () => {
-                    matcher.should_be_same(Matcher.Person);
+                    matcher.should_be_same(CoreMatcher.Person);
                 };
 
                 it["has component names"] = () => {
-                    ((Matcher)matcher).componentNames.should_be(ComponentIds.componentNames);
+                    ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                 };
             };
         };
 
         context["single component without fields"] = () => {
 
-            Entity e = null;
+            Core e = null;
             int index = -1;
 
             before = () => {
-                index = ComponentIds.Animating;
+                index = CoreComponentIds.Animating;
             };
 
             context["entity extensions"] = () => {
@@ -245,10 +245,10 @@ class describe_GeneratedComponents : nspec {
 
                 context["matcher"] = () => {
 
-                    IMatcher matcher = null;
+                    IMatcher<Core> matcher = null;
 
                     before = () => {
-                        matcher = Matcher.Animating;
+                        matcher = CoreMatcher.Animating;
                     };
 
                     it["generates matcher"] = () => {
@@ -257,11 +257,11 @@ class describe_GeneratedComponents : nspec {
                     };
 
                     it["gets same instance"] = () => {
-                        matcher.should_be_same(Matcher.Animating);
+                        matcher.should_be_same(CoreMatcher.Animating);
                     };
 
                     it["has component names"] = () => {
-                        ((Matcher)matcher).componentNames.should_be(ComponentIds.componentNames);
+                        ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                     };
                 };
             };
@@ -273,7 +273,7 @@ class describe_GeneratedComponents : nspec {
                 };
 
                 it["creates entity"] = () => {
-                    var singleEntity = pool.GetGroup(Matcher.Animating).GetSingleEntity();
+                    var singleEntity = pool.GetGroup(CoreMatcher.Animating).GetSingleEntity();
                     singleEntity.should_not_be_null();
 
                     pool.animatingEntity.should_be_same(singleEntity);
@@ -284,7 +284,7 @@ class describe_GeneratedComponents : nspec {
                 it["destroys entity"] = () => {
                     pool.isAnimating = false;
 
-                    var singleEntity = pool.GetGroup(Matcher.Animating).GetSingleEntity();
+                    var singleEntity = pool.GetGroup(CoreMatcher.Animating).GetSingleEntity();
                     singleEntity.should_be_null();
 
                     pool.animatingEntity.should_be_null();
@@ -300,7 +300,7 @@ class describe_GeneratedComponents : nspec {
                     pool.animatingEntity.should_be_same(animatingEntity);
                     pool.isAnimating = true;
                     pool.animatingEntity.should_be_same(animatingEntity);
-                    pool.GetEntities(Matcher.Animating).Length.should_be(1);
+                    pool.GetEntities(CoreMatcher.Animating).Length.should_be(1);
                 };
 
                 it["ignores setting to false multiple times"] = () => {
@@ -314,7 +314,7 @@ class describe_GeneratedComponents : nspec {
 
                     pool.isAnimating = false;
 
-                    var singleEntity = pool.GetGroup(Matcher.Animating).GetSingleEntity();
+                    var singleEntity = pool.GetGroup(CoreMatcher.Animating).GetSingleEntity();
                     singleEntity.should_be_null();
                     pool.animatingEntity.should_be_null();
 
@@ -325,13 +325,13 @@ class describe_GeneratedComponents : nspec {
 
         context["single component with fields"] = () => {
 
-            int index = ComponentIds.User;
+            int index = CoreComponentIds.User;
             var date1 = new DateTime(1);
             var date2 = new DateTime(2);
 
             context["entity extensions"] = () => {
 
-                Entity e = null;
+                Core e = null;
 
                 before = () => {
                     e = pool.CreateEntity();
@@ -412,10 +412,10 @@ class describe_GeneratedComponents : nspec {
 
                 context["matcher"] = () => {
 
-                    IMatcher matcher = null;
+                    IMatcher<Core> matcher = null;
 
                     before = () => {
-                        matcher = Matcher.User;
+                        matcher = CoreMatcher.User;
                     };
 
                     it["generates matcher"] = () => {
@@ -424,11 +424,11 @@ class describe_GeneratedComponents : nspec {
                     };
 
                     it["gets same instance"] = () => {
-                        matcher.should_be_same(Matcher.User);
+                        matcher.should_be_same(CoreMatcher.User);
                     };
 
                     it["has component names"] = () => {
-                        ((Matcher)matcher).componentNames.should_be(ComponentIds.componentNames);
+                        ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                     };
                 };
             };
@@ -438,7 +438,7 @@ class describe_GeneratedComponents : nspec {
                 it["creates entity"] = () => {
                     var userEntity = pool.SetUser(date1, false);
 
-                    var singleEntity = pool.GetGroup(Matcher.User).GetSingleEntity();
+                    var singleEntity = pool.GetGroup(CoreMatcher.User).GetSingleEntity();
                     singleEntity.should_be_same(userEntity);
 
                     pool.userEntity.should_be_same(userEntity);
@@ -470,14 +470,14 @@ class describe_GeneratedComponents : nspec {
                     pool.userEntity.user.timestamp.should_be(date2);
                     pool.userEntity.user.isLoggedIn.should_be_true();
 
-                    pool.GetEntities(Matcher.User).Length.should_be(1);
+                    pool.GetEntities(CoreMatcher.User).Length.should_be(1);
                 };
 
                 it["destroys entity"] = () => {
                     pool.SetUser(date1, false);
                     pool.RemoveUser();
 
-                    var singleEntity = pool.GetGroup(Matcher.User).GetSingleEntity();
+                    var singleEntity = pool.GetGroup(CoreMatcher.User).GetSingleEntity();
                     singleEntity.should_be_null();
 
                     pool.userEntity.should_be_null();
@@ -491,7 +491,7 @@ class describe_GeneratedComponents : nspec {
                     userEntity.isMovable = true;
                     pool.RemoveUser();
 
-                    var singleEntity = pool.GetGroup(Matcher.User).GetSingleEntity();
+                    var singleEntity = pool.GetGroup(CoreMatcher.User).GetSingleEntity();
                     singleEntity.should_be_null();
 
                     pool.userEntity.should_be_null();

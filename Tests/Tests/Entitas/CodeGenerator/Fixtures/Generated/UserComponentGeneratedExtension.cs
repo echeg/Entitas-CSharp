@@ -6,84 +6,83 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-namespace Entitas {
+using Entitas;
 
-    public partial class Entity {
+public partial class Core : Entity {
 
-        public UserComponent user { get { return (UserComponent)GetComponent(ComponentIds.User); } }
+    public UserComponent user { get { return (UserComponent)GetComponent(CoreComponentIds.User); } }
 
-        public bool hasUser { get { return HasComponent(ComponentIds.User); } }
+    public bool hasUser { get { return HasComponent(CoreComponentIds.User); } }
 
-        public Entity AddUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            var component = CreateComponent<UserComponent>(ComponentIds.User);
-            component.timestamp = newTimestamp;
-            component.isLoggedIn = newIsLoggedIn;
-            AddComponent(ComponentIds.User, component);
-            return this;
-        }
-
-        public Entity ReplaceUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            var component = CreateComponent<UserComponent>(ComponentIds.User);
-            component.timestamp = newTimestamp;
-            component.isLoggedIn = newIsLoggedIn;
-            ReplaceComponent(ComponentIds.User, component);
-            return this;
-        }
-
-        public Entity RemoveUser() {
-            RemoveComponent(ComponentIds.User);
-            return this;
-        }
+    public Core AddUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        var component = CreateComponent<UserComponent>(CoreComponentIds.User);
+        component.timestamp = newTimestamp;
+        component.isLoggedIn = newIsLoggedIn;
+        AddComponent(CoreComponentIds.User, component);
+        return this;
     }
 
-    public partial class Pool {
-
-        public Entity userEntity { get { return GetGroup(Matcher.User).GetSingleEntity(); } }
-
-        public UserComponent user { get { return userEntity.user; } }
-
-        public bool hasUser { get { return userEntity != null; } }
-
-        public Entity SetUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            if (hasUser) {
-                throw new EntitasException("Could not set user!\n" + this + " already has an entity with UserComponent!",
-                    "You should check if the pool already has a userEntity before setting it or use pool.ReplaceUser().");
-            }
-            var entity = CreateEntity();
-            entity.AddUser(newTimestamp, newIsLoggedIn);
-            return entity;
-        }
-
-        public Entity ReplaceUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
-            var entity = userEntity;
-            if (entity == null) {
-                entity = SetUser(newTimestamp, newIsLoggedIn);
-            } else {
-                entity.ReplaceUser(newTimestamp, newIsLoggedIn);
-            }
-
-            return entity;
-        }
-
-        public void RemoveUser() {
-            DestroyEntity(userEntity);
-        }
+    public Core ReplaceUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        var component = CreateComponent<UserComponent>(CoreComponentIds.User);
+        component.timestamp = newTimestamp;
+        component.isLoggedIn = newIsLoggedIn;
+        ReplaceComponent(CoreComponentIds.User, component);
+        return this;
     }
 
-    public partial class Matcher {
+    public Core RemoveUser() {
+        RemoveComponent(CoreComponentIds.User);
+        return this;
+    }
+}
 
-        static IMatcher _matcherUser;
+public partial class CorePool : Pool<Core> {
 
-        public static IMatcher User {
-            get {
-                if (_matcherUser == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.User);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherUser = matcher;
-                }
+    public Core userEntity { get { return GetGroup(CoreMatcher.User).GetSingleEntity(); } }
 
-                return _matcherUser;
+    public UserComponent user { get { return userEntity.user; } }
+
+    public bool hasUser { get { return userEntity != null; } }
+
+    public Core SetUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        if(hasUser) {
+            throw new EntitasException("Could not set user!\n" + this + " already has an entity with UserComponent!",
+                "You should check if the pool already has a userEntity before setting it or use pool.ReplaceUser().");
+        }
+        var entity = CreateEntity();
+        entity.AddUser(newTimestamp, newIsLoggedIn);
+        return entity;
+    }
+
+    public Core ReplaceUser(System.DateTime newTimestamp, bool newIsLoggedIn) {
+        var entity = userEntity;
+        if(entity == null) {
+            entity = SetUser(newTimestamp, newIsLoggedIn);
+        } else {
+            entity.ReplaceUser(newTimestamp, newIsLoggedIn);
+        }
+
+        return entity;
+    }
+
+    public void RemoveUser() {
+        DestroyEntity(userEntity);
+    }
+}
+
+public partial class CoreMatcher {
+
+    static IMatcher<Core> _matcherUser;
+
+    public static IMatcher<Core> User {
+        get {
+            if(_matcherUser == null) {
+                var matcher = (Matcher<Core>)Matcher<Core>.AllOf(CoreComponentIds.User);
+                matcher.componentNames = CoreComponentIds.componentNames;
+                _matcherUser = matcher;
             }
+
+            return _matcherUser;
         }
     }
 }

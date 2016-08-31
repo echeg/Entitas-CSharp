@@ -9,25 +9,25 @@
 public static class PoolCComponentIds {
     public const int C = 0;
     public const int E = 1;
-    public const int F = 2;
-    public const int D = 3;
-    public const int G = 4;
+    public const int D = 2;
+    public const int G = 3;
+    public const int F = 4;
 
     public const int TotalComponents = 5;
 
     public static readonly string[] componentNames = {
         "C",
         "E",
-        "F",
         "D",
-        "G"
+        "G",
+        "F"
     };
 
     public static readonly System.Type[] componentTypes = {
         typeof(CComponent),
         typeof(EComponent),
-        typeof(FComponent),
         typeof(DComponent),
-        typeof(GComponent)
+        typeof(GComponent),
+        typeof(FComponent)
     };
 }

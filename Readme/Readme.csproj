@@ -230,6 +230,9 @@
     <Compile Include="..\Entitas\Entitas\Interfaces\IEntity.cs">
       <Link>Linked Libraries\Entitas\Interfaces\IEntity.cs</Link>
     </Compile>
+    <Compile Include="..\Entitas\Entitas\Interfaces\IPool.cs">
+      <Link>Linked Libraries\Entitas\Interfaces\IPool.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

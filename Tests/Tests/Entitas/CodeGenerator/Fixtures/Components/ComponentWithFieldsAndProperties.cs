@@ -1,6 +1,8 @@
-using Entitas;
-
 #pragma warning disable
+using Entitas;
+using Entitas.CodeGenerator;
+
+[Pool("Core")]
 public class ComponentWithFieldsAndProperties : IComponent {
 
     // Has one public field
