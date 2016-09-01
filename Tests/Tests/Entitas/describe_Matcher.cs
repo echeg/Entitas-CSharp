@@ -92,15 +92,15 @@ class describe_Matcher : nspec {
             it["can ToString"] = () => m.ToString().should_be("AllOf(1, 2)");
 
             it["uses componentNames when set"] = () => {
-                var matcher = (Matcher)m;
+                var matcher = (Matcher<Entity>)m;
                 matcher.componentNames = new [] { "one", "two", "three" };
                 matcher.ToString().should_be("AllOf(two, three)");
             };
 
             it["uses componentNames when merged matcher ToString"] = () => {
-                var m1 = (Matcher)Matcher.AllOf(new [] { CID.ComponentA });
-                var m2 = (Matcher)Matcher.AllOf(new [] { CID.ComponentB });
-                var m3 = (Matcher)Matcher.AllOf(new [] { CID.ComponentC });
+                var m1 = (Matcher<Entity>)Matcher.AllOf(new [] { CID.ComponentA });
+                var m2 = (Matcher<Entity>)Matcher.AllOf(new [] { CID.ComponentB });
+                var m3 = (Matcher<Entity>)Matcher.AllOf(new [] { CID.ComponentC });
 
                 m2.componentNames = new [] {"m_0", "m_1", "m_2", "m_3"};
 
@@ -225,7 +225,7 @@ class describe_Matcher : nspec {
             it["can ToString"] = () => m.ToString().should_be("AllOf(1, 2).NoneOf(3, 4)");
 
             it["uses componentNames when componentNames set"] = () => {
-                var matcher = (Matcher)m;
+                var matcher = (Matcher<Entity>)m;
                 matcher.componentNames = new [] { "one", "two", "three", "four", "five" };
                 matcher.ToString().should_be("AllOf(two, three).NoneOf(four, five)");
             };
