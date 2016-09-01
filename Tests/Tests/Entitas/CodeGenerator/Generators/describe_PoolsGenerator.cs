@@ -6,41 +6,21 @@ class describe_PoolsGenerator : nspec {
 
     const bool logResults = false;
 
-    const string defaultPool = @"namespace Entitas {
-
-    public partial class Pools {
-
-        public static Pool CreatePool() {
-            return CreatePool(""Pool"", ComponentIds.TotalComponents, ComponentIds.componentNames, ComponentIds.componentTypes);
-        }
-
-        public Pool[] allPools { get { return new[] { pool }; } }
-
-        public Pool pool;
-
-        public void SetAllPools() {
-            pool = CreatePool();
-        }
-    }
-}
-";
-
     const string metaPool = @"namespace Entitas {
 
     public partial class Pools {
 
-        public static Pool CreateMetaPool() {
-            return CreatePool(""Meta"", MetaComponentIds.TotalComponents, MetaComponentIds.componentNames, MetaComponentIds.componentTypes);
-        }
-
-        public Pool[] allPools { get { return new[] { meta }; } }
-
-        public Pool meta;
+        public MetaPool meta;
 
         public void SetAllPools() {
-            meta = CreateMetaPool();
+            meta = new MetaPool();
         }
     }
+}
+
+public partial class MetaPool : Entitas.Pool<Meta> {
+    public MetaPool() : base(MetaComponentIds.TotalComponents) { }
+    public MetaPool(int startCreationIndex) : base(MetaComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData(""Meta Pool"", MetaComponentIds.componentNames, MetaComponentIds.componentTypes)) { }
 }
 ";
 
@@ -48,28 +28,33 @@ class describe_PoolsGenerator : nspec {
 
     public partial class Pools {
 
-        public static Pool CreateMetaPool() {
-            return CreatePool(""Meta"", MetaComponentIds.TotalComponents, MetaComponentIds.componentNames, MetaComponentIds.componentTypes);
-        }
-
-        public static Pool CreateCorePool() {
-            return CreatePool(""Core"", CoreComponentIds.TotalComponents, CoreComponentIds.componentNames, CoreComponentIds.componentTypes);
-        }
-
-        public Pool[] allPools { get { return new[] { meta, core }; } }
-
-        public Pool meta;
-        public Pool core;
+        public MetaPool meta;
+        public CorePool core;
 
         public void SetAllPools() {
-            meta = CreateMetaPool();
-            core = CreateCorePool();
+            meta = new MetaPool();
+            core = new CorePool();
         }
     }
+}
+
+public partial class MetaPool : Entitas.Pool<Meta> {
+    public MetaPool() : base(MetaComponentIds.TotalComponents) { }
+    public MetaPool(int startCreationIndex) : base(MetaComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData(""Meta Pool"", MetaComponentIds.componentNames, MetaComponentIds.componentTypes)) { }
+}
+
+public partial class CorePool : Entitas.Pool<Core> {
+    public CorePool() : base(CoreComponentIds.TotalComponents) { }
+    public CorePool(int startCreationIndex) : base(CoreComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData(""Core Pool"", CoreComponentIds.componentNames, CoreComponentIds.componentTypes)) { }
 }
 ";
 
     void generates(string[] poolNames, string expectedFileContent) {
+        try {
+
+
+
+
         expectedFileContent = expectedFileContent.ToUnixLineEndings();
 
         var files = new PoolsGenerator().Generate(poolNames);
@@ -84,12 +69,19 @@ class describe_PoolsGenerator : nspec {
 
         file.fileName.should_be("Pools");
         file.fileContent.should_be(expectedFileContent);
+
+
+
+        } catch(System.Exception ex) {
+            System.Console.WriteLine(ex);
+            throw ex;
+        }
+
     }
 
     void when_generating() {
 
-        it["generates default pool"] = () => generates(new[] { CodeGenerator.DEFAULT_POOL_NAME }, defaultPool);
-        it["generates one custom pool"] = () => generates(new[] { "Meta" }, metaPool);
+        it["generates one pool"] = () => generates(new[] { "Meta" }, metaPool);
         it["generates multiple pools"] = () => generates(new[] { "Meta", "Core" }, coreMetaPool);
     }
 }

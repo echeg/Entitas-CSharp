@@ -7,39 +7,40 @@ namespace Entitas.CodeGenerator {
         const string CLASS_TEMPLATE = @"namespace Entitas {{
 
     public partial class Pools {{
-{0}
-        public Pool[] allPools {{ get {{ return new[] {{ {1} }}; }} }}
 
-{2}
+{0}
 
         public void SetAllPools() {{
-{3}
+{1}
         }}
     }}
 }}
-";
+{2}";
 
-        const string CREATE_POOL_TEMPLATE = @"
-        public static Pool Create{1}Pool() {{
-            return CreatePool(""{0}"", {2}.TotalComponents, {2}.componentNames, {2}.componentTypes);
-        }}
+        const string POOL_FIELD = "        public {0}Pool {1};";
+        const string SET_POOL   = "            {0} = new {1}Pool();";
+        const string POOL_TEMPLATE = @"
+public partial class {0}Pool : Entitas.Pool<{0}> {{
+    public {0}Pool() : base({0}ComponentIds.TotalComponents) {{ }}
+    public {0}Pool(int startCreationIndex) : base({1}.TotalComponents, startCreationIndex, new Entitas.PoolMetaData(""{0} Pool"", {1}.componentNames, {1}.componentTypes)) {{ }}
+}}
 ";
 
         public CodeGenFile[] Generate(string[] poolNames) {
-            var createPoolMethods = poolNames.Aggregate(string.Empty, (acc, poolName) =>
-                acc + string.Format(CREATE_POOL_TEMPLATE, poolName, poolName.PoolPrefix(), poolName.PoolPrefix() + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG)
-            );
 
-            var allPoolsList = string.Join(", ", poolNames.Select(poolName => poolName.LowercaseFirst()).ToArray());
             var poolFields = string.Join("\n", poolNames.Select(poolName =>
-                "        public Pool " + poolName.LowercaseFirst() + ";").ToArray());
-
+                string.Format(POOL_FIELD, poolName, poolName.LowercaseFirst())).ToArray());
+            
             var setAllPools = string.Join("\n", poolNames.Select(poolName =>
-                "            " + poolName.LowercaseFirst() + " = Create" + poolName.PoolPrefix() + "Pool();").ToArray());
+                string.Format(SET_POOL, poolName.LowercaseFirst(), poolName)).ToArray());
+
+            var pools = poolNames.Aggregate(string.Empty, (acc, poolName) =>
+                acc + string.Format(POOL_TEMPLATE, poolName, poolName + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG)
+            );
 
             return new[] { new CodeGenFile(
                 "Pools",
-                string.Format(CLASS_TEMPLATE, createPoolMethods, allPoolsList, poolFields, setAllPools),
+                string.Format(CLASS_TEMPLATE, poolFields, setAllPools, pools),
                 GetType().FullName
             )};
         }

@@ -7,7 +7,7 @@ using NSpec;
 
 class describe_ComponentExtensionsGenerator : nspec {
 
-    const bool logResults = !false;
+    const bool logResults = false;
 
     const string classSuffix = "GeneratedExtension";
 
