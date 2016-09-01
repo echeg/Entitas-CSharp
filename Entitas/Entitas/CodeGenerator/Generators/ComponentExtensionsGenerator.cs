@@ -274,9 +274,9 @@ public partial class $TagMatcher {
             var a1_name = componentInfo.typeName.RemoveComponentSuffix();
             var a2_lowercaseName = a1_name.LowercaseFirst();
             var poolNames = componentInfo.pools;
-            var a3_tag = poolNames[poolIndex].PoolPrefix();
+            var a3_tag = poolNames[poolIndex];
             var lookupTags = componentInfo.ComponentLookupTags();
-            var a4_ids = lookupTags.Length == 0 ? string.Empty : lookupTags[poolIndex];
+            var a4_ids = lookupTags[poolIndex];
             var memberInfos = componentInfo.memberInfos;
             var a5_memberNamesWithType = memberNamesWithType(memberInfos);
             var a6_memberAssigns = memberAssignments(memberInfos);

@@ -79,7 +79,7 @@ class describe_GeneratedComponents : nspec {
                 };
 
                 it["has component names"] = () => {
-                    ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
+                    ((Matcher<Core>)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                 };
             };
         };
@@ -184,7 +184,7 @@ class describe_GeneratedComponents : nspec {
                 };
 
                 it["has component names"] = () => {
-                    ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
+                    ((Matcher<Core>)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                 };
             };
         };
@@ -261,7 +261,7 @@ class describe_GeneratedComponents : nspec {
                     };
 
                     it["has component names"] = () => {
-                        ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
+                        ((Matcher<Core>)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                     };
                 };
             };
@@ -428,7 +428,7 @@ class describe_GeneratedComponents : nspec {
                     };
 
                     it["has component names"] = () => {
-                        ((Matcher)matcher).componentNames.should_be(CoreComponentIds.componentNames);
+                        ((Matcher<Core>)matcher).componentNames.should_be(CoreComponentIds.componentNames);
                     };
                 };
             };

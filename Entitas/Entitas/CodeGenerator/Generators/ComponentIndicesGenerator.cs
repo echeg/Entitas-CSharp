@@ -11,7 +11,7 @@ namespace Entitas.CodeGenerator {
             var emptyInfos = new ComponentInfo[0];
             var generatorName = GetType().FullName;
             return poolNames
-                .Select(poolName => poolName.PoolPrefix() + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG)
+                .Select(poolName => poolName + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG)
                 .Select(lookupTag => new CodeGenFile(
                     lookupTag,
                     generateIndicesLookup(lookupTag, emptyInfos),
@@ -101,7 +101,7 @@ namespace Entitas.CodeGenerator {
         }
 
         static string addClassHeader(string lookupTag) {
-            return string.Format("public static class {0} {{\n\n", lookupTag);
+            return string.Format("public static class {0} {{\n", lookupTag);
         }
 
         static string addIndices(ComponentInfo[] componentInfos) {
@@ -113,6 +113,10 @@ namespace Entitas.CodeGenerator {
                 if(info != null) {
                     code += string.Format(fieldFormat, info.typeName.RemoveComponentSuffix(), i);
                 }
+            }
+
+            if (code != string.Empty) {
+                code = "\n" + code;
             }
 
             var totalComponents = string.Format(totalFormat, componentInfos.Length);

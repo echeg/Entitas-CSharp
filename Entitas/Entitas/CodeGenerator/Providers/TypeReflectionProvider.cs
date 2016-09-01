@@ -24,7 +24,10 @@ namespace Entitas.CodeGenerator {
                 );
             }
             _componentInfos = GetComponentInfos(types);
-            _poolNames = pools.OrderBy(poolName => poolName).ToArray();
+            _poolNames = pools
+                .Select(poolName => poolName.UppercaseFirst())
+                .OrderBy(poolName => poolName)
+                .ToArray();
             _blueprintNames = blueprintNames;
         }
 
@@ -82,21 +85,15 @@ namespace Entitas.CodeGenerator {
             return type.GetPublicMemberInfos();
         }
 
-        public static string[] GetPools(Type type, bool defaultIfEmpty) {
+        public static string[] GetPools(Type type, bool throwIfNoneFound) {
             var pools = Attribute.GetCustomAttributes(type)
                 .Where(attr => isTypeOrHasBaseType(attr.GetType(), "Entitas.CodeGenerator.PoolAttribute"))
                 .Select(attr => attr.GetType().GetField("poolName").GetValue(attr) as string)
                 .OrderBy(poolName => poolName)
                 .ToArray();
 
-            if (pools.Length == 0 && defaultIfEmpty) {
-                return new[] { CodeGenerator.DEFAULT_POOL_NAME };
-            }
-
-            var defaultPoolIndex = Array.IndexOf(pools, CodeGenerator.DEFAULT_POOL_NAME);
-            if (defaultPoolIndex != -1) {
-                pools[defaultPoolIndex] = pools[0];
-                pools[0] = CodeGenerator.DEFAULT_POOL_NAME;
+            if(throwIfNoneFound && pools.Length == 0) {
+                throw new TypeReflectionProviderException("No PoolAttribute set for '" + type + "'!", "Add at least one PoolAttribute.");
             }
 
             return pools;

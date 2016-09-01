@@ -7,9 +7,7 @@ namespace Entitas.CodeGenerator {
 
         public readonly string poolName;
 
-        // TODO Try to use this again as soon Unity updates to newer mono
-        //public PoolAttribute(string poolName = CodeGenerator.DEFAULT_POOL_NAME) {
-        public PoolAttribute(string poolName = "Pool") {
+        public PoolAttribute(string poolName) {
             this.poolName = poolName;
         }
     }

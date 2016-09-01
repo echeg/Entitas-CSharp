@@ -20,7 +20,6 @@ class describe_ComponentIndicesGenerator : nspec {
         var infos = TypeReflectionProvider.GetComponentInfos(types);
 
         var files = new ComponentIndicesGenerator().Generate(infos);
-
         files.Length.should_be(expectedLookupNames.Length);
 
         for(int i = 0; i < expectedLookupNames.Length; i++) {
@@ -29,7 +28,7 @@ class describe_ComponentIndicesGenerator : nspec {
 
             files.Any(f => f.fileName == expectedLookupName).should_be_true();
             var file = files.Single(f => f.fileName == expectedLookupName);
-#pragma warning disable
+            #pragma warning disable
             if(logResults) {
                 Console.WriteLine("should:\n" + expectedLookupCode);
                 Console.WriteLine("was:\n" + file.fileContent);
@@ -59,8 +58,9 @@ class describe_ComponentIndicesGenerator : nspec {
     void when_generating() {
 
         it["generates default lookup"] = () => {
-            generates(typeof(SomeComponent), CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                @"public static class ComponentIds {
+            generates(typeof(SomeComponent), "SomePool" + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                @"public static class SomePoolComponentIds {
+
     public const int Some = 0;
 
     public const int TotalComponents = 1;
@@ -78,8 +78,9 @@ class describe_ComponentIndicesGenerator : nspec {
 
 
         it["generates compatible field names for components with namespace"] = () => {
-            generates(typeof(NamespaceComponent), CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                @"public static class ComponentIds {
+            generates(typeof(NamespaceComponent), "Core" + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                @"public static class CoreComponentIds {
+
     public const int Namespace = 0;
 
     public const int TotalComponents = 1;
@@ -99,6 +100,7 @@ class describe_ComponentIndicesGenerator : nspec {
         it["generates lookup with name from attribute"] = () => {
             generates(typeof(OtherPoolComponent), "OtherComponentIds",
                 @"public static class OtherComponentIds {
+
     public const int OtherPool = 0;
 
     public const int TotalComponents = 1;
@@ -116,8 +118,9 @@ class describe_ComponentIndicesGenerator : nspec {
 
 
         it["generates id for [DontGenerate]"] = () => {
-            generates(typeof(DontGenerateComponent), CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                @"public static class ComponentIds {
+            generates(typeof(DontGenerateComponent), "Core" + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                @"public static class CoreComponentIds {
+
     public const int DontGenerate = 0;
 
     public const int TotalComponents = 1;
@@ -138,8 +141,9 @@ class describe_ComponentIndicesGenerator : nspec {
             generates(new[] {
                 typeof(SomeComponent),
                 typeof(DontGenerateIndexComponent)
-            }, CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                @"public static class ComponentIds {
+            }, "SomePool" + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                @"public static class SomePoolComponentIds {
+
     public const int Some = 0;
 
     public const int TotalComponents = 1;
@@ -158,40 +162,26 @@ class describe_ComponentIndicesGenerator : nspec {
 
         it["generates ids for all types ordered alphabetically"] = () => {
             generates(new[] {
-                    typeof(SomeComponent),
-                    typeof(DontGenerateComponent)
-                }, CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                @"public static class ComponentIds {
-    public const int DontGenerate = 0;
-    public const int Some = 1;
+                    typeof(MovableComponent),
+                    typeof(PersonComponent)
+                }, "Core" + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                @"public static class CoreComponentIds {
+
+    public const int Movable = 0;
+    public const int Person = 1;
 
     public const int TotalComponents = 2;
 
     public static readonly string[] componentNames = {
-        ""DontGenerate"",
-        ""Some""
+        ""Movable"",
+        ""Person""
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(DontGenerateComponent),
-        typeof(SomeComponent)
+        typeof(MovableComponent),
+        typeof(PersonComponent)
     };
 }");
-        };
-
-
-
-        it["generates empty lookup with total components when for default pool"] = () => {
-            generatesEmptyLookup(new[] { CodeGenerator.DEFAULT_POOL_NAME }, new[] { CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG }, new[] { @"public static class ComponentIds {
-
-    public const int TotalComponents = 0;
-
-    public static readonly string[] componentNames = {
-    };
-
-    public static readonly System.Type[] componentTypes = {
-    };
-}" });
         };
 
 
@@ -245,6 +235,7 @@ class describe_ComponentIndicesGenerator : nspec {
                         typeof(BComponent)
                     }, new[] { "PoolAComponentIds", "PoolBComponentIds" }, new[] {
                     @"public static class PoolAComponentIds {
+
     public const int B = 0;
     public const int A = 1;
 
@@ -261,6 +252,7 @@ class describe_ComponentIndicesGenerator : nspec {
     };
 }",
                     @"public static class PoolBComponentIds {
+
     public const int B = 0;
 
     public const int TotalComponents = 1;
@@ -292,6 +284,7 @@ class describe_ComponentIndicesGenerator : nspec {
                         "PoolCComponentIds",
                     }, new[] {
                         @"public static class PoolAComponentIds {
+
     public const int C = 0;
     public const int B = 1;
     public const int A = 2;
@@ -311,6 +304,7 @@ class describe_ComponentIndicesGenerator : nspec {
     };
 }",
                     @"public static class PoolBComponentIds {
+
     public const int C = 0;
     public const int B = 1;
     public const int D = 2;
@@ -330,6 +324,7 @@ class describe_ComponentIndicesGenerator : nspec {
     };
 }",
                     @"public static class PoolCComponentIds {
+
     public const int C = 0;
     public const int E = 1;
     public const int D = 2;
@@ -366,6 +361,7 @@ class describe_ComponentIndicesGenerator : nspec {
                         "PoolCComponentIds",
                     }, new[] {
                 @"public static class PoolAComponentIds {
+
     public const int B = 0;
     public const int G = 2;
 
@@ -384,6 +380,7 @@ class describe_ComponentIndicesGenerator : nspec {
     };
 }",
                 @"public static class PoolBComponentIds {
+
     public const int B = 0;
     public const int D = 1;
 
@@ -400,6 +397,7 @@ class describe_ComponentIndicesGenerator : nspec {
     };
 }",
                 @"public static class PoolCComponentIds {
+
     public const int D = 1;
     public const int G = 2;
 

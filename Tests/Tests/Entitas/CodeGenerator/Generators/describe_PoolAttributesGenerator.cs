@@ -5,11 +5,11 @@ using System.Linq;
 class describe_PoolAttributesGenerator : nspec {
 
     void when_generating() {
+
         it["generates nothing if input is empty"] = () => new PoolAttributesGenerator().Generate(new string[0]).Length.should_be(0);
-        it["doesn't generate for default pool"] = () => new PoolAttributesGenerator().Generate(new [] { CodeGenerator.DEFAULT_POOL_NAME }).Length.should_be(0);
 
         it["generates a PoolAttribute"] = () => {
-            var files = new PoolAttributesGenerator().Generate(new [] { "metaGame" });
+            var files = new PoolAttributesGenerator().Generate(new [] { "MetaGame" });
             files.Length.should_be(1);
             var file = files[0];
             file.fileName.should_be("MetaGameAttribute");
@@ -22,7 +22,6 @@ public class MetaGameAttribute : PoolAttribute {
 
 ".ToUnixLineEndings());
         };
-
 
         it["generates multiple PoolAttributes"] = () => {
             var files = new PoolAttributesGenerator().Generate(new [] { "MetaGame", "UI" });

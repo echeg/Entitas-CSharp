@@ -7,13 +7,6 @@ public class IndexKeyComponent : IComponent {
     public string name;
 }
 
-[Pool]
-public class DefautPoolIndexKeyComponent : IComponent {
-
-    [IndexKey("MyName")]
-    public string name;
-}
-
 [Pool("Meta")]
 public class MetaIndexKeyComponent : IComponent {
 

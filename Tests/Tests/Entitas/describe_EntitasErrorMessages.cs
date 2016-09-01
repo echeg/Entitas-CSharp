@@ -199,6 +199,10 @@ class describe_EntitasErrorMessages : EntitasTest {
             it["no pool names"] = () => printErrorMessage(() => {
                 new TypeReflectionProvider(new Type[0], new string[0] , new string[0]);
             });
+
+            it["no PoolAttributes found for type"] = () => printErrorMessage(() => {
+                new TypeReflectionProvider(new [] { typeof(ComponentB) }, new [] { "Core" } , new string[0]);
+            });
         };
     }
 }
