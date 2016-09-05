@@ -16,6 +16,7 @@ class describe_PoolAttributesGenerator : nspec {
             file.fileContent.should_be(@"using Entitas.CodeGenerator;
 
 public class MetaGameAttribute : PoolAttribute {
+
     public MetaGameAttribute() : base(""MetaGame"") {
     }
 }
@@ -34,6 +35,7 @@ public class MetaGameAttribute : PoolAttribute {
             file.fileContent.should_be(@"using Entitas.CodeGenerator;
 
 public class UIAttribute : PoolAttribute {
+
     public UIAttribute() : base(""UI"") {
     }
 }

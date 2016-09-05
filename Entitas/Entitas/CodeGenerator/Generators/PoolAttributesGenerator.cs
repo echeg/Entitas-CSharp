@@ -18,6 +18,7 @@ namespace Entitas.CodeGenerator {
             return string.Format(@"using Entitas.CodeGenerator;
 
 public class {0}Attribute : PoolAttribute {{
+
     public {0}Attribute() : base(""{0}"") {{
     }}
 }}
