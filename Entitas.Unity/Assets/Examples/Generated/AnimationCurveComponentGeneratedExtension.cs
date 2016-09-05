@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public AnimationCurveComponent animationCurve { get { return (AnimationCurveComponent)GetComponent(VisualDebuggingComponentIds.AnimationCurve); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasAnimationCurve { get { return HasComponent(VisualDebuggingComponentIds.AnimationCurve); } }
+    public AnimationCurveComponent animationCurve { get { return (AnimationCurveComponent)GetComponent(VisualDebuggingComponentIds.AnimationCurve); } }
 
-        public Entity AddAnimationCurve(UnityEngine.AnimationCurve newAnimationCurve) {
-            var component = CreateComponent<AnimationCurveComponent>(VisualDebuggingComponentIds.AnimationCurve);
-            component.animationCurve = newAnimationCurve;
-            return AddComponent(VisualDebuggingComponentIds.AnimationCurve, component);
-        }
+    public bool hasAnimationCurve { get { return HasComponent(VisualDebuggingComponentIds.AnimationCurve); } }
 
-        public Entity ReplaceAnimationCurve(UnityEngine.AnimationCurve newAnimationCurve) {
-            var component = CreateComponent<AnimationCurveComponent>(VisualDebuggingComponentIds.AnimationCurve);
-            component.animationCurve = newAnimationCurve;
-            ReplaceComponent(VisualDebuggingComponentIds.AnimationCurve, component);
-            return this;
-        }
+    public VisualDebugging AddAnimationCurve(UnityEngine.AnimationCurve newAnimationCurve) {
+        var component = CreateComponent<AnimationCurveComponent>(VisualDebuggingComponentIds.AnimationCurve);
+        component.animationCurve = newAnimationCurve;
+        AddComponent(VisualDebuggingComponentIds.AnimationCurve, component);
+        return this;
+    }
 
-        public Entity RemoveAnimationCurve() {
-            return RemoveComponent(VisualDebuggingComponentIds.AnimationCurve);
-        }
+    public VisualDebugging ReplaceAnimationCurve(UnityEngine.AnimationCurve newAnimationCurve) {
+        var component = CreateComponent<AnimationCurveComponent>(VisualDebuggingComponentIds.AnimationCurve);
+        component.animationCurve = newAnimationCurve;
+        ReplaceComponent(VisualDebuggingComponentIds.AnimationCurve, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveAnimationCurve() {
+        RemoveComponent(VisualDebuggingComponentIds.AnimationCurve);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherAnimationCurve;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher AnimationCurve {
-            get {
-                if (_matcherAnimationCurve == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.AnimationCurve);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherAnimationCurve = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherAnimationCurve;
 
-                return _matcherAnimationCurve;
+    public static IMatcher<VisualDebugging> AnimationCurve {
+        get {
+            if(_matcherAnimationCurve == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.AnimationCurve);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherAnimationCurve = matcher;
             }
+
+            return _matcherAnimationCurve;
         }
     }
+}

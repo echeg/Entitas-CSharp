@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public MyDoubleComponent myDouble { get { return (MyDoubleComponent)GetComponent(VisualDebuggingComponentIds.MyDouble); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasMyDouble { get { return HasComponent(VisualDebuggingComponentIds.MyDouble); } }
+    public MyDoubleComponent myDouble { get { return (MyDoubleComponent)GetComponent(VisualDebuggingComponentIds.MyDouble); } }
 
-        public Entity AddMyDouble(double newMyDouble) {
-            var component = CreateComponent<MyDoubleComponent>(VisualDebuggingComponentIds.MyDouble);
-            component.myDouble = newMyDouble;
-            return AddComponent(VisualDebuggingComponentIds.MyDouble, component);
-        }
+    public bool hasMyDouble { get { return HasComponent(VisualDebuggingComponentIds.MyDouble); } }
 
-        public Entity ReplaceMyDouble(double newMyDouble) {
-            var component = CreateComponent<MyDoubleComponent>(VisualDebuggingComponentIds.MyDouble);
-            component.myDouble = newMyDouble;
-            ReplaceComponent(VisualDebuggingComponentIds.MyDouble, component);
-            return this;
-        }
+    public VisualDebugging AddMyDouble(double newMyDouble) {
+        var component = CreateComponent<MyDoubleComponent>(VisualDebuggingComponentIds.MyDouble);
+        component.myDouble = newMyDouble;
+        AddComponent(VisualDebuggingComponentIds.MyDouble, component);
+        return this;
+    }
 
-        public Entity RemoveMyDouble() {
-            return RemoveComponent(VisualDebuggingComponentIds.MyDouble);
-        }
+    public VisualDebugging ReplaceMyDouble(double newMyDouble) {
+        var component = CreateComponent<MyDoubleComponent>(VisualDebuggingComponentIds.MyDouble);
+        component.myDouble = newMyDouble;
+        ReplaceComponent(VisualDebuggingComponentIds.MyDouble, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveMyDouble() {
+        RemoveComponent(VisualDebuggingComponentIds.MyDouble);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherMyDouble;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher MyDouble {
-            get {
-                if (_matcherMyDouble == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.MyDouble);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherMyDouble = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherMyDouble;
 
-                return _matcherMyDouble;
+    public static IMatcher<VisualDebugging> MyDouble {
+        get {
+            if(_matcherMyDouble == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.MyDouble);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherMyDouble = matcher;
             }
+
+            return _matcherMyDouble;
         }
     }
+}

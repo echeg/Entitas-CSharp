@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public TextureComponent texture { get { return (TextureComponent)GetComponent(VisualDebuggingComponentIds.Texture); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasTexture { get { return HasComponent(VisualDebuggingComponentIds.Texture); } }
+    public TextureComponent texture { get { return (TextureComponent)GetComponent(VisualDebuggingComponentIds.Texture); } }
 
-        public Entity AddTexture(UnityEngine.Texture newTexture) {
-            var component = CreateComponent<TextureComponent>(VisualDebuggingComponentIds.Texture);
-            component.texture = newTexture;
-            return AddComponent(VisualDebuggingComponentIds.Texture, component);
-        }
+    public bool hasTexture { get { return HasComponent(VisualDebuggingComponentIds.Texture); } }
 
-        public Entity ReplaceTexture(UnityEngine.Texture newTexture) {
-            var component = CreateComponent<TextureComponent>(VisualDebuggingComponentIds.Texture);
-            component.texture = newTexture;
-            ReplaceComponent(VisualDebuggingComponentIds.Texture, component);
-            return this;
-        }
+    public VisualDebugging AddTexture(UnityEngine.Texture newTexture) {
+        var component = CreateComponent<TextureComponent>(VisualDebuggingComponentIds.Texture);
+        component.texture = newTexture;
+        AddComponent(VisualDebuggingComponentIds.Texture, component);
+        return this;
+    }
 
-        public Entity RemoveTexture() {
-            return RemoveComponent(VisualDebuggingComponentIds.Texture);
-        }
+    public VisualDebugging ReplaceTexture(UnityEngine.Texture newTexture) {
+        var component = CreateComponent<TextureComponent>(VisualDebuggingComponentIds.Texture);
+        component.texture = newTexture;
+        ReplaceComponent(VisualDebuggingComponentIds.Texture, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveTexture() {
+        RemoveComponent(VisualDebuggingComponentIds.Texture);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherTexture;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Texture {
-            get {
-                if (_matcherTexture == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Texture);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherTexture = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherTexture;
 
-                return _matcherTexture;
+    public static IMatcher<VisualDebugging> Texture {
+        get {
+            if(_matcherTexture == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Texture);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherTexture = matcher;
             }
+
+            return _matcherTexture;
         }
     }
+}

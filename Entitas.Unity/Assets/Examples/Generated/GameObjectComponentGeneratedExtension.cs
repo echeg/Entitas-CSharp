@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public GameObjectComponent gameObject { get { return (GameObjectComponent)GetComponent(VisualDebuggingComponentIds.GameObject); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasGameObject { get { return HasComponent(VisualDebuggingComponentIds.GameObject); } }
+    public GameObjectComponent gameObject { get { return (GameObjectComponent)GetComponent(VisualDebuggingComponentIds.GameObject); } }
 
-        public Entity AddGameObject(UnityEngine.GameObject newGameObject) {
-            var component = CreateComponent<GameObjectComponent>(VisualDebuggingComponentIds.GameObject);
-            component.gameObject = newGameObject;
-            return AddComponent(VisualDebuggingComponentIds.GameObject, component);
-        }
+    public bool hasGameObject { get { return HasComponent(VisualDebuggingComponentIds.GameObject); } }
 
-        public Entity ReplaceGameObject(UnityEngine.GameObject newGameObject) {
-            var component = CreateComponent<GameObjectComponent>(VisualDebuggingComponentIds.GameObject);
-            component.gameObject = newGameObject;
-            ReplaceComponent(VisualDebuggingComponentIds.GameObject, component);
-            return this;
-        }
+    public VisualDebugging AddGameObject(UnityEngine.GameObject newGameObject) {
+        var component = CreateComponent<GameObjectComponent>(VisualDebuggingComponentIds.GameObject);
+        component.gameObject = newGameObject;
+        AddComponent(VisualDebuggingComponentIds.GameObject, component);
+        return this;
+    }
 
-        public Entity RemoveGameObject() {
-            return RemoveComponent(VisualDebuggingComponentIds.GameObject);
-        }
+    public VisualDebugging ReplaceGameObject(UnityEngine.GameObject newGameObject) {
+        var component = CreateComponent<GameObjectComponent>(VisualDebuggingComponentIds.GameObject);
+        component.gameObject = newGameObject;
+        ReplaceComponent(VisualDebuggingComponentIds.GameObject, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveGameObject() {
+        RemoveComponent(VisualDebuggingComponentIds.GameObject);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherGameObject;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher GameObject {
-            get {
-                if (_matcherGameObject == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.GameObject);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherGameObject = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherGameObject;
 
-                return _matcherGameObject;
+    public static IMatcher<VisualDebugging> GameObject {
+        get {
+            if(_matcherGameObject == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.GameObject);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherGameObject = matcher;
             }
+
+            return _matcherGameObject;
         }
     }
+}

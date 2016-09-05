@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public UnsupportedObjectComponent unsupportedObject { get { return (UnsupportedObjectComponent)GetComponent(VisualDebuggingComponentIds.UnsupportedObject); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasUnsupportedObject { get { return HasComponent(VisualDebuggingComponentIds.UnsupportedObject); } }
+    public UnsupportedObjectComponent unsupportedObject { get { return (UnsupportedObjectComponent)GetComponent(VisualDebuggingComponentIds.UnsupportedObject); } }
 
-        public Entity AddUnsupportedObject(UnsupportedObject newUnsupportedObject) {
-            var component = CreateComponent<UnsupportedObjectComponent>(VisualDebuggingComponentIds.UnsupportedObject);
-            component.unsupportedObject = newUnsupportedObject;
-            return AddComponent(VisualDebuggingComponentIds.UnsupportedObject, component);
-        }
+    public bool hasUnsupportedObject { get { return HasComponent(VisualDebuggingComponentIds.UnsupportedObject); } }
 
-        public Entity ReplaceUnsupportedObject(UnsupportedObject newUnsupportedObject) {
-            var component = CreateComponent<UnsupportedObjectComponent>(VisualDebuggingComponentIds.UnsupportedObject);
-            component.unsupportedObject = newUnsupportedObject;
-            ReplaceComponent(VisualDebuggingComponentIds.UnsupportedObject, component);
-            return this;
-        }
+    public VisualDebugging AddUnsupportedObject(UnsupportedObject newUnsupportedObject) {
+        var component = CreateComponent<UnsupportedObjectComponent>(VisualDebuggingComponentIds.UnsupportedObject);
+        component.unsupportedObject = newUnsupportedObject;
+        AddComponent(VisualDebuggingComponentIds.UnsupportedObject, component);
+        return this;
+    }
 
-        public Entity RemoveUnsupportedObject() {
-            return RemoveComponent(VisualDebuggingComponentIds.UnsupportedObject);
-        }
+    public VisualDebugging ReplaceUnsupportedObject(UnsupportedObject newUnsupportedObject) {
+        var component = CreateComponent<UnsupportedObjectComponent>(VisualDebuggingComponentIds.UnsupportedObject);
+        component.unsupportedObject = newUnsupportedObject;
+        ReplaceComponent(VisualDebuggingComponentIds.UnsupportedObject, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveUnsupportedObject() {
+        RemoveComponent(VisualDebuggingComponentIds.UnsupportedObject);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherUnsupportedObject;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher UnsupportedObject {
-            get {
-                if (_matcherUnsupportedObject == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.UnsupportedObject);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherUnsupportedObject = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherUnsupportedObject;
 
-                return _matcherUnsupportedObject;
+    public static IMatcher<VisualDebugging> UnsupportedObject {
+        get {
+            if(_matcherUnsupportedObject == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.UnsupportedObject);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherUnsupportedObject = matcher;
             }
+
+            return _matcherUnsupportedObject;
         }
     }
+}

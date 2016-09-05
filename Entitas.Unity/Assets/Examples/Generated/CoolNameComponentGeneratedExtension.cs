@@ -12,43 +12,45 @@ public class CoolNameComponent : IComponent {
     public BadName value;
 }
 
-namespace Entitas {
-    public partial class Entity {
-        public CoolNameComponent coolName { get { return (CoolNameComponent)GetComponent(VisualDebuggingComponentIds.CoolName); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasCoolName { get { return HasComponent(VisualDebuggingComponentIds.CoolName); } }
+    public CoolNameComponent coolName { get { return (CoolNameComponent)GetComponent(VisualDebuggingComponentIds.CoolName); } }
 
-        public Entity AddCoolName(BadName newValue) {
-            var component = CreateComponent<CoolNameComponent>(VisualDebuggingComponentIds.CoolName);
-            component.value = newValue;
-            return AddComponent(VisualDebuggingComponentIds.CoolName, component);
-        }
+    public bool hasCoolName { get { return HasComponent(VisualDebuggingComponentIds.CoolName); } }
 
-        public Entity ReplaceCoolName(BadName newValue) {
-            var component = CreateComponent<CoolNameComponent>(VisualDebuggingComponentIds.CoolName);
-            component.value = newValue;
-            ReplaceComponent(VisualDebuggingComponentIds.CoolName, component);
-            return this;
-        }
+    public VisualDebugging AddCoolName(BadName newValue) {
+        var component = CreateComponent<CoolNameComponent>(VisualDebuggingComponentIds.CoolName);
+        component.value = newValue;
+        AddComponent(VisualDebuggingComponentIds.CoolName, component);
+        return this;
+    }
 
-        public Entity RemoveCoolName() {
-            return RemoveComponent(VisualDebuggingComponentIds.CoolName);
-        }
+    public VisualDebugging ReplaceCoolName(BadName newValue) {
+        var component = CreateComponent<CoolNameComponent>(VisualDebuggingComponentIds.CoolName);
+        component.value = newValue;
+        ReplaceComponent(VisualDebuggingComponentIds.CoolName, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveCoolName() {
+        RemoveComponent(VisualDebuggingComponentIds.CoolName);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherCoolName;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher CoolName {
-            get {
-                if (_matcherCoolName == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.CoolName);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherCoolName = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherCoolName;
 
-                return _matcherCoolName;
+    public static IMatcher<VisualDebugging> CoolName {
+        get {
+            if(_matcherCoolName == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.CoolName);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherCoolName = matcher;
             }
+
+            return _matcherCoolName;
         }
     }
+}

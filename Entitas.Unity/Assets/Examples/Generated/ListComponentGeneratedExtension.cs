@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public ListComponent list { get { return (ListComponent)GetComponent(VisualDebuggingComponentIds.List); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasList { get { return HasComponent(VisualDebuggingComponentIds.List); } }
+    public ListComponent list { get { return (ListComponent)GetComponent(VisualDebuggingComponentIds.List); } }
 
-        public Entity AddList(System.Collections.Generic.List<string> newList) {
-            var component = CreateComponent<ListComponent>(VisualDebuggingComponentIds.List);
-            component.list = newList;
-            return AddComponent(VisualDebuggingComponentIds.List, component);
-        }
+    public bool hasList { get { return HasComponent(VisualDebuggingComponentIds.List); } }
 
-        public Entity ReplaceList(System.Collections.Generic.List<string> newList) {
-            var component = CreateComponent<ListComponent>(VisualDebuggingComponentIds.List);
-            component.list = newList;
-            ReplaceComponent(VisualDebuggingComponentIds.List, component);
-            return this;
-        }
+    public VisualDebugging AddList(System.Collections.Generic.List<string> newList) {
+        var component = CreateComponent<ListComponent>(VisualDebuggingComponentIds.List);
+        component.list = newList;
+        AddComponent(VisualDebuggingComponentIds.List, component);
+        return this;
+    }
 
-        public Entity RemoveList() {
-            return RemoveComponent(VisualDebuggingComponentIds.List);
-        }
+    public VisualDebugging ReplaceList(System.Collections.Generic.List<string> newList) {
+        var component = CreateComponent<ListComponent>(VisualDebuggingComponentIds.List);
+        component.list = newList;
+        ReplaceComponent(VisualDebuggingComponentIds.List, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveList() {
+        RemoveComponent(VisualDebuggingComponentIds.List);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherList;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher List {
-            get {
-                if (_matcherList == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.List);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherList = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherList;
 
-                return _matcherList;
+    public static IMatcher<VisualDebugging> List {
+        get {
+            if(_matcherList == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.List);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherList = matcher;
             }
+
+            return _matcherList;
         }
     }
+}

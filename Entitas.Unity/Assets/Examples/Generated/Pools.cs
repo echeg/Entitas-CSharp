@@ -10,22 +10,22 @@ namespace Entitas {
 
     public partial class Pools {
 
-        public static Pool CreateBlueprintsPool() {
-            return CreatePool("Blueprints", BlueprintsComponentIds.TotalComponents, BlueprintsComponentIds.componentNames, BlueprintsComponentIds.componentTypes);
-        }
-
-        public static Pool CreateVisualDebuggingPool() {
-            return CreatePool("VisualDebugging", VisualDebuggingComponentIds.TotalComponents, VisualDebuggingComponentIds.componentNames, VisualDebuggingComponentIds.componentTypes);
-        }
-
-        public Pool[] allPools { get { return new[] { blueprints, visualDebugging }; } }
-
-        public Pool blueprints;
-        public Pool visualDebugging;
+        public BlueprintsPool blueprints;
+        public VisualDebuggingPool visualDebugging;
 
         public void SetAllPools() {
-            blueprints = CreateBlueprintsPool();
-            visualDebugging = CreateVisualDebuggingPool();
+            blueprints = new BlueprintsPool();
+            visualDebugging = new VisualDebuggingPool();
         }
     }
+}
+
+public partial class BlueprintsPool : Entitas.Pool<Blueprints> {
+    public BlueprintsPool() : base(BlueprintsComponentIds.TotalComponents) { }
+    public BlueprintsPool(int startCreationIndex) : base(BlueprintsComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData("Blueprints Pool", BlueprintsComponentIds.componentNames, BlueprintsComponentIds.componentTypes)) { }
+}
+
+public partial class VisualDebuggingPool : Entitas.Pool<VisualDebugging> {
+    public VisualDebuggingPool() : base(VisualDebuggingComponentIds.TotalComponents) { }
+    public VisualDebuggingPool(int startCreationIndex) : base(VisualDebuggingComponentIds.TotalComponents, startCreationIndex, new Entitas.PoolMetaData("VisualDebugging Pool", VisualDebuggingComponentIds.componentNames, VisualDebuggingComponentIds.componentTypes)) { }
 }

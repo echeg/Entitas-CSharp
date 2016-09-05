@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public NameComponent name { get { return (NameComponent)GetComponent(BlueprintsComponentIds.Name); } }
+public partial class Blueprints : Entity {
 
-        public bool hasName { get { return HasComponent(BlueprintsComponentIds.Name); } }
+    public NameComponent name { get { return (NameComponent)GetComponent(BlueprintsComponentIds.Name); } }
 
-        public Entity AddName(string newValue) {
-            var component = CreateComponent<NameComponent>(BlueprintsComponentIds.Name);
-            component.value = newValue;
-            return AddComponent(BlueprintsComponentIds.Name, component);
-        }
+    public bool hasName { get { return HasComponent(BlueprintsComponentIds.Name); } }
 
-        public Entity ReplaceName(string newValue) {
-            var component = CreateComponent<NameComponent>(BlueprintsComponentIds.Name);
-            component.value = newValue;
-            ReplaceComponent(BlueprintsComponentIds.Name, component);
-            return this;
-        }
+    public Blueprints AddName(string newValue) {
+        var component = CreateComponent<NameComponent>(BlueprintsComponentIds.Name);
+        component.value = newValue;
+        AddComponent(BlueprintsComponentIds.Name, component);
+        return this;
+    }
 
-        public Entity RemoveName() {
-            return RemoveComponent(BlueprintsComponentIds.Name);
-        }
+    public Blueprints ReplaceName(string newValue) {
+        var component = CreateComponent<NameComponent>(BlueprintsComponentIds.Name);
+        component.value = newValue;
+        ReplaceComponent(BlueprintsComponentIds.Name, component);
+        return this;
+    }
+
+    public Blueprints RemoveName() {
+        RemoveComponent(BlueprintsComponentIds.Name);
+        return this;
     }
 }
 
-    public partial class BlueprintsMatcher {
-        static IMatcher _matcherName;
+public partial class BlueprintsMatcher {
 
-        public static IMatcher Name {
-            get {
-                if (_matcherName == null) {
-                    var matcher = (Matcher)Matcher.AllOf(BlueprintsComponentIds.Name);
-                    matcher.componentNames = BlueprintsComponentIds.componentNames;
-                    _matcherName = matcher;
-                }
+    static IMatcher<Blueprints> _matcherName;
 
-                return _matcherName;
+    public static IMatcher<Blueprints> Name {
+        get {
+            if(_matcherName == null) {
+                var matcher = (Matcher<Blueprints>)Matcher<Blueprints>.AllOf(BlueprintsComponentIds.Name);
+                matcher.componentNames = BlueprintsComponentIds.componentNames;
+                _matcherName = matcher;
             }
+
+            return _matcherName;
         }
     }
+}

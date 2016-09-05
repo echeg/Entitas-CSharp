@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public JaggedArrayComponent jaggedArray { get { return (JaggedArrayComponent)GetComponent(VisualDebuggingComponentIds.JaggedArray); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasJaggedArray { get { return HasComponent(VisualDebuggingComponentIds.JaggedArray); } }
+    public JaggedArrayComponent jaggedArray { get { return (JaggedArrayComponent)GetComponent(VisualDebuggingComponentIds.JaggedArray); } }
 
-        public Entity AddJaggedArray(string[][] newJaggedArray) {
-            var component = CreateComponent<JaggedArrayComponent>(VisualDebuggingComponentIds.JaggedArray);
-            component.jaggedArray = newJaggedArray;
-            return AddComponent(VisualDebuggingComponentIds.JaggedArray, component);
-        }
+    public bool hasJaggedArray { get { return HasComponent(VisualDebuggingComponentIds.JaggedArray); } }
 
-        public Entity ReplaceJaggedArray(string[][] newJaggedArray) {
-            var component = CreateComponent<JaggedArrayComponent>(VisualDebuggingComponentIds.JaggedArray);
-            component.jaggedArray = newJaggedArray;
-            ReplaceComponent(VisualDebuggingComponentIds.JaggedArray, component);
-            return this;
-        }
+    public VisualDebugging AddJaggedArray(string[][] newJaggedArray) {
+        var component = CreateComponent<JaggedArrayComponent>(VisualDebuggingComponentIds.JaggedArray);
+        component.jaggedArray = newJaggedArray;
+        AddComponent(VisualDebuggingComponentIds.JaggedArray, component);
+        return this;
+    }
 
-        public Entity RemoveJaggedArray() {
-            return RemoveComponent(VisualDebuggingComponentIds.JaggedArray);
-        }
+    public VisualDebugging ReplaceJaggedArray(string[][] newJaggedArray) {
+        var component = CreateComponent<JaggedArrayComponent>(VisualDebuggingComponentIds.JaggedArray);
+        component.jaggedArray = newJaggedArray;
+        ReplaceComponent(VisualDebuggingComponentIds.JaggedArray, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveJaggedArray() {
+        RemoveComponent(VisualDebuggingComponentIds.JaggedArray);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherJaggedArray;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher JaggedArray {
-            get {
-                if (_matcherJaggedArray == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.JaggedArray);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherJaggedArray = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherJaggedArray;
 
-                return _matcherJaggedArray;
+    public static IMatcher<VisualDebugging> JaggedArray {
+        get {
+            if(_matcherJaggedArray == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.JaggedArray);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherJaggedArray = matcher;
             }
+
+            return _matcherJaggedArray;
         }
     }
+}

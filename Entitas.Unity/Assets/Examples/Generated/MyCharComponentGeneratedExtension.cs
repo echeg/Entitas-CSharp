@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public MyCharComponent myChar { get { return (MyCharComponent)GetComponent(VisualDebuggingComponentIds.MyChar); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasMyChar { get { return HasComponent(VisualDebuggingComponentIds.MyChar); } }
+    public MyCharComponent myChar { get { return (MyCharComponent)GetComponent(VisualDebuggingComponentIds.MyChar); } }
 
-        public Entity AddMyChar(char newMyChar) {
-            var component = CreateComponent<MyCharComponent>(VisualDebuggingComponentIds.MyChar);
-            component.myChar = newMyChar;
-            return AddComponent(VisualDebuggingComponentIds.MyChar, component);
-        }
+    public bool hasMyChar { get { return HasComponent(VisualDebuggingComponentIds.MyChar); } }
 
-        public Entity ReplaceMyChar(char newMyChar) {
-            var component = CreateComponent<MyCharComponent>(VisualDebuggingComponentIds.MyChar);
-            component.myChar = newMyChar;
-            ReplaceComponent(VisualDebuggingComponentIds.MyChar, component);
-            return this;
-        }
+    public VisualDebugging AddMyChar(char newMyChar) {
+        var component = CreateComponent<MyCharComponent>(VisualDebuggingComponentIds.MyChar);
+        component.myChar = newMyChar;
+        AddComponent(VisualDebuggingComponentIds.MyChar, component);
+        return this;
+    }
 
-        public Entity RemoveMyChar() {
-            return RemoveComponent(VisualDebuggingComponentIds.MyChar);
-        }
+    public VisualDebugging ReplaceMyChar(char newMyChar) {
+        var component = CreateComponent<MyCharComponent>(VisualDebuggingComponentIds.MyChar);
+        component.myChar = newMyChar;
+        ReplaceComponent(VisualDebuggingComponentIds.MyChar, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveMyChar() {
+        RemoveComponent(VisualDebuggingComponentIds.MyChar);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherMyChar;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher MyChar {
-            get {
-                if (_matcherMyChar == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.MyChar);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherMyChar = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherMyChar;
 
-                return _matcherMyChar;
+    public static IMatcher<VisualDebugging> MyChar {
+        get {
+            if(_matcherMyChar == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.MyChar);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherMyChar = matcher;
             }
+
+            return _matcherMyChar;
         }
     }
+}

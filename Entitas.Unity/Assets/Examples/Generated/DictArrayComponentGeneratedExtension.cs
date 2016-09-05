@@ -8,45 +8,47 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public DictArrayComponent dictArray { get { return (DictArrayComponent)GetComponent(VisualDebuggingComponentIds.DictArray); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasDictArray { get { return HasComponent(VisualDebuggingComponentIds.DictArray); } }
+    public DictArrayComponent dictArray { get { return (DictArrayComponent)GetComponent(VisualDebuggingComponentIds.DictArray); } }
 
-        public Entity AddDictArray(System.Collections.Generic.Dictionary<int, string[]> newDict, System.Collections.Generic.Dictionary<int, string[]>[] newDictArray) {
-            var component = CreateComponent<DictArrayComponent>(VisualDebuggingComponentIds.DictArray);
-            component.dict = newDict;
-            component.dictArray = newDictArray;
-            return AddComponent(VisualDebuggingComponentIds.DictArray, component);
-        }
+    public bool hasDictArray { get { return HasComponent(VisualDebuggingComponentIds.DictArray); } }
 
-        public Entity ReplaceDictArray(System.Collections.Generic.Dictionary<int, string[]> newDict, System.Collections.Generic.Dictionary<int, string[]>[] newDictArray) {
-            var component = CreateComponent<DictArrayComponent>(VisualDebuggingComponentIds.DictArray);
-            component.dict = newDict;
-            component.dictArray = newDictArray;
-            ReplaceComponent(VisualDebuggingComponentIds.DictArray, component);
-            return this;
-        }
+    public VisualDebugging AddDictArray(System.Collections.Generic.Dictionary<int, string[]> newDict, System.Collections.Generic.Dictionary<int, string[]>[] newDictArray) {
+        var component = CreateComponent<DictArrayComponent>(VisualDebuggingComponentIds.DictArray);
+        component.dict = newDict;
+        component.dictArray = newDictArray;
+        AddComponent(VisualDebuggingComponentIds.DictArray, component);
+        return this;
+    }
 
-        public Entity RemoveDictArray() {
-            return RemoveComponent(VisualDebuggingComponentIds.DictArray);
-        }
+    public VisualDebugging ReplaceDictArray(System.Collections.Generic.Dictionary<int, string[]> newDict, System.Collections.Generic.Dictionary<int, string[]>[] newDictArray) {
+        var component = CreateComponent<DictArrayComponent>(VisualDebuggingComponentIds.DictArray);
+        component.dict = newDict;
+        component.dictArray = newDictArray;
+        ReplaceComponent(VisualDebuggingComponentIds.DictArray, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveDictArray() {
+        RemoveComponent(VisualDebuggingComponentIds.DictArray);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherDictArray;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher DictArray {
-            get {
-                if (_matcherDictArray == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.DictArray);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherDictArray = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherDictArray;
 
-                return _matcherDictArray;
+    public static IMatcher<VisualDebugging> DictArray {
+        get {
+            if(_matcherDictArray == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.DictArray);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherDictArray = matcher;
             }
+
+            return _matcherDictArray;
         }
     }
+}

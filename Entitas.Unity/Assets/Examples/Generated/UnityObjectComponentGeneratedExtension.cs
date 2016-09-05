@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public UnityObjectComponent unityObject { get { return (UnityObjectComponent)GetComponent(VisualDebuggingComponentIds.UnityObject); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasUnityObject { get { return HasComponent(VisualDebuggingComponentIds.UnityObject); } }
+    public UnityObjectComponent unityObject { get { return (UnityObjectComponent)GetComponent(VisualDebuggingComponentIds.UnityObject); } }
 
-        public Entity AddUnityObject(UnityEngine.Object newUnityObject) {
-            var component = CreateComponent<UnityObjectComponent>(VisualDebuggingComponentIds.UnityObject);
-            component.unityObject = newUnityObject;
-            return AddComponent(VisualDebuggingComponentIds.UnityObject, component);
-        }
+    public bool hasUnityObject { get { return HasComponent(VisualDebuggingComponentIds.UnityObject); } }
 
-        public Entity ReplaceUnityObject(UnityEngine.Object newUnityObject) {
-            var component = CreateComponent<UnityObjectComponent>(VisualDebuggingComponentIds.UnityObject);
-            component.unityObject = newUnityObject;
-            ReplaceComponent(VisualDebuggingComponentIds.UnityObject, component);
-            return this;
-        }
+    public VisualDebugging AddUnityObject(UnityEngine.Object newUnityObject) {
+        var component = CreateComponent<UnityObjectComponent>(VisualDebuggingComponentIds.UnityObject);
+        component.unityObject = newUnityObject;
+        AddComponent(VisualDebuggingComponentIds.UnityObject, component);
+        return this;
+    }
 
-        public Entity RemoveUnityObject() {
-            return RemoveComponent(VisualDebuggingComponentIds.UnityObject);
-        }
+    public VisualDebugging ReplaceUnityObject(UnityEngine.Object newUnityObject) {
+        var component = CreateComponent<UnityObjectComponent>(VisualDebuggingComponentIds.UnityObject);
+        component.unityObject = newUnityObject;
+        ReplaceComponent(VisualDebuggingComponentIds.UnityObject, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveUnityObject() {
+        RemoveComponent(VisualDebuggingComponentIds.UnityObject);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherUnityObject;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher UnityObject {
-            get {
-                if (_matcherUnityObject == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.UnityObject);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherUnityObject = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherUnityObject;
 
-                return _matcherUnityObject;
+    public static IMatcher<VisualDebugging> UnityObject {
+        get {
+            if(_matcherUnityObject == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.UnityObject);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherUnityObject = matcher;
             }
+
+            return _matcherUnityObject;
         }
     }
+}

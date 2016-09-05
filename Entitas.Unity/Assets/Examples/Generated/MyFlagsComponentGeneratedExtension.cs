@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public MyFlagsComponent myFlags { get { return (MyFlagsComponent)GetComponent(VisualDebuggingComponentIds.MyFlags); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasMyFlags { get { return HasComponent(VisualDebuggingComponentIds.MyFlags); } }
+    public MyFlagsComponent myFlags { get { return (MyFlagsComponent)GetComponent(VisualDebuggingComponentIds.MyFlags); } }
 
-        public Entity AddMyFlags(MyFlagsComponent.MyFlags newMyFlags) {
-            var component = CreateComponent<MyFlagsComponent>(VisualDebuggingComponentIds.MyFlags);
-            component.myFlags = newMyFlags;
-            return AddComponent(VisualDebuggingComponentIds.MyFlags, component);
-        }
+    public bool hasMyFlags { get { return HasComponent(VisualDebuggingComponentIds.MyFlags); } }
 
-        public Entity ReplaceMyFlags(MyFlagsComponent.MyFlags newMyFlags) {
-            var component = CreateComponent<MyFlagsComponent>(VisualDebuggingComponentIds.MyFlags);
-            component.myFlags = newMyFlags;
-            ReplaceComponent(VisualDebuggingComponentIds.MyFlags, component);
-            return this;
-        }
+    public VisualDebugging AddMyFlags(MyFlagsComponent.MyFlags newMyFlags) {
+        var component = CreateComponent<MyFlagsComponent>(VisualDebuggingComponentIds.MyFlags);
+        component.myFlags = newMyFlags;
+        AddComponent(VisualDebuggingComponentIds.MyFlags, component);
+        return this;
+    }
 
-        public Entity RemoveMyFlags() {
-            return RemoveComponent(VisualDebuggingComponentIds.MyFlags);
-        }
+    public VisualDebugging ReplaceMyFlags(MyFlagsComponent.MyFlags newMyFlags) {
+        var component = CreateComponent<MyFlagsComponent>(VisualDebuggingComponentIds.MyFlags);
+        component.myFlags = newMyFlags;
+        ReplaceComponent(VisualDebuggingComponentIds.MyFlags, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveMyFlags() {
+        RemoveComponent(VisualDebuggingComponentIds.MyFlags);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherMyFlags;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher MyFlags {
-            get {
-                if (_matcherMyFlags == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.MyFlags);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherMyFlags = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherMyFlags;
 
-                return _matcherMyFlags;
+    public static IMatcher<VisualDebugging> MyFlags {
+        get {
+            if(_matcherMyFlags == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.MyFlags);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherMyFlags = matcher;
             }
+
+            return _matcherMyFlags;
         }
     }
+}

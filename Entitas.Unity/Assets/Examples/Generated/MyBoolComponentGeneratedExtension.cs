@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public MyBoolComponent myBool { get { return (MyBoolComponent)GetComponent(VisualDebuggingComponentIds.MyBool); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasMyBool { get { return HasComponent(VisualDebuggingComponentIds.MyBool); } }
+    public MyBoolComponent myBool { get { return (MyBoolComponent)GetComponent(VisualDebuggingComponentIds.MyBool); } }
 
-        public Entity AddMyBool(bool newMyBool) {
-            var component = CreateComponent<MyBoolComponent>(VisualDebuggingComponentIds.MyBool);
-            component.myBool = newMyBool;
-            return AddComponent(VisualDebuggingComponentIds.MyBool, component);
-        }
+    public bool hasMyBool { get { return HasComponent(VisualDebuggingComponentIds.MyBool); } }
 
-        public Entity ReplaceMyBool(bool newMyBool) {
-            var component = CreateComponent<MyBoolComponent>(VisualDebuggingComponentIds.MyBool);
-            component.myBool = newMyBool;
-            ReplaceComponent(VisualDebuggingComponentIds.MyBool, component);
-            return this;
-        }
+    public VisualDebugging AddMyBool(bool newMyBool) {
+        var component = CreateComponent<MyBoolComponent>(VisualDebuggingComponentIds.MyBool);
+        component.myBool = newMyBool;
+        AddComponent(VisualDebuggingComponentIds.MyBool, component);
+        return this;
+    }
 
-        public Entity RemoveMyBool() {
-            return RemoveComponent(VisualDebuggingComponentIds.MyBool);
-        }
+    public VisualDebugging ReplaceMyBool(bool newMyBool) {
+        var component = CreateComponent<MyBoolComponent>(VisualDebuggingComponentIds.MyBool);
+        component.myBool = newMyBool;
+        ReplaceComponent(VisualDebuggingComponentIds.MyBool, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveMyBool() {
+        RemoveComponent(VisualDebuggingComponentIds.MyBool);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherMyBool;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher MyBool {
-            get {
-                if (_matcherMyBool == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.MyBool);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherMyBool = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherMyBool;
 
-                return _matcherMyBool;
+    public static IMatcher<VisualDebugging> MyBool {
+        get {
+            if(_matcherMyBool == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.MyBool);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherMyBool = matcher;
             }
+
+            return _matcherMyBool;
         }
     }
+}

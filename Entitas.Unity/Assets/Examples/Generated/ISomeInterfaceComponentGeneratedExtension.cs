@@ -12,76 +12,79 @@ public class ISomeInterfaceComponent : IComponent {
     public ISomeInterface value;
 }
 
-namespace Entitas {
-    public partial class Entity {
-        public ISomeInterfaceComponent iSomeInterface { get { return (ISomeInterfaceComponent)GetComponent(VisualDebuggingComponentIds.ISomeInterface); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasISomeInterface { get { return HasComponent(VisualDebuggingComponentIds.ISomeInterface); } }
+    public ISomeInterfaceComponent iSomeInterface { get { return (ISomeInterfaceComponent)GetComponent(VisualDebuggingComponentIds.ISomeInterface); } }
 
-        public Entity AddISomeInterface(ISomeInterface newValue) {
-            var component = CreateComponent<ISomeInterfaceComponent>(VisualDebuggingComponentIds.ISomeInterface);
-            component.value = newValue;
-            return AddComponent(VisualDebuggingComponentIds.ISomeInterface, component);
-        }
+    public bool hasISomeInterface { get { return HasComponent(VisualDebuggingComponentIds.ISomeInterface); } }
 
-        public Entity ReplaceISomeInterface(ISomeInterface newValue) {
-            var component = CreateComponent<ISomeInterfaceComponent>(VisualDebuggingComponentIds.ISomeInterface);
-            component.value = newValue;
-            ReplaceComponent(VisualDebuggingComponentIds.ISomeInterface, component);
-            return this;
-        }
-
-        public Entity RemoveISomeInterface() {
-            return RemoveComponent(VisualDebuggingComponentIds.ISomeInterface);
-        }
+    public VisualDebugging AddISomeInterface(ISomeInterface newValue) {
+        var component = CreateComponent<ISomeInterfaceComponent>(VisualDebuggingComponentIds.ISomeInterface);
+        component.value = newValue;
+        AddComponent(VisualDebuggingComponentIds.ISomeInterface, component);
+        return this;
     }
 
-    public partial class Pool {
-        public Entity iSomeInterfaceEntity { get { return GetGroup(VisualDebuggingMatcher.ISomeInterface).GetSingleEntity(); } }
+    public VisualDebugging ReplaceISomeInterface(ISomeInterface newValue) {
+        var component = CreateComponent<ISomeInterfaceComponent>(VisualDebuggingComponentIds.ISomeInterface);
+        component.value = newValue;
+        ReplaceComponent(VisualDebuggingComponentIds.ISomeInterface, component);
+        return this;
+    }
 
-        public ISomeInterfaceComponent iSomeInterface { get { return iSomeInterfaceEntity.iSomeInterface; } }
-
-        public bool hasISomeInterface { get { return iSomeInterfaceEntity != null; } }
-
-        public Entity SetISomeInterface(ISomeInterface newValue) {
-            if (hasISomeInterface) {
-                throw new EntitasException("Could not set iSomeInterface!\n" + this + " already has an entity with ISomeInterfaceComponent!",
-                    "You should check if the pool already has a iSomeInterfaceEntity before setting it or use pool.ReplaceISomeInterface().");
-            }
-            var entity = CreateEntity();
-            entity.AddISomeInterface(newValue);
-            return entity;
-        }
-
-        public Entity ReplaceISomeInterface(ISomeInterface newValue) {
-            var entity = iSomeInterfaceEntity;
-            if (entity == null) {
-                entity = SetISomeInterface(newValue);
-            } else {
-                entity.ReplaceISomeInterface(newValue);
-            }
-
-            return entity;
-        }
-
-        public void RemoveISomeInterface() {
-            DestroyEntity(iSomeInterfaceEntity);
-        }
+    public VisualDebugging RemoveISomeInterface() {
+        RemoveComponent(VisualDebuggingComponentIds.ISomeInterface);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherISomeInterface;
+public partial class VisualDebuggingPool : Pool<VisualDebugging> {
 
-        public static IMatcher ISomeInterface {
-            get {
-                if (_matcherISomeInterface == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.ISomeInterface);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherISomeInterface = matcher;
-                }
+    public VisualDebugging iSomeInterfaceEntity { get { return GetGroup(VisualDebuggingMatcher.ISomeInterface).GetSingleEntity(); } }
 
-                return _matcherISomeInterface;
+    public ISomeInterfaceComponent iSomeInterface { get { return iSomeInterfaceEntity.iSomeInterface; } }
+
+    public bool hasISomeInterface { get { return iSomeInterfaceEntity != null; } }
+
+    public VisualDebugging SetISomeInterface(ISomeInterface newValue) {
+        if(hasISomeInterface) {
+            throw new EntitasException("Could not set iSomeInterface!\n" + this + " already has an entity with ISomeInterfaceComponent!",
+                "You should check if the pool already has a iSomeInterfaceEntity before setting it or use pool.ReplaceISomeInterface().");
+        }
+        var entity = CreateEntity();
+        entity.AddISomeInterface(newValue);
+        return entity;
+    }
+
+    public VisualDebugging ReplaceISomeInterface(ISomeInterface newValue) {
+        var entity = iSomeInterfaceEntity;
+        if(entity == null) {
+            entity = SetISomeInterface(newValue);
+        } else {
+            entity.ReplaceISomeInterface(newValue);
+        }
+
+        return entity;
+    }
+
+    public void RemoveISomeInterface() {
+        DestroyEntity(iSomeInterfaceEntity);
+    }
+}
+
+public partial class VisualDebuggingMatcher {
+
+    static IMatcher<VisualDebugging> _matcherISomeInterface;
+
+    public static IMatcher<VisualDebugging> ISomeInterface {
+        get {
+            if(_matcherISomeInterface == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.ISomeInterface);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherISomeInterface = matcher;
             }
+
+            return _matcherISomeInterface;
         }
     }
+}

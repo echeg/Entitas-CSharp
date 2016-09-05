@@ -12,59 +12,45 @@ public class VelocityComponent : IComponent {
     public IntVector2 value;
 }
 
-namespace Entitas {
-    public partial class Entity {
-        public VelocityComponent velocity { get { return (VelocityComponent)GetComponent(ComponentIds.Velocity); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasVelocity { get { return HasComponent(ComponentIds.Velocity); } }
+    public VelocityComponent velocity { get { return (VelocityComponent)GetComponent(VisualDebuggingComponentIds.Velocity); } }
 
-        public Entity AddVelocity(IntVector2 newValue) {
-            var component = CreateComponent<VelocityComponent>(ComponentIds.Velocity);
-            component.value = newValue;
-            return AddComponent(ComponentIds.Velocity, component);
-        }
+    public bool hasVelocity { get { return HasComponent(VisualDebuggingComponentIds.Velocity); } }
 
-        public Entity ReplaceVelocity(IntVector2 newValue) {
-            var component = CreateComponent<VelocityComponent>(ComponentIds.Velocity);
-            component.value = newValue;
-            ReplaceComponent(ComponentIds.Velocity, component);
-            return this;
-        }
-
-        public Entity RemoveVelocity() {
-            return RemoveComponent(ComponentIds.Velocity);
-        }
+    public VisualDebugging AddVelocity(IntVector2 newValue) {
+        var component = CreateComponent<VelocityComponent>(VisualDebuggingComponentIds.Velocity);
+        component.value = newValue;
+        AddComponent(VisualDebuggingComponentIds.Velocity, component);
+        return this;
     }
 
-    public partial class Matcher {
-        static IMatcher _matcherVelocity;
+    public VisualDebugging ReplaceVelocity(IntVector2 newValue) {
+        var component = CreateComponent<VelocityComponent>(VisualDebuggingComponentIds.Velocity);
+        component.value = newValue;
+        ReplaceComponent(VisualDebuggingComponentIds.Velocity, component);
+        return this;
+    }
 
-        public static IMatcher Velocity {
-            get {
-                if (_matcherVelocity == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Velocity);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherVelocity = matcher;
-                }
-
-                return _matcherVelocity;
-            }
-        }
+    public VisualDebugging RemoveVelocity() {
+        RemoveComponent(VisualDebuggingComponentIds.Velocity);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherVelocity;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Velocity {
-            get {
-                if (_matcherVelocity == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Velocity);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherVelocity = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherVelocity;
 
-                return _matcherVelocity;
+    public static IMatcher<VisualDebugging> Velocity {
+        get {
+            if(_matcherVelocity == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Velocity);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherVelocity = matcher;
             }
+
+            return _matcherVelocity;
         }
     }
+}

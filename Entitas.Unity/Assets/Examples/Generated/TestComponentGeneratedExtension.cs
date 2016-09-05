@@ -8,42 +8,42 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        static readonly TestComponent testComponent = new TestComponent();
+public partial class VisualDebugging : Entity {
 
-        public bool isTest {
-            get { return HasComponent(VisualDebuggingComponentIds.Test); }
-            set {
-                if (value != isTest) {
-                    if (value) {
-                        AddComponent(VisualDebuggingComponentIds.Test, testComponent);
-                    } else {
-                        RemoveComponent(VisualDebuggingComponentIds.Test);
-                    }
+    static readonly TestComponent testComponent = new TestComponent();
+
+    public bool isTest {
+        get { return HasComponent(VisualDebuggingComponentIds.Test); }
+        set {
+            if(value != isTest) {
+                if(value) {
+                    AddComponent(VisualDebuggingComponentIds.Test, testComponent);
+                } else {
+                    RemoveComponent(VisualDebuggingComponentIds.Test);
                 }
             }
         }
+    }
 
-        public Entity IsTest(bool value) {
-            isTest = value;
-            return this;
-        }
+    public VisualDebugging IsTest(bool value) {
+        isTest = value;
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherTest;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Test {
-            get {
-                if (_matcherTest == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Test);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherTest = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherTest;
 
-                return _matcherTest;
+    public static IMatcher<VisualDebugging> Test {
+        get {
+            if(_matcherTest == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Test);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherTest = matcher;
             }
+
+            return _matcherTest;
         }
     }
+}

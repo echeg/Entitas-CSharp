@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public Array2DComponent array2D { get { return (Array2DComponent)GetComponent(VisualDebuggingComponentIds.Array2D); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasArray2D { get { return HasComponent(VisualDebuggingComponentIds.Array2D); } }
+    public Array2DComponent array2D { get { return (Array2DComponent)GetComponent(VisualDebuggingComponentIds.Array2D); } }
 
-        public Entity AddArray2D(string[,] newArray2d) {
-            var component = CreateComponent<Array2DComponent>(VisualDebuggingComponentIds.Array2D);
-            component.array2d = newArray2d;
-            return AddComponent(VisualDebuggingComponentIds.Array2D, component);
-        }
+    public bool hasArray2D { get { return HasComponent(VisualDebuggingComponentIds.Array2D); } }
 
-        public Entity ReplaceArray2D(string[,] newArray2d) {
-            var component = CreateComponent<Array2DComponent>(VisualDebuggingComponentIds.Array2D);
-            component.array2d = newArray2d;
-            ReplaceComponent(VisualDebuggingComponentIds.Array2D, component);
-            return this;
-        }
+    public VisualDebugging AddArray2D(string[,] newArray2d) {
+        var component = CreateComponent<Array2DComponent>(VisualDebuggingComponentIds.Array2D);
+        component.array2d = newArray2d;
+        AddComponent(VisualDebuggingComponentIds.Array2D, component);
+        return this;
+    }
 
-        public Entity RemoveArray2D() {
-            return RemoveComponent(VisualDebuggingComponentIds.Array2D);
-        }
+    public VisualDebugging ReplaceArray2D(string[,] newArray2d) {
+        var component = CreateComponent<Array2DComponent>(VisualDebuggingComponentIds.Array2D);
+        component.array2d = newArray2d;
+        ReplaceComponent(VisualDebuggingComponentIds.Array2D, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveArray2D() {
+        RemoveComponent(VisualDebuggingComponentIds.Array2D);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherArray2D;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Array2D {
-            get {
-                if (_matcherArray2D == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Array2D);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherArray2D = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherArray2D;
 
-                return _matcherArray2D;
+    public static IMatcher<VisualDebugging> Array2D {
+        get {
+            if(_matcherArray2D == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Array2D);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherArray2D = matcher;
             }
+
+            return _matcherArray2D;
         }
     }
+}

@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public Vector2Component vector2 { get { return (Vector2Component)GetComponent(VisualDebuggingComponentIds.Vector2); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasVector2 { get { return HasComponent(VisualDebuggingComponentIds.Vector2); } }
+    public Vector2Component vector2 { get { return (Vector2Component)GetComponent(VisualDebuggingComponentIds.Vector2); } }
 
-        public Entity AddVector2(UnityEngine.Vector2 newVector2) {
-            var component = CreateComponent<Vector2Component>(VisualDebuggingComponentIds.Vector2);
-            component.vector2 = newVector2;
-            return AddComponent(VisualDebuggingComponentIds.Vector2, component);
-        }
+    public bool hasVector2 { get { return HasComponent(VisualDebuggingComponentIds.Vector2); } }
 
-        public Entity ReplaceVector2(UnityEngine.Vector2 newVector2) {
-            var component = CreateComponent<Vector2Component>(VisualDebuggingComponentIds.Vector2);
-            component.vector2 = newVector2;
-            ReplaceComponent(VisualDebuggingComponentIds.Vector2, component);
-            return this;
-        }
+    public VisualDebugging AddVector2(UnityEngine.Vector2 newVector2) {
+        var component = CreateComponent<Vector2Component>(VisualDebuggingComponentIds.Vector2);
+        component.vector2 = newVector2;
+        AddComponent(VisualDebuggingComponentIds.Vector2, component);
+        return this;
+    }
 
-        public Entity RemoveVector2() {
-            return RemoveComponent(VisualDebuggingComponentIds.Vector2);
-        }
+    public VisualDebugging ReplaceVector2(UnityEngine.Vector2 newVector2) {
+        var component = CreateComponent<Vector2Component>(VisualDebuggingComponentIds.Vector2);
+        component.vector2 = newVector2;
+        ReplaceComponent(VisualDebuggingComponentIds.Vector2, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveVector2() {
+        RemoveComponent(VisualDebuggingComponentIds.Vector2);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherVector2;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Vector2 {
-            get {
-                if (_matcherVector2 == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Vector2);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherVector2 = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherVector2;
 
-                return _matcherVector2;
+    public static IMatcher<VisualDebugging> Vector2 {
+        get {
+            if(_matcherVector2 == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Vector2);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherVector2 = matcher;
             }
+
+            return _matcherVector2;
         }
     }
+}

@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public MyFloatComponent myFloat { get { return (MyFloatComponent)GetComponent(VisualDebuggingComponentIds.MyFloat); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasMyFloat { get { return HasComponent(VisualDebuggingComponentIds.MyFloat); } }
+    public MyFloatComponent myFloat { get { return (MyFloatComponent)GetComponent(VisualDebuggingComponentIds.MyFloat); } }
 
-        public Entity AddMyFloat(float newMyFloat) {
-            var component = CreateComponent<MyFloatComponent>(VisualDebuggingComponentIds.MyFloat);
-            component.myFloat = newMyFloat;
-            return AddComponent(VisualDebuggingComponentIds.MyFloat, component);
-        }
+    public bool hasMyFloat { get { return HasComponent(VisualDebuggingComponentIds.MyFloat); } }
 
-        public Entity ReplaceMyFloat(float newMyFloat) {
-            var component = CreateComponent<MyFloatComponent>(VisualDebuggingComponentIds.MyFloat);
-            component.myFloat = newMyFloat;
-            ReplaceComponent(VisualDebuggingComponentIds.MyFloat, component);
-            return this;
-        }
+    public VisualDebugging AddMyFloat(float newMyFloat) {
+        var component = CreateComponent<MyFloatComponent>(VisualDebuggingComponentIds.MyFloat);
+        component.myFloat = newMyFloat;
+        AddComponent(VisualDebuggingComponentIds.MyFloat, component);
+        return this;
+    }
 
-        public Entity RemoveMyFloat() {
-            return RemoveComponent(VisualDebuggingComponentIds.MyFloat);
-        }
+    public VisualDebugging ReplaceMyFloat(float newMyFloat) {
+        var component = CreateComponent<MyFloatComponent>(VisualDebuggingComponentIds.MyFloat);
+        component.myFloat = newMyFloat;
+        ReplaceComponent(VisualDebuggingComponentIds.MyFloat, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveMyFloat() {
+        RemoveComponent(VisualDebuggingComponentIds.MyFloat);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherMyFloat;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher MyFloat {
-            get {
-                if (_matcherMyFloat == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.MyFloat);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherMyFloat = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherMyFloat;
 
-                return _matcherMyFloat;
+    public static IMatcher<VisualDebugging> MyFloat {
+        get {
+            if(_matcherMyFloat == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.MyFloat);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherMyFloat = matcher;
             }
+
+            return _matcherMyFloat;
         }
     }
+}

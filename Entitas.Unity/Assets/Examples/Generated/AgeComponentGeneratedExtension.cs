@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public AgeComponent age { get { return (AgeComponent)GetComponent(BlueprintsComponentIds.Age); } }
+public partial class Blueprints : Entity {
 
-        public bool hasAge { get { return HasComponent(BlueprintsComponentIds.Age); } }
+    public AgeComponent age { get { return (AgeComponent)GetComponent(BlueprintsComponentIds.Age); } }
 
-        public Entity AddAge(int newValue) {
-            var component = CreateComponent<AgeComponent>(BlueprintsComponentIds.Age);
-            component.value = newValue;
-            return AddComponent(BlueprintsComponentIds.Age, component);
-        }
+    public bool hasAge { get { return HasComponent(BlueprintsComponentIds.Age); } }
 
-        public Entity ReplaceAge(int newValue) {
-            var component = CreateComponent<AgeComponent>(BlueprintsComponentIds.Age);
-            component.value = newValue;
-            ReplaceComponent(BlueprintsComponentIds.Age, component);
-            return this;
-        }
+    public Blueprints AddAge(int newValue) {
+        var component = CreateComponent<AgeComponent>(BlueprintsComponentIds.Age);
+        component.value = newValue;
+        AddComponent(BlueprintsComponentIds.Age, component);
+        return this;
+    }
 
-        public Entity RemoveAge() {
-            return RemoveComponent(BlueprintsComponentIds.Age);
-        }
+    public Blueprints ReplaceAge(int newValue) {
+        var component = CreateComponent<AgeComponent>(BlueprintsComponentIds.Age);
+        component.value = newValue;
+        ReplaceComponent(BlueprintsComponentIds.Age, component);
+        return this;
+    }
+
+    public Blueprints RemoveAge() {
+        RemoveComponent(BlueprintsComponentIds.Age);
+        return this;
     }
 }
 
-    public partial class BlueprintsMatcher {
-        static IMatcher _matcherAge;
+public partial class BlueprintsMatcher {
 
-        public static IMatcher Age {
-            get {
-                if (_matcherAge == null) {
-                    var matcher = (Matcher)Matcher.AllOf(BlueprintsComponentIds.Age);
-                    matcher.componentNames = BlueprintsComponentIds.componentNames;
-                    _matcherAge = matcher;
-                }
+    static IMatcher<Blueprints> _matcherAge;
 
-                return _matcherAge;
+    public static IMatcher<Blueprints> Age {
+        get {
+            if(_matcherAge == null) {
+                var matcher = (Matcher<Blueprints>)Matcher<Blueprints>.AllOf(BlueprintsComponentIds.Age);
+                matcher.componentNames = BlueprintsComponentIds.componentNames;
+                _matcherAge = matcher;
             }
+
+            return _matcherAge;
         }
     }
+}

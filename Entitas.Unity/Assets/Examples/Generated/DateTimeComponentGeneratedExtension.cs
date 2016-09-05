@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public DateTimeComponent dateTime { get { return (DateTimeComponent)GetComponent(VisualDebuggingComponentIds.DateTime); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasDateTime { get { return HasComponent(VisualDebuggingComponentIds.DateTime); } }
+    public DateTimeComponent dateTime { get { return (DateTimeComponent)GetComponent(VisualDebuggingComponentIds.DateTime); } }
 
-        public Entity AddDateTime(System.DateTime newDate) {
-            var component = CreateComponent<DateTimeComponent>(VisualDebuggingComponentIds.DateTime);
-            component.date = newDate;
-            return AddComponent(VisualDebuggingComponentIds.DateTime, component);
-        }
+    public bool hasDateTime { get { return HasComponent(VisualDebuggingComponentIds.DateTime); } }
 
-        public Entity ReplaceDateTime(System.DateTime newDate) {
-            var component = CreateComponent<DateTimeComponent>(VisualDebuggingComponentIds.DateTime);
-            component.date = newDate;
-            ReplaceComponent(VisualDebuggingComponentIds.DateTime, component);
-            return this;
-        }
+    public VisualDebugging AddDateTime(System.DateTime newDate) {
+        var component = CreateComponent<DateTimeComponent>(VisualDebuggingComponentIds.DateTime);
+        component.date = newDate;
+        AddComponent(VisualDebuggingComponentIds.DateTime, component);
+        return this;
+    }
 
-        public Entity RemoveDateTime() {
-            return RemoveComponent(VisualDebuggingComponentIds.DateTime);
-        }
+    public VisualDebugging ReplaceDateTime(System.DateTime newDate) {
+        var component = CreateComponent<DateTimeComponent>(VisualDebuggingComponentIds.DateTime);
+        component.date = newDate;
+        ReplaceComponent(VisualDebuggingComponentIds.DateTime, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveDateTime() {
+        RemoveComponent(VisualDebuggingComponentIds.DateTime);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherDateTime;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher DateTime {
-            get {
-                if (_matcherDateTime == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.DateTime);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherDateTime = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherDateTime;
 
-                return _matcherDateTime;
+    public static IMatcher<VisualDebugging> DateTime {
+        get {
+            if(_matcherDateTime == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.DateTime);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherDateTime = matcher;
             }
+
+            return _matcherDateTime;
         }
     }
+}

@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public Texture2DComponent texture2D { get { return (Texture2DComponent)GetComponent(VisualDebuggingComponentIds.Texture2D); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasTexture2D { get { return HasComponent(VisualDebuggingComponentIds.Texture2D); } }
+    public Texture2DComponent texture2D { get { return (Texture2DComponent)GetComponent(VisualDebuggingComponentIds.Texture2D); } }
 
-        public Entity AddTexture2D(UnityEngine.Texture2D newTexture2D) {
-            var component = CreateComponent<Texture2DComponent>(VisualDebuggingComponentIds.Texture2D);
-            component.texture2D = newTexture2D;
-            return AddComponent(VisualDebuggingComponentIds.Texture2D, component);
-        }
+    public bool hasTexture2D { get { return HasComponent(VisualDebuggingComponentIds.Texture2D); } }
 
-        public Entity ReplaceTexture2D(UnityEngine.Texture2D newTexture2D) {
-            var component = CreateComponent<Texture2DComponent>(VisualDebuggingComponentIds.Texture2D);
-            component.texture2D = newTexture2D;
-            ReplaceComponent(VisualDebuggingComponentIds.Texture2D, component);
-            return this;
-        }
+    public VisualDebugging AddTexture2D(UnityEngine.Texture2D newTexture2D) {
+        var component = CreateComponent<Texture2DComponent>(VisualDebuggingComponentIds.Texture2D);
+        component.texture2D = newTexture2D;
+        AddComponent(VisualDebuggingComponentIds.Texture2D, component);
+        return this;
+    }
 
-        public Entity RemoveTexture2D() {
-            return RemoveComponent(VisualDebuggingComponentIds.Texture2D);
-        }
+    public VisualDebugging ReplaceTexture2D(UnityEngine.Texture2D newTexture2D) {
+        var component = CreateComponent<Texture2DComponent>(VisualDebuggingComponentIds.Texture2D);
+        component.texture2D = newTexture2D;
+        ReplaceComponent(VisualDebuggingComponentIds.Texture2D, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveTexture2D() {
+        RemoveComponent(VisualDebuggingComponentIds.Texture2D);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherTexture2D;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Texture2D {
-            get {
-                if (_matcherTexture2D == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Texture2D);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherTexture2D = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherTexture2D;
 
-                return _matcherTexture2D;
+    public static IMatcher<VisualDebugging> Texture2D {
+        get {
+            if(_matcherTexture2D == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Texture2D);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherTexture2D = matcher;
             }
+
+            return _matcherTexture2D;
         }
     }
+}

@@ -12,43 +12,45 @@ public class SomeStructComponent : IComponent {
     public SomeStruct value;
 }
 
-namespace Entitas {
-    public partial class Entity {
-        public SomeStructComponent someStruct { get { return (SomeStructComponent)GetComponent(ComponentIds.SomeStruct); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasSomeStruct { get { return HasComponent(ComponentIds.SomeStruct); } }
+    public SomeStructComponent someStruct { get { return (SomeStructComponent)GetComponent(VisualDebuggingComponentIds.SomeStruct); } }
 
-        public Entity AddSomeStruct(SomeStruct newValue) {
-            var component = CreateComponent<SomeStructComponent>(ComponentIds.SomeStruct);
-            component.value = newValue;
-            return AddComponent(ComponentIds.SomeStruct, component);
-        }
+    public bool hasSomeStruct { get { return HasComponent(VisualDebuggingComponentIds.SomeStruct); } }
 
-        public Entity ReplaceSomeStruct(SomeStruct newValue) {
-            var component = CreateComponent<SomeStructComponent>(ComponentIds.SomeStruct);
-            component.value = newValue;
-            ReplaceComponent(ComponentIds.SomeStruct, component);
-            return this;
-        }
-
-        public Entity RemoveSomeStruct() {
-            return RemoveComponent(ComponentIds.SomeStruct);
-        }
+    public VisualDebugging AddSomeStruct(SomeStruct newValue) {
+        var component = CreateComponent<SomeStructComponent>(VisualDebuggingComponentIds.SomeStruct);
+        component.value = newValue;
+        AddComponent(VisualDebuggingComponentIds.SomeStruct, component);
+        return this;
     }
 
-    public partial class Matcher {
-        static IMatcher _matcherSomeStruct;
+    public VisualDebugging ReplaceSomeStruct(SomeStruct newValue) {
+        var component = CreateComponent<SomeStructComponent>(VisualDebuggingComponentIds.SomeStruct);
+        component.value = newValue;
+        ReplaceComponent(VisualDebuggingComponentIds.SomeStruct, component);
+        return this;
+    }
 
-        public static IMatcher SomeStruct {
-            get {
-                if (_matcherSomeStruct == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.SomeStruct);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherSomeStruct = matcher;
-                }
+    public VisualDebugging RemoveSomeStruct() {
+        RemoveComponent(VisualDebuggingComponentIds.SomeStruct);
+        return this;
+    }
+}
 
-                return _matcherSomeStruct;
+public partial class VisualDebuggingMatcher {
+
+    static IMatcher<VisualDebugging> _matcherSomeStruct;
+
+    public static IMatcher<VisualDebugging> SomeStruct {
+        get {
+            if(_matcherSomeStruct == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.SomeStruct);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherSomeStruct = matcher;
             }
+
+            return _matcherSomeStruct;
         }
     }
 }

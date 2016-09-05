@@ -8,45 +8,47 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public PersonComponent person { get { return (PersonComponent)GetComponent(VisualDebuggingComponentIds.Person); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasPerson { get { return HasComponent(VisualDebuggingComponentIds.Person); } }
+    public PersonComponent person { get { return (PersonComponent)GetComponent(VisualDebuggingComponentIds.Person); } }
 
-        public Entity AddPerson(string newName, string newGender) {
-            var component = CreateComponent<PersonComponent>(VisualDebuggingComponentIds.Person);
-            component.name = newName;
-            component.gender = newGender;
-            return AddComponent(VisualDebuggingComponentIds.Person, component);
-        }
+    public bool hasPerson { get { return HasComponent(VisualDebuggingComponentIds.Person); } }
 
-        public Entity ReplacePerson(string newName, string newGender) {
-            var component = CreateComponent<PersonComponent>(VisualDebuggingComponentIds.Person);
-            component.name = newName;
-            component.gender = newGender;
-            ReplaceComponent(VisualDebuggingComponentIds.Person, component);
-            return this;
-        }
+    public VisualDebugging AddPerson(string newName, string newGender) {
+        var component = CreateComponent<PersonComponent>(VisualDebuggingComponentIds.Person);
+        component.name = newName;
+        component.gender = newGender;
+        AddComponent(VisualDebuggingComponentIds.Person, component);
+        return this;
+    }
 
-        public Entity RemovePerson() {
-            return RemoveComponent(VisualDebuggingComponentIds.Person);
-        }
+    public VisualDebugging ReplacePerson(string newName, string newGender) {
+        var component = CreateComponent<PersonComponent>(VisualDebuggingComponentIds.Person);
+        component.name = newName;
+        component.gender = newGender;
+        ReplaceComponent(VisualDebuggingComponentIds.Person, component);
+        return this;
+    }
+
+    public VisualDebugging RemovePerson() {
+        RemoveComponent(VisualDebuggingComponentIds.Person);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherPerson;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Person {
-            get {
-                if (_matcherPerson == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Person);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherPerson = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherPerson;
 
-                return _matcherPerson;
+    public static IMatcher<VisualDebugging> Person {
+        get {
+            if(_matcherPerson == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Person);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherPerson = matcher;
             }
+
+            return _matcherPerson;
         }
     }
+}

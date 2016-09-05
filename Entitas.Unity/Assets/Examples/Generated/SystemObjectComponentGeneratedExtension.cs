@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public SystemObjectComponent systemObject { get { return (SystemObjectComponent)GetComponent(VisualDebuggingComponentIds.SystemObject); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasSystemObject { get { return HasComponent(VisualDebuggingComponentIds.SystemObject); } }
+    public SystemObjectComponent systemObject { get { return (SystemObjectComponent)GetComponent(VisualDebuggingComponentIds.SystemObject); } }
 
-        public Entity AddSystemObject(object newSystemObject) {
-            var component = CreateComponent<SystemObjectComponent>(VisualDebuggingComponentIds.SystemObject);
-            component.systemObject = newSystemObject;
-            return AddComponent(VisualDebuggingComponentIds.SystemObject, component);
-        }
+    public bool hasSystemObject { get { return HasComponent(VisualDebuggingComponentIds.SystemObject); } }
 
-        public Entity ReplaceSystemObject(object newSystemObject) {
-            var component = CreateComponent<SystemObjectComponent>(VisualDebuggingComponentIds.SystemObject);
-            component.systemObject = newSystemObject;
-            ReplaceComponent(VisualDebuggingComponentIds.SystemObject, component);
-            return this;
-        }
+    public VisualDebugging AddSystemObject(object newSystemObject) {
+        var component = CreateComponent<SystemObjectComponent>(VisualDebuggingComponentIds.SystemObject);
+        component.systemObject = newSystemObject;
+        AddComponent(VisualDebuggingComponentIds.SystemObject, component);
+        return this;
+    }
 
-        public Entity RemoveSystemObject() {
-            return RemoveComponent(VisualDebuggingComponentIds.SystemObject);
-        }
+    public VisualDebugging ReplaceSystemObject(object newSystemObject) {
+        var component = CreateComponent<SystemObjectComponent>(VisualDebuggingComponentIds.SystemObject);
+        component.systemObject = newSystemObject;
+        ReplaceComponent(VisualDebuggingComponentIds.SystemObject, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveSystemObject() {
+        RemoveComponent(VisualDebuggingComponentIds.SystemObject);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherSystemObject;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher SystemObject {
-            get {
-                if (_matcherSystemObject == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.SystemObject);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherSystemObject = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherSystemObject;
 
-                return _matcherSystemObject;
+    public static IMatcher<VisualDebugging> SystemObject {
+        get {
+            if(_matcherSystemObject == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.SystemObject);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherSystemObject = matcher;
             }
+
+            return _matcherSystemObject;
         }
     }
+}

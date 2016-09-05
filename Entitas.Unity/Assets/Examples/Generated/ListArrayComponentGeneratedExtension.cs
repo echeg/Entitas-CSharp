@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public ListArrayComponent listArray { get { return (ListArrayComponent)GetComponent(VisualDebuggingComponentIds.ListArray); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasListArray { get { return HasComponent(VisualDebuggingComponentIds.ListArray); } }
+    public ListArrayComponent listArray { get { return (ListArrayComponent)GetComponent(VisualDebuggingComponentIds.ListArray); } }
 
-        public Entity AddListArray(System.Collections.Generic.List<string>[] newListArray) {
-            var component = CreateComponent<ListArrayComponent>(VisualDebuggingComponentIds.ListArray);
-            component.listArray = newListArray;
-            return AddComponent(VisualDebuggingComponentIds.ListArray, component);
-        }
+    public bool hasListArray { get { return HasComponent(VisualDebuggingComponentIds.ListArray); } }
 
-        public Entity ReplaceListArray(System.Collections.Generic.List<string>[] newListArray) {
-            var component = CreateComponent<ListArrayComponent>(VisualDebuggingComponentIds.ListArray);
-            component.listArray = newListArray;
-            ReplaceComponent(VisualDebuggingComponentIds.ListArray, component);
-            return this;
-        }
+    public VisualDebugging AddListArray(System.Collections.Generic.List<string>[] newListArray) {
+        var component = CreateComponent<ListArrayComponent>(VisualDebuggingComponentIds.ListArray);
+        component.listArray = newListArray;
+        AddComponent(VisualDebuggingComponentIds.ListArray, component);
+        return this;
+    }
 
-        public Entity RemoveListArray() {
-            return RemoveComponent(VisualDebuggingComponentIds.ListArray);
-        }
+    public VisualDebugging ReplaceListArray(System.Collections.Generic.List<string>[] newListArray) {
+        var component = CreateComponent<ListArrayComponent>(VisualDebuggingComponentIds.ListArray);
+        component.listArray = newListArray;
+        ReplaceComponent(VisualDebuggingComponentIds.ListArray, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveListArray() {
+        RemoveComponent(VisualDebuggingComponentIds.ListArray);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherListArray;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher ListArray {
-            get {
-                if (_matcherListArray == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.ListArray);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherListArray = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherListArray;
 
-                return _matcherListArray;
+    public static IMatcher<VisualDebugging> ListArray {
+        get {
+            if(_matcherListArray == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.ListArray);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherListArray = matcher;
             }
+
+            return _matcherListArray;
         }
     }
+}

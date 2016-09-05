@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public BoundsComponent bounds { get { return (BoundsComponent)GetComponent(VisualDebuggingComponentIds.Bounds); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasBounds { get { return HasComponent(VisualDebuggingComponentIds.Bounds); } }
+    public BoundsComponent bounds { get { return (BoundsComponent)GetComponent(VisualDebuggingComponentIds.Bounds); } }
 
-        public Entity AddBounds(UnityEngine.Bounds newBounds) {
-            var component = CreateComponent<BoundsComponent>(VisualDebuggingComponentIds.Bounds);
-            component.bounds = newBounds;
-            return AddComponent(VisualDebuggingComponentIds.Bounds, component);
-        }
+    public bool hasBounds { get { return HasComponent(VisualDebuggingComponentIds.Bounds); } }
 
-        public Entity ReplaceBounds(UnityEngine.Bounds newBounds) {
-            var component = CreateComponent<BoundsComponent>(VisualDebuggingComponentIds.Bounds);
-            component.bounds = newBounds;
-            ReplaceComponent(VisualDebuggingComponentIds.Bounds, component);
-            return this;
-        }
+    public VisualDebugging AddBounds(UnityEngine.Bounds newBounds) {
+        var component = CreateComponent<BoundsComponent>(VisualDebuggingComponentIds.Bounds);
+        component.bounds = newBounds;
+        AddComponent(VisualDebuggingComponentIds.Bounds, component);
+        return this;
+    }
 
-        public Entity RemoveBounds() {
-            return RemoveComponent(VisualDebuggingComponentIds.Bounds);
-        }
+    public VisualDebugging ReplaceBounds(UnityEngine.Bounds newBounds) {
+        var component = CreateComponent<BoundsComponent>(VisualDebuggingComponentIds.Bounds);
+        component.bounds = newBounds;
+        ReplaceComponent(VisualDebuggingComponentIds.Bounds, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveBounds() {
+        RemoveComponent(VisualDebuggingComponentIds.Bounds);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherBounds;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Bounds {
-            get {
-                if (_matcherBounds == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Bounds);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherBounds = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherBounds;
 
-                return _matcherBounds;
+    public static IMatcher<VisualDebugging> Bounds {
+        get {
+            if(_matcherBounds == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Bounds);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherBounds = matcher;
             }
+
+            return _matcherBounds;
         }
     }
+}

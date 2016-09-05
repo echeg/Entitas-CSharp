@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public AnArrayComponent anArray { get { return (AnArrayComponent)GetComponent(VisualDebuggingComponentIds.AnArray); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasAnArray { get { return HasComponent(VisualDebuggingComponentIds.AnArray); } }
+    public AnArrayComponent anArray { get { return (AnArrayComponent)GetComponent(VisualDebuggingComponentIds.AnArray); } }
 
-        public Entity AddAnArray(string[] newArray) {
-            var component = CreateComponent<AnArrayComponent>(VisualDebuggingComponentIds.AnArray);
-            component.array = newArray;
-            return AddComponent(VisualDebuggingComponentIds.AnArray, component);
-        }
+    public bool hasAnArray { get { return HasComponent(VisualDebuggingComponentIds.AnArray); } }
 
-        public Entity ReplaceAnArray(string[] newArray) {
-            var component = CreateComponent<AnArrayComponent>(VisualDebuggingComponentIds.AnArray);
-            component.array = newArray;
-            ReplaceComponent(VisualDebuggingComponentIds.AnArray, component);
-            return this;
-        }
+    public VisualDebugging AddAnArray(string[] newArray) {
+        var component = CreateComponent<AnArrayComponent>(VisualDebuggingComponentIds.AnArray);
+        component.array = newArray;
+        AddComponent(VisualDebuggingComponentIds.AnArray, component);
+        return this;
+    }
 
-        public Entity RemoveAnArray() {
-            return RemoveComponent(VisualDebuggingComponentIds.AnArray);
-        }
+    public VisualDebugging ReplaceAnArray(string[] newArray) {
+        var component = CreateComponent<AnArrayComponent>(VisualDebuggingComponentIds.AnArray);
+        component.array = newArray;
+        ReplaceComponent(VisualDebuggingComponentIds.AnArray, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveAnArray() {
+        RemoveComponent(VisualDebuggingComponentIds.AnArray);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherAnArray;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher AnArray {
-            get {
-                if (_matcherAnArray == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.AnArray);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherAnArray = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherAnArray;
 
-                return _matcherAnArray;
+    public static IMatcher<VisualDebugging> AnArray {
+        get {
+            if(_matcherAnArray == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.AnArray);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherAnArray = matcher;
             }
+
+            return _matcherAnArray;
         }
     }
+}

@@ -7,53 +7,54 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public static class VisualDebuggingComponentIds {
-    public const int Position = 0;
-    public const int Velocity = 1;
-    public const int AnArray = 2;
-    public const int AnimationCurve = 3;
-    public const int Array2D = 4;
-    public const int Array3D = 5;
-    public const int Bounds = 6;
-    public const int Color = 7;
-    public const int CoolName = 8;
-    public const int CustomObject = 9;
-    public const int DateTime = 10;
-    public const int DictArray = 11;
-    public const int Dictionary = 12;
-    public const int GameObject = 13;
-    public const int HashSet = 14;
-    public const int ISomeInterface = 15;
-    public const int JaggedArray = 16;
-    public const int ListArray = 17;
-    public const int List = 18;
-    public const int MonoBehaviourSubClass = 19;
-    public const int MyBool = 20;
-    public const int MyChar = 21;
-    public const int MyDouble = 22;
-    public const int MyEnum = 23;
-    public const int MyFlags = 24;
-    public const int MyFloat = 25;
-    public const int MyInt = 26;
-    public const int MyString = 27;
-    public const int Person = 28;
-    public const int Property = 29;
-    public const int Rect = 30;
-    public const int SomeOtherClass = 31;
-    public const int SystemObject = 32;
-    public const int Test = 33;
-    public const int Texture2D = 34;
-    public const int Texture = 35;
-    public const int UnityObject = 36;
-    public const int UnsupportedObject = 37;
-    public const int Vector2 = 38;
-    public const int Vector3 = 39;
-    public const int Vector4 = 40;
 
-    public const int TotalComponents = 41;
+    public const int AnArray = 0;
+    public const int AnimationCurve = 1;
+    public const int Array2D = 2;
+    public const int Array3D = 3;
+    public const int Bounds = 4;
+    public const int Color = 5;
+    public const int CoolName = 6;
+    public const int CustomObject = 7;
+    public const int DateTime = 8;
+    public const int DictArray = 9;
+    public const int Dictionary = 10;
+    public const int GameObject = 11;
+    public const int HashSet = 12;
+    public const int ISomeInterface = 13;
+    public const int JaggedArray = 14;
+    public const int ListArray = 15;
+    public const int List = 16;
+    public const int MonoBehaviourSubClass = 17;
+    public const int MyBool = 18;
+    public const int MyChar = 19;
+    public const int MyDouble = 20;
+    public const int MyEnum = 21;
+    public const int MyFlags = 22;
+    public const int MyFloat = 23;
+    public const int MyInt = 24;
+    public const int MyString = 25;
+    public const int Person = 26;
+    public const int Position = 27;
+    public const int Property = 28;
+    public const int Rect = 29;
+    public const int SomeClass = 30;
+    public const int SomeOtherClass = 31;
+    public const int SomeStruct = 32;
+    public const int SystemObject = 33;
+    public const int Test = 34;
+    public const int Texture2D = 35;
+    public const int Texture = 36;
+    public const int UnityObject = 37;
+    public const int UnsupportedObject = 38;
+    public const int Vector2 = 39;
+    public const int Vector3 = 40;
+    public const int Vector4 = 41;
+    public const int Velocity = 42;
+
+    public const int TotalComponents = 43;
 
     public static readonly string[] componentNames = {
-        "Position",
-        "Velocity",
         "AnArray",
         "AnimationCurve",
         "Array2D",
@@ -81,9 +82,12 @@ public static class VisualDebuggingComponentIds {
         "MyInt",
         "MyString",
         "Person",
+        "Position",
         "Property",
         "Rect",
+        "SomeClass",
         "SomeOtherClass",
+        "SomeStruct",
         "SystemObject",
         "Test",
         "Texture2D",
@@ -92,12 +96,11 @@ public static class VisualDebuggingComponentIds {
         "UnsupportedObject",
         "Vector2",
         "Vector3",
-        "Vector4"
+        "Vector4",
+        "Velocity"
     };
 
     public static readonly System.Type[] componentTypes = {
-        typeof(PositionComponent),
-        typeof(VelocityComponent),
         typeof(AnArrayComponent),
         typeof(AnimationCurveComponent),
         typeof(Array2DComponent),
@@ -125,9 +128,12 @@ public static class VisualDebuggingComponentIds {
         typeof(MyIntComponent),
         typeof(MyStringComponent),
         typeof(PersonComponent),
+        typeof(PositionComponent),
         typeof(PropertyComponent),
         typeof(RectComponent),
+        typeof(SomeClassComponent),
         typeof(SomeOtherClassComponent),
+        typeof(SomeStructComponent),
         typeof(SystemObjectComponent),
         typeof(TestComponent),
         typeof(Texture2DComponent),
@@ -136,6 +142,7 @@ public static class VisualDebuggingComponentIds {
         typeof(UnsupportedObjectComponent),
         typeof(Vector2Component),
         typeof(Vector3Component),
-        typeof(Vector4Component)
+        typeof(Vector4Component),
+        typeof(VelocityComponent)
     };
 }

@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public RectComponent rect { get { return (RectComponent)GetComponent(VisualDebuggingComponentIds.Rect); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasRect { get { return HasComponent(VisualDebuggingComponentIds.Rect); } }
+    public RectComponent rect { get { return (RectComponent)GetComponent(VisualDebuggingComponentIds.Rect); } }
 
-        public Entity AddRect(UnityEngine.Rect newRect) {
-            var component = CreateComponent<RectComponent>(VisualDebuggingComponentIds.Rect);
-            component.rect = newRect;
-            return AddComponent(VisualDebuggingComponentIds.Rect, component);
-        }
+    public bool hasRect { get { return HasComponent(VisualDebuggingComponentIds.Rect); } }
 
-        public Entity ReplaceRect(UnityEngine.Rect newRect) {
-            var component = CreateComponent<RectComponent>(VisualDebuggingComponentIds.Rect);
-            component.rect = newRect;
-            ReplaceComponent(VisualDebuggingComponentIds.Rect, component);
-            return this;
-        }
+    public VisualDebugging AddRect(UnityEngine.Rect newRect) {
+        var component = CreateComponent<RectComponent>(VisualDebuggingComponentIds.Rect);
+        component.rect = newRect;
+        AddComponent(VisualDebuggingComponentIds.Rect, component);
+        return this;
+    }
 
-        public Entity RemoveRect() {
-            return RemoveComponent(VisualDebuggingComponentIds.Rect);
-        }
+    public VisualDebugging ReplaceRect(UnityEngine.Rect newRect) {
+        var component = CreateComponent<RectComponent>(VisualDebuggingComponentIds.Rect);
+        component.rect = newRect;
+        ReplaceComponent(VisualDebuggingComponentIds.Rect, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveRect() {
+        RemoveComponent(VisualDebuggingComponentIds.Rect);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherRect;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Rect {
-            get {
-                if (_matcherRect == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Rect);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherRect = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherRect;
 
-                return _matcherRect;
+    public static IMatcher<VisualDebugging> Rect {
+        get {
+            if(_matcherRect == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Rect);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherRect = matcher;
             }
+
+            return _matcherRect;
         }
     }
+}

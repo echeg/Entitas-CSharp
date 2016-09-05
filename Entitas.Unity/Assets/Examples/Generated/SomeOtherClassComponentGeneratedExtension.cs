@@ -12,43 +12,45 @@ public class SomeOtherClassComponent : IComponent {
     public SomeNamespace.SomeOtherClass value;
 }
 
-namespace Entitas {
-    public partial class Entity {
-        public SomeOtherClassComponent someOtherClass { get { return (SomeOtherClassComponent)GetComponent(VisualDebuggingComponentIds.SomeOtherClass); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasSomeOtherClass { get { return HasComponent(VisualDebuggingComponentIds.SomeOtherClass); } }
+    public SomeOtherClassComponent someOtherClass { get { return (SomeOtherClassComponent)GetComponent(VisualDebuggingComponentIds.SomeOtherClass); } }
 
-        public Entity AddSomeOtherClass(SomeNamespace.SomeOtherClass newValue) {
-            var component = CreateComponent<SomeOtherClassComponent>(VisualDebuggingComponentIds.SomeOtherClass);
-            component.value = newValue;
-            return AddComponent(VisualDebuggingComponentIds.SomeOtherClass, component);
-        }
+    public bool hasSomeOtherClass { get { return HasComponent(VisualDebuggingComponentIds.SomeOtherClass); } }
 
-        public Entity ReplaceSomeOtherClass(SomeNamespace.SomeOtherClass newValue) {
-            var component = CreateComponent<SomeOtherClassComponent>(VisualDebuggingComponentIds.SomeOtherClass);
-            component.value = newValue;
-            ReplaceComponent(VisualDebuggingComponentIds.SomeOtherClass, component);
-            return this;
-        }
+    public VisualDebugging AddSomeOtherClass(SomeNamespace.SomeOtherClass newValue) {
+        var component = CreateComponent<SomeOtherClassComponent>(VisualDebuggingComponentIds.SomeOtherClass);
+        component.value = newValue;
+        AddComponent(VisualDebuggingComponentIds.SomeOtherClass, component);
+        return this;
+    }
 
-        public Entity RemoveSomeOtherClass() {
-            return RemoveComponent(VisualDebuggingComponentIds.SomeOtherClass);
-        }
+    public VisualDebugging ReplaceSomeOtherClass(SomeNamespace.SomeOtherClass newValue) {
+        var component = CreateComponent<SomeOtherClassComponent>(VisualDebuggingComponentIds.SomeOtherClass);
+        component.value = newValue;
+        ReplaceComponent(VisualDebuggingComponentIds.SomeOtherClass, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveSomeOtherClass() {
+        RemoveComponent(VisualDebuggingComponentIds.SomeOtherClass);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherSomeOtherClass;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher SomeOtherClass {
-            get {
-                if (_matcherSomeOtherClass == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.SomeOtherClass);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherSomeOtherClass = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherSomeOtherClass;
 
-                return _matcherSomeOtherClass;
+    public static IMatcher<VisualDebugging> SomeOtherClass {
+        get {
+            if(_matcherSomeOtherClass == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.SomeOtherClass);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherSomeOtherClass = matcher;
             }
+
+            return _matcherSomeOtherClass;
         }
     }
+}

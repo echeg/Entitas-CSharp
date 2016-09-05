@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public MyIntComponent myInt { get { return (MyIntComponent)GetComponent(VisualDebuggingComponentIds.MyInt); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasMyInt { get { return HasComponent(VisualDebuggingComponentIds.MyInt); } }
+    public MyIntComponent myInt { get { return (MyIntComponent)GetComponent(VisualDebuggingComponentIds.MyInt); } }
 
-        public Entity AddMyInt(int newMyInt) {
-            var component = CreateComponent<MyIntComponent>(VisualDebuggingComponentIds.MyInt);
-            component.myInt = newMyInt;
-            return AddComponent(VisualDebuggingComponentIds.MyInt, component);
-        }
+    public bool hasMyInt { get { return HasComponent(VisualDebuggingComponentIds.MyInt); } }
 
-        public Entity ReplaceMyInt(int newMyInt) {
-            var component = CreateComponent<MyIntComponent>(VisualDebuggingComponentIds.MyInt);
-            component.myInt = newMyInt;
-            ReplaceComponent(VisualDebuggingComponentIds.MyInt, component);
-            return this;
-        }
+    public VisualDebugging AddMyInt(int newMyInt) {
+        var component = CreateComponent<MyIntComponent>(VisualDebuggingComponentIds.MyInt);
+        component.myInt = newMyInt;
+        AddComponent(VisualDebuggingComponentIds.MyInt, component);
+        return this;
+    }
 
-        public Entity RemoveMyInt() {
-            return RemoveComponent(VisualDebuggingComponentIds.MyInt);
-        }
+    public VisualDebugging ReplaceMyInt(int newMyInt) {
+        var component = CreateComponent<MyIntComponent>(VisualDebuggingComponentIds.MyInt);
+        component.myInt = newMyInt;
+        ReplaceComponent(VisualDebuggingComponentIds.MyInt, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveMyInt() {
+        RemoveComponent(VisualDebuggingComponentIds.MyInt);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherMyInt;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher MyInt {
-            get {
-                if (_matcherMyInt == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.MyInt);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherMyInt = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherMyInt;
 
-                return _matcherMyInt;
+    public static IMatcher<VisualDebugging> MyInt {
+        get {
+            if(_matcherMyInt == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.MyInt);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherMyInt = matcher;
             }
+
+            return _matcherMyInt;
         }
     }
+}

@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public DictionaryComponent dictionary { get { return (DictionaryComponent)GetComponent(VisualDebuggingComponentIds.Dictionary); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasDictionary { get { return HasComponent(VisualDebuggingComponentIds.Dictionary); } }
+    public DictionaryComponent dictionary { get { return (DictionaryComponent)GetComponent(VisualDebuggingComponentIds.Dictionary); } }
 
-        public Entity AddDictionary(System.Collections.Generic.Dictionary<string, string> newDict) {
-            var component = CreateComponent<DictionaryComponent>(VisualDebuggingComponentIds.Dictionary);
-            component.dict = newDict;
-            return AddComponent(VisualDebuggingComponentIds.Dictionary, component);
-        }
+    public bool hasDictionary { get { return HasComponent(VisualDebuggingComponentIds.Dictionary); } }
 
-        public Entity ReplaceDictionary(System.Collections.Generic.Dictionary<string, string> newDict) {
-            var component = CreateComponent<DictionaryComponent>(VisualDebuggingComponentIds.Dictionary);
-            component.dict = newDict;
-            ReplaceComponent(VisualDebuggingComponentIds.Dictionary, component);
-            return this;
-        }
+    public VisualDebugging AddDictionary(System.Collections.Generic.Dictionary<string, string> newDict) {
+        var component = CreateComponent<DictionaryComponent>(VisualDebuggingComponentIds.Dictionary);
+        component.dict = newDict;
+        AddComponent(VisualDebuggingComponentIds.Dictionary, component);
+        return this;
+    }
 
-        public Entity RemoveDictionary() {
-            return RemoveComponent(VisualDebuggingComponentIds.Dictionary);
-        }
+    public VisualDebugging ReplaceDictionary(System.Collections.Generic.Dictionary<string, string> newDict) {
+        var component = CreateComponent<DictionaryComponent>(VisualDebuggingComponentIds.Dictionary);
+        component.dict = newDict;
+        ReplaceComponent(VisualDebuggingComponentIds.Dictionary, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveDictionary() {
+        RemoveComponent(VisualDebuggingComponentIds.Dictionary);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherDictionary;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Dictionary {
-            get {
-                if (_matcherDictionary == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Dictionary);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherDictionary = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherDictionary;
 
-                return _matcherDictionary;
+    public static IMatcher<VisualDebugging> Dictionary {
+        get {
+            if(_matcherDictionary == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Dictionary);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherDictionary = matcher;
             }
+
+            return _matcherDictionary;
         }
     }
+}

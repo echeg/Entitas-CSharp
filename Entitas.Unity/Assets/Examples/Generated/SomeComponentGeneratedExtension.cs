@@ -8,42 +8,42 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        static readonly SomeComponent someComponent = new SomeComponent();
+public partial class Test : Entity {
 
-        public bool isSome {
-            get { return HasComponent(TestComponentIds.Some); }
-            set {
-                if (value != isSome) {
-                    if (value) {
-                        AddComponent(TestComponentIds.Some, someComponent);
-                    } else {
-                        RemoveComponent(TestComponentIds.Some);
-                    }
+    static readonly SomeComponent someComponent = new SomeComponent();
+
+    public bool isSome {
+        get { return HasComponent(TestComponentIds.Some); }
+        set {
+            if(value != isSome) {
+                if(value) {
+                    AddComponent(TestComponentIds.Some, someComponent);
+                } else {
+                    RemoveComponent(TestComponentIds.Some);
                 }
             }
         }
+    }
 
-        public Entity IsSome(bool value) {
-            isSome = value;
-            return this;
-        }
+    public Test IsSome(bool value) {
+        isSome = value;
+        return this;
     }
 }
 
-    public partial class TestMatcher {
-        static IMatcher _matcherSome;
+public partial class TestMatcher {
 
-        public static IMatcher Some {
-            get {
-                if (_matcherSome == null) {
-                    var matcher = (Matcher)Matcher.AllOf(TestComponentIds.Some);
-                    matcher.componentNames = TestComponentIds.componentNames;
-                    _matcherSome = matcher;
-                }
+    static IMatcher<Test> _matcherSome;
 
-                return _matcherSome;
+    public static IMatcher<Test> Some {
+        get {
+            if(_matcherSome == null) {
+                var matcher = (Matcher<Test>)Matcher<Test>.AllOf(TestComponentIds.Some);
+                matcher.componentNames = TestComponentIds.componentNames;
+                _matcherSome = matcher;
             }
+
+            return _matcherSome;
         }
     }
+}

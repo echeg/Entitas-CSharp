@@ -12,59 +12,45 @@ public class PositionComponent : IComponent {
     public IntVector2 value;
 }
 
-namespace Entitas {
-    public partial class Entity {
-        public PositionComponent position { get { return (PositionComponent)GetComponent(ComponentIds.Position); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasPosition { get { return HasComponent(ComponentIds.Position); } }
+    public PositionComponent position { get { return (PositionComponent)GetComponent(VisualDebuggingComponentIds.Position); } }
 
-        public Entity AddPosition(IntVector2 newValue) {
-            var component = CreateComponent<PositionComponent>(ComponentIds.Position);
-            component.value = newValue;
-            return AddComponent(ComponentIds.Position, component);
-        }
+    public bool hasPosition { get { return HasComponent(VisualDebuggingComponentIds.Position); } }
 
-        public Entity ReplacePosition(IntVector2 newValue) {
-            var component = CreateComponent<PositionComponent>(ComponentIds.Position);
-            component.value = newValue;
-            ReplaceComponent(ComponentIds.Position, component);
-            return this;
-        }
-
-        public Entity RemovePosition() {
-            return RemoveComponent(ComponentIds.Position);
-        }
+    public VisualDebugging AddPosition(IntVector2 newValue) {
+        var component = CreateComponent<PositionComponent>(VisualDebuggingComponentIds.Position);
+        component.value = newValue;
+        AddComponent(VisualDebuggingComponentIds.Position, component);
+        return this;
     }
 
-    public partial class Matcher {
-        static IMatcher _matcherPosition;
+    public VisualDebugging ReplacePosition(IntVector2 newValue) {
+        var component = CreateComponent<PositionComponent>(VisualDebuggingComponentIds.Position);
+        component.value = newValue;
+        ReplaceComponent(VisualDebuggingComponentIds.Position, component);
+        return this;
+    }
 
-        public static IMatcher Position {
-            get {
-                if (_matcherPosition == null) {
-                    var matcher = (Matcher)Matcher.AllOf(ComponentIds.Position);
-                    matcher.componentNames = ComponentIds.componentNames;
-                    _matcherPosition = matcher;
-                }
-
-                return _matcherPosition;
-            }
-        }
+    public VisualDebugging RemovePosition() {
+        RemoveComponent(VisualDebuggingComponentIds.Position);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherPosition;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Position {
-            get {
-                if (_matcherPosition == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Position);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherPosition = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherPosition;
 
-                return _matcherPosition;
+    public static IMatcher<VisualDebugging> Position {
+        get {
+            if(_matcherPosition == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Position);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherPosition = matcher;
             }
+
+            return _matcherPosition;
         }
     }
+}

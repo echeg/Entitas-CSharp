@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public PropertyComponent property { get { return (PropertyComponent)GetComponent(VisualDebuggingComponentIds.Property); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasProperty { get { return HasComponent(VisualDebuggingComponentIds.Property); } }
+    public PropertyComponent property { get { return (PropertyComponent)GetComponent(VisualDebuggingComponentIds.Property); } }
 
-        public Entity AddProperty(string newValue) {
-            var component = CreateComponent<PropertyComponent>(VisualDebuggingComponentIds.Property);
-            component.value = newValue;
-            return AddComponent(VisualDebuggingComponentIds.Property, component);
-        }
+    public bool hasProperty { get { return HasComponent(VisualDebuggingComponentIds.Property); } }
 
-        public Entity ReplaceProperty(string newValue) {
-            var component = CreateComponent<PropertyComponent>(VisualDebuggingComponentIds.Property);
-            component.value = newValue;
-            ReplaceComponent(VisualDebuggingComponentIds.Property, component);
-            return this;
-        }
+    public VisualDebugging AddProperty(string newValue) {
+        var component = CreateComponent<PropertyComponent>(VisualDebuggingComponentIds.Property);
+        component.value = newValue;
+        AddComponent(VisualDebuggingComponentIds.Property, component);
+        return this;
+    }
 
-        public Entity RemoveProperty() {
-            return RemoveComponent(VisualDebuggingComponentIds.Property);
-        }
+    public VisualDebugging ReplaceProperty(string newValue) {
+        var component = CreateComponent<PropertyComponent>(VisualDebuggingComponentIds.Property);
+        component.value = newValue;
+        ReplaceComponent(VisualDebuggingComponentIds.Property, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveProperty() {
+        RemoveComponent(VisualDebuggingComponentIds.Property);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherProperty;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Property {
-            get {
-                if (_matcherProperty == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Property);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherProperty = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherProperty;
 
-                return _matcherProperty;
+    public static IMatcher<VisualDebugging> Property {
+        get {
+            if(_matcherProperty == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Property);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherProperty = matcher;
             }
+
+            return _matcherProperty;
         }
     }
+}

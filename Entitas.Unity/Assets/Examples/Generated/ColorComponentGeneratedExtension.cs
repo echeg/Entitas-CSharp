@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public ColorComponent color { get { return (ColorComponent)GetComponent(VisualDebuggingComponentIds.Color); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasColor { get { return HasComponent(VisualDebuggingComponentIds.Color); } }
+    public ColorComponent color { get { return (ColorComponent)GetComponent(VisualDebuggingComponentIds.Color); } }
 
-        public Entity AddColor(UnityEngine.Color newColor) {
-            var component = CreateComponent<ColorComponent>(VisualDebuggingComponentIds.Color);
-            component.color = newColor;
-            return AddComponent(VisualDebuggingComponentIds.Color, component);
-        }
+    public bool hasColor { get { return HasComponent(VisualDebuggingComponentIds.Color); } }
 
-        public Entity ReplaceColor(UnityEngine.Color newColor) {
-            var component = CreateComponent<ColorComponent>(VisualDebuggingComponentIds.Color);
-            component.color = newColor;
-            ReplaceComponent(VisualDebuggingComponentIds.Color, component);
-            return this;
-        }
+    public VisualDebugging AddColor(UnityEngine.Color newColor) {
+        var component = CreateComponent<ColorComponent>(VisualDebuggingComponentIds.Color);
+        component.color = newColor;
+        AddComponent(VisualDebuggingComponentIds.Color, component);
+        return this;
+    }
 
-        public Entity RemoveColor() {
-            return RemoveComponent(VisualDebuggingComponentIds.Color);
-        }
+    public VisualDebugging ReplaceColor(UnityEngine.Color newColor) {
+        var component = CreateComponent<ColorComponent>(VisualDebuggingComponentIds.Color);
+        component.color = newColor;
+        ReplaceComponent(VisualDebuggingComponentIds.Color, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveColor() {
+        RemoveComponent(VisualDebuggingComponentIds.Color);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherColor;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher Color {
-            get {
-                if (_matcherColor == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.Color);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherColor = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherColor;
 
-                return _matcherColor;
+    public static IMatcher<VisualDebugging> Color {
+        get {
+            if(_matcherColor == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.Color);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherColor = matcher;
             }
+
+            return _matcherColor;
         }
     }
+}

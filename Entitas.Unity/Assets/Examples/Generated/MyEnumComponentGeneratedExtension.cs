@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public MyEnumComponent myEnum { get { return (MyEnumComponent)GetComponent(VisualDebuggingComponentIds.MyEnum); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasMyEnum { get { return HasComponent(VisualDebuggingComponentIds.MyEnum); } }
+    public MyEnumComponent myEnum { get { return (MyEnumComponent)GetComponent(VisualDebuggingComponentIds.MyEnum); } }
 
-        public Entity AddMyEnum(MyEnumComponent.MyEnum newMyEnum) {
-            var component = CreateComponent<MyEnumComponent>(VisualDebuggingComponentIds.MyEnum);
-            component.myEnum = newMyEnum;
-            return AddComponent(VisualDebuggingComponentIds.MyEnum, component);
-        }
+    public bool hasMyEnum { get { return HasComponent(VisualDebuggingComponentIds.MyEnum); } }
 
-        public Entity ReplaceMyEnum(MyEnumComponent.MyEnum newMyEnum) {
-            var component = CreateComponent<MyEnumComponent>(VisualDebuggingComponentIds.MyEnum);
-            component.myEnum = newMyEnum;
-            ReplaceComponent(VisualDebuggingComponentIds.MyEnum, component);
-            return this;
-        }
+    public VisualDebugging AddMyEnum(MyEnumComponent.MyEnum newMyEnum) {
+        var component = CreateComponent<MyEnumComponent>(VisualDebuggingComponentIds.MyEnum);
+        component.myEnum = newMyEnum;
+        AddComponent(VisualDebuggingComponentIds.MyEnum, component);
+        return this;
+    }
 
-        public Entity RemoveMyEnum() {
-            return RemoveComponent(VisualDebuggingComponentIds.MyEnum);
-        }
+    public VisualDebugging ReplaceMyEnum(MyEnumComponent.MyEnum newMyEnum) {
+        var component = CreateComponent<MyEnumComponent>(VisualDebuggingComponentIds.MyEnum);
+        component.myEnum = newMyEnum;
+        ReplaceComponent(VisualDebuggingComponentIds.MyEnum, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveMyEnum() {
+        RemoveComponent(VisualDebuggingComponentIds.MyEnum);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherMyEnum;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher MyEnum {
-            get {
-                if (_matcherMyEnum == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.MyEnum);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherMyEnum = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherMyEnum;
 
-                return _matcherMyEnum;
+    public static IMatcher<VisualDebugging> MyEnum {
+        get {
+            if(_matcherMyEnum == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.MyEnum);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherMyEnum = matcher;
             }
+
+            return _matcherMyEnum;
         }
     }
+}

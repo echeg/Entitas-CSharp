@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public CustomObjectComponent customObject { get { return (CustomObjectComponent)GetComponent(VisualDebuggingComponentIds.CustomObject); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasCustomObject { get { return HasComponent(VisualDebuggingComponentIds.CustomObject); } }
+    public CustomObjectComponent customObject { get { return (CustomObjectComponent)GetComponent(VisualDebuggingComponentIds.CustomObject); } }
 
-        public Entity AddCustomObject(CustomObject newCustomObject) {
-            var component = CreateComponent<CustomObjectComponent>(VisualDebuggingComponentIds.CustomObject);
-            component.customObject = newCustomObject;
-            return AddComponent(VisualDebuggingComponentIds.CustomObject, component);
-        }
+    public bool hasCustomObject { get { return HasComponent(VisualDebuggingComponentIds.CustomObject); } }
 
-        public Entity ReplaceCustomObject(CustomObject newCustomObject) {
-            var component = CreateComponent<CustomObjectComponent>(VisualDebuggingComponentIds.CustomObject);
-            component.customObject = newCustomObject;
-            ReplaceComponent(VisualDebuggingComponentIds.CustomObject, component);
-            return this;
-        }
+    public VisualDebugging AddCustomObject(CustomObject newCustomObject) {
+        var component = CreateComponent<CustomObjectComponent>(VisualDebuggingComponentIds.CustomObject);
+        component.customObject = newCustomObject;
+        AddComponent(VisualDebuggingComponentIds.CustomObject, component);
+        return this;
+    }
 
-        public Entity RemoveCustomObject() {
-            return RemoveComponent(VisualDebuggingComponentIds.CustomObject);
-        }
+    public VisualDebugging ReplaceCustomObject(CustomObject newCustomObject) {
+        var component = CreateComponent<CustomObjectComponent>(VisualDebuggingComponentIds.CustomObject);
+        component.customObject = newCustomObject;
+        ReplaceComponent(VisualDebuggingComponentIds.CustomObject, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveCustomObject() {
+        RemoveComponent(VisualDebuggingComponentIds.CustomObject);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherCustomObject;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher CustomObject {
-            get {
-                if (_matcherCustomObject == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.CustomObject);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherCustomObject = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherCustomObject;
 
-                return _matcherCustomObject;
+    public static IMatcher<VisualDebugging> CustomObject {
+        get {
+            if(_matcherCustomObject == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.CustomObject);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherCustomObject = matcher;
             }
+
+            return _matcherCustomObject;
         }
     }
+}

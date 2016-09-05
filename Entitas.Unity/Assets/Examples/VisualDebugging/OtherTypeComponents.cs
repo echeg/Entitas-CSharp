@@ -109,7 +109,3 @@ public class PersonComponent : IComponent {
     public string name;
     public string gender;
 }
-
-[Pool]
-public class DefaultPoolComponent : IComponent {
-}

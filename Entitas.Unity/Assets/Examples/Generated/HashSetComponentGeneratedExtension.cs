@@ -8,43 +8,45 @@
 //------------------------------------------------------------------------------
 using Entitas;
 
-namespace Entitas {
-    public partial class Entity {
-        public HashSetComponent hashSet { get { return (HashSetComponent)GetComponent(VisualDebuggingComponentIds.HashSet); } }
+public partial class VisualDebugging : Entity {
 
-        public bool hasHashSet { get { return HasComponent(VisualDebuggingComponentIds.HashSet); } }
+    public HashSetComponent hashSet { get { return (HashSetComponent)GetComponent(VisualDebuggingComponentIds.HashSet); } }
 
-        public Entity AddHashSet(System.Collections.Generic.HashSet<string> newHashset) {
-            var component = CreateComponent<HashSetComponent>(VisualDebuggingComponentIds.HashSet);
-            component.hashset = newHashset;
-            return AddComponent(VisualDebuggingComponentIds.HashSet, component);
-        }
+    public bool hasHashSet { get { return HasComponent(VisualDebuggingComponentIds.HashSet); } }
 
-        public Entity ReplaceHashSet(System.Collections.Generic.HashSet<string> newHashset) {
-            var component = CreateComponent<HashSetComponent>(VisualDebuggingComponentIds.HashSet);
-            component.hashset = newHashset;
-            ReplaceComponent(VisualDebuggingComponentIds.HashSet, component);
-            return this;
-        }
+    public VisualDebugging AddHashSet(System.Collections.Generic.HashSet<string> newHashset) {
+        var component = CreateComponent<HashSetComponent>(VisualDebuggingComponentIds.HashSet);
+        component.hashset = newHashset;
+        AddComponent(VisualDebuggingComponentIds.HashSet, component);
+        return this;
+    }
 
-        public Entity RemoveHashSet() {
-            return RemoveComponent(VisualDebuggingComponentIds.HashSet);
-        }
+    public VisualDebugging ReplaceHashSet(System.Collections.Generic.HashSet<string> newHashset) {
+        var component = CreateComponent<HashSetComponent>(VisualDebuggingComponentIds.HashSet);
+        component.hashset = newHashset;
+        ReplaceComponent(VisualDebuggingComponentIds.HashSet, component);
+        return this;
+    }
+
+    public VisualDebugging RemoveHashSet() {
+        RemoveComponent(VisualDebuggingComponentIds.HashSet);
+        return this;
     }
 }
 
-    public partial class VisualDebuggingMatcher {
-        static IMatcher _matcherHashSet;
+public partial class VisualDebuggingMatcher {
 
-        public static IMatcher HashSet {
-            get {
-                if (_matcherHashSet == null) {
-                    var matcher = (Matcher)Matcher.AllOf(VisualDebuggingComponentIds.HashSet);
-                    matcher.componentNames = VisualDebuggingComponentIds.componentNames;
-                    _matcherHashSet = matcher;
-                }
+    static IMatcher<VisualDebugging> _matcherHashSet;
 
-                return _matcherHashSet;
+    public static IMatcher<VisualDebugging> HashSet {
+        get {
+            if(_matcherHashSet == null) {
+                var matcher = (Matcher<VisualDebugging>)Matcher<VisualDebugging>.AllOf(VisualDebuggingComponentIds.HashSet);
+                matcher.componentNames = VisualDebuggingComponentIds.componentNames;
+                _matcherHashSet = matcher;
             }
+
+            return _matcherHashSet;
         }
     }
+}
